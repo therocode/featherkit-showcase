@@ -1,13 +1,12 @@
-# Compiled Object files
-*.slo
-*.lo
-*.o
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-
-# Compiled Static libraries
-*.lai
-*.la
+*.swp
+*.swo
+*~
+CMakeCache.txt
+CMakeFiles/*
+cmake_install.cmake
+Makefile
 *.a
+bin/*
+lib/*
+doxy/gen/*
+install_manifest.txt
