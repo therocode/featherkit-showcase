@@ -3,6 +3,7 @@
 *~
 CMakeCache.txt
 CMakeFiles/*
+rain/CMakeFiles/*
 cmake_install.cmake
 Makefile
 *.a
