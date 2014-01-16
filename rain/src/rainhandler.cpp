@@ -15,7 +15,7 @@ void RainHandler::update(const fea::Texture& solidMask)
 
     //create new drops
     if(!(rand() % 3))
-        mRaindrops.push_back({rand() % 1500, -20});
+        mRaindrops.push_back({rand() % 3000, -20});
 
     //check for border removal and collisions
     for(auto iterator = mRaindrops.begin(); iterator != mRaindrops.end();)
