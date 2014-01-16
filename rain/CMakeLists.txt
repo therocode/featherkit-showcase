@@ -15,6 +15,7 @@ add_executable(${project_name} ${header_files} ${source_files})
 
 find_package(Featherkit REQUIRED COMPONENTS ui rendering structure)
 find_package(SDL REQUIRED)
+find_package(GLM REQUIRED)
 
 if(FEATHERKIT_FOUND)
     include_directories(${FEATHERKIT_INCLUDE_DIRS})
@@ -24,6 +25,10 @@ endif()
 if(SDL_FOUND)
     include_directories(${SDL_INCLUDE_DIR})
     target_link_libraries(${project_name} ${SDL_LIBRARIES})
+endif()
+
+if(GLM_FOUND)
+    include_directories(${GLM_INCLUDE_DIR})
 endif()
 
 target_link_libraries(${project_name} GL GLU GLEW sfml-window sfml-system)
