@@ -23,12 +23,12 @@ int main()
     rainTexture.create(20, 20, loader.loadImage("raindata/textures/raindrop.png", 20, 20).data());
     rainSplashTexture.create(13, 13, loader.loadImage("raindata/textures/rainsplash.png", 13, 13).data());
 
-    fea::Quad ground(800, 600);
+    fea::Quad ground(1600, 1200);
     ground.setTexture(groundTexture);
     fea::Quad sky(800, 600);
     sky.setTexture(skyTexture);
 
-    fea::Renderer2D renderer(fea::Viewport(800, 600, 0, 0, fea::Camera(800.0f/2.0f, 600.0f/2.0f)));
+    fea::Renderer2D renderer(fea::Viewport(800, 600, 0, 0, fea::Camera(800.0f/2.0f, 600.0f/2.0f + 600.0f)));
     renderer.setup();
 
     RainHandler rainHandler;

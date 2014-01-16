@@ -26,8 +26,8 @@ void RainHandler::update(const fea::Texture& solidMask)
             continue;
         }
         
-        uint32_t pixelX = std::max(0, std::min((int32_t)(iterator->x + 10.0f), 800));
-        uint32_t pixelY = std::max(0, std::min((int32_t)(iterator->y + 18.0f), 600));
+        uint32_t pixelX = std::max(0, std::min((int32_t)(iterator->x + 10.0f), 1600)) / 2;
+        uint32_t pixelY = std::max(0, std::min((int32_t)(iterator->y + 18.0f), 1200)) / 2;
         
         if(solidMask.getPixel(pixelX, pixelY).a != 0.0f)
         {
@@ -39,7 +39,7 @@ void RainHandler::update(const fea::Texture& solidMask)
 
                 for(uint32_t i = 0; i < 5; i++)
                 {
-                    Rainsplash newSplash({{pixelX - 6, pixelY - 10}, {((float)(rand() % 21) / 4.0f) - 2.5f, ((rand() % 21) / 4.0f) - 2.5f}, static_cast<uint32_t>((rand() % 60) + 40)});
+                    Rainsplash newSplash({{pixelX * 2 - 6, pixelY * 2 - 10}, {((float)(rand() % 21) / 4.0f) - 2.5f, ((rand() % 21) / 4.0f) - 2.5f}, static_cast<uint32_t>((rand() % 60) + 40)});
                     mRainsplashes.push_back(newSplash);
                 }
             }
