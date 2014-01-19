@@ -15,7 +15,7 @@ void RainHandler::update(const fea::Texture& solidMask)
 
     //create new drops
     if(!(rand() % 3))
-        mRaindrops.push_back({rand() % 3000, -20});
+        mRaindrops.push_back(glm::vec2(rand() % 3000, -20));
 
     //check for border removal and collisions
     for(auto iterator = mRaindrops.begin(); iterator != mRaindrops.end();)
@@ -35,11 +35,11 @@ void RainHandler::update(const fea::Texture& solidMask)
 
             if(pixelX > 0 && pixelX < 800 && pixelY > 0 && pixelY < 600)
             {
-                mCollisions.push_back({pixelX, pixelY});
+                mCollisions.push_back(glm::vec2(pixelX, pixelY));
 
                 for(uint32_t i = 0; i < 5; i++)
                 {
-                    Rainsplash newSplash({{pixelX * 2 - 6, pixelY * 2 - 10}, {((float)(rand() % 21) / 4.0f) - 2.5f, ((rand() % 21) / 4.0f) - 2.5f}, static_cast<uint32_t>((rand() % 60) + 40)});
+                    Rainsplash newSplash({glm::vec2(pixelX * 2 - 6, pixelY * 2 - 10), glm::vec2(((float)(rand() % 21) / 4.0f) - 2.5f, ((rand() % 21) / 4.0f) - 2.5f), static_cast<uint32_t>((rand() % 60) + 40)});
                     mRainsplashes.push_back(newSplash);
                 }
             }

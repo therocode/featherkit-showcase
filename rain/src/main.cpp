@@ -156,7 +156,7 @@ int main()
         for(uint32_t i = 0; i < splashPositions.size(); i++)
         {
             rainSplash.setPosition(splashPositions[i]);
-            rainSplash.setScale({splashSizes[i], splashSizes[i]});
+            rainSplash.setScale(glm::vec2(splashSizes[i], splashSizes[i]));
             renderer.queue(rainSplash);
         }
 
