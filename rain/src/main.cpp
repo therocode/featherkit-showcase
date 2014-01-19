@@ -4,6 +4,9 @@
 #include <featherkit/util/window/sdl/sdlwindowbackend.h>
 #include <featherkit/util/input/sdl/sdlinputbackend.h>
 #include "rainhandler.h"
+#include "interpolator.h"
+
+enum {UP, LEFT, RIGHT, DOWN};
 
 int main()
 {
@@ -13,22 +16,39 @@ int main()
     fea::InputHandler input(new fea::util::SDLInputBackend());
 
     fea::Texture groundTexture;
+    fea::Texture groundbackTexture;
     fea::Texture skyTexture;
     fea::Texture rainTexture;
     fea::Texture rainSplashTexture;
+    fea::Texture backgroundTexture;
 
     ImageLoader loader;
     groundTexture.create(800, 600, loader.loadImage("raindata/textures/ground.png", 800, 600).data(), false, true);
+    groundbackTexture.create(800, 600, loader.loadImage("raindata/textures/groundback.png", 800, 600).data());
     skyTexture.create(800, 600, loader.loadImage("raindata/textures/sky.png", 800, 600).data());
+    backgroundTexture.create(300, 600, loader.loadImage("raindata/textures/background.png", 300, 600).data());
     rainTexture.create(20, 20, loader.loadImage("raindata/textures/raindrop.png", 20, 20).data());
     rainSplashTexture.create(13, 13, loader.loadImage("raindata/textures/rainsplash.png", 13, 13).data());
 
-    fea::Quad ground(800, 600);
+    fea::Quad ground(1600, 1200);
     ground.setTexture(groundTexture);
+    fea::Quad groundback(1600, 1200);
+    groundback.setTexture(groundbackTexture);
     fea::Quad sky(800, 600);
     sky.setTexture(skyTexture);
+    sky.setParallax(0.0f);
+    sky.setPosition(-400, -300);
+    fea::RepeatedQuad background(1800, 1000);
+    background.setTileSize(300, 600);
+    background.setParallax(0.5f);
+    background.setPosition(-800.0f, 100.0f);
+    background.setTexture(backgroundTexture);
+    
 
-    fea::Renderer2D renderer(fea::Viewport(800, 600, 0, 0, fea::Camera(800.0f/2.0f, 600.0f/2.0f)));
+    glm::vec2 camPos(800.0f/2.0f, 600.0f/2.0f + 300.0f);
+    Interpolator cameraPosition(camPos);
+
+    fea::Renderer2D renderer(fea::Viewport(800, 600, 0, 0, fea::Camera(cameraPosition.getPosition())));
     renderer.setup();
 
     RainHandler rainHandler;
@@ -36,6 +56,8 @@ int main()
     rainDrop.setTexture(rainTexture);
     fea::Quad rainSplash(13.0f, 13.0f);
     rainSplash.setTexture(rainSplashTexture);
+
+    bool directions[4] = {false, false , false, false};
 
     bool quit = false;
     while(!quit)
@@ -49,8 +71,45 @@ int main()
             {
                 if(event.key.code == fea::Keyboard::Q || event.key.code == fea::Keyboard::ESCAPE)
                     quit = true;
+                else if(event.key.code == fea::Keyboard::W)
+                    directions[UP] = true;
+                else if(event.key.code == fea::Keyboard::S)
+                    directions[DOWN] = true;
+                else if(event.key.code == fea::Keyboard::A)
+                    directions[LEFT] = true;
+                else if(event.key.code == fea::Keyboard::D)
+                    directions[RIGHT] = true;
+            }
+            else if(event.type == fea::Event::KEYRELEASED)
+            {
+                if(event.key.code == fea::Keyboard::W)
+                    directions[UP] = false;
+                else if(event.key.code == fea::Keyboard::S)
+                    directions[DOWN] = false;
+                else if(event.key.code == fea::Keyboard::A)
+                    directions[LEFT] = false;
+                else if(event.key.code == fea::Keyboard::D)
+                    directions[RIGHT] = false;
             }
         }
+
+        if(directions[UP])
+            camPos.y -= 12;
+        if(directions[DOWN])
+            camPos.y += 12;
+        if(directions[LEFT])
+            camPos.x -= 12;
+        if(directions[RIGHT])
+            camPos.x += 12;
+
+        if(camPos.x < 400.0f)
+            camPos.x = 400.0f;
+        else if(camPos.x > 1200.0f)
+            camPos.x = 1200.0f;
+        if(camPos.y < 300.0f)
+            camPos.y = 300.0f;
+        else if(camPos.y > 900.0f)
+            camPos.y = 900.0f;
 
         rainHandler.update(groundTexture);
 
@@ -76,8 +135,14 @@ int main()
         if(collisions.size() > 0)
             groundTexture.update();
 
+        cameraPosition.setPosition(camPos);
+        cameraPosition.update();
+        renderer.getViewport().getCamera().setPosition(cameraPosition.getPosition());
+
         renderer.clear();
         renderer.queue(sky);
+        renderer.queue(background);
+        renderer.queue(groundback);
         renderer.queue(ground);
         for(auto position : rainHandler.getRaindropPositions())
         {
