@@ -2,8 +2,8 @@
 #include <featherkit/render2d.h>
 #include <featherkit/userinterface.h>
 #include <featherkit/structure.h>
-#include <featherkit/util/window/sdl/sdlwindowbackend.h>
-#include <featherkit/util/input/sdl/sdlinputbackend.h>
+#include <featherkit/util/window/sdl2/sdl2windowbackend.h>
+#include <featherkit/util/input/sdl2/sdl2inputbackend.h>
 #include "rainhandler.h"
 #include "interpolator.h"
 
@@ -40,8 +40,8 @@ class RainApplication : public fea::Application
     RainHandler rainHandler;
 };
 
-RainApplication::RainApplication() : window(new fea::util::SDLWindowBackend()),
-                                     input(new fea::util::SDLInputBackend()),
+RainApplication::RainApplication() : window(new fea::util::SDL2WindowBackend()),
+                                     input(new fea::util::SDL2InputBackend()),
                                      ground(1600, 1200),
                                      groundback(1600, 1200),
                                      sky(800, 600),
