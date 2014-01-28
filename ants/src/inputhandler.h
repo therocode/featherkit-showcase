@@ -1,19 +1,23 @@
+#pragma once
+#include "messages.h"
 #include <featherkit/userinterface.h>
 #include <featherkit/util/input/sdl2/sdl2inputbackend.h>
 
 class InputHandler
 {
     public:
-        InputHandler();
+        InputHandler(fea::MessageBus& bus);
         void inputLoop();
 
     private:
         fea::InputHandler input;
+        fea::MessageBus& messageBus;
 };
 
 
-InputHandler::InputHandler()
-    :   input(new fea::util::SDL2InputBackend())
+InputHandler::InputHandler(fea::MessageBus& bus)
+    :   input(new fea::util::SDL2InputBackend()),
+        messageBus(bus)
 {
 }
 
@@ -27,8 +31,9 @@ void InputHandler::inputLoop()
         if(event.type == fea::Event::KEYPRESSED)
         {
             if(event.key.code == fea::Keyboard::Q || event.key.code == fea::Keyboard::ESCAPE)
-            {}
-                //message to quit
+            {
+                messageBus.send(QuitMessage());
+            }
             else if(event.key.code == fea::Keyboard::W)
                 // do stuff
             {}

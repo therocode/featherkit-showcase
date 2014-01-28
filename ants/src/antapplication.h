@@ -1,12 +1,16 @@
+#pragma once
 #include "inputhandler.h"
 #include "imageloader.h"
 #include "rainhandler.h"
 #include "interpolator.h"
+#include "messages.h"
 #include <featherkit/render2d.h>
 #include <featherkit/structure.h>
 #include <featherkit/util/window/sdl2/sdl2windowbackend.h>
 
-class AntApplication : public fea::Application
+class AntApplication
+    : public fea::Application,
+      public fea::MessageReceiver<QuitMessage>
 {
     public:
         AntApplication();
@@ -14,11 +18,16 @@ class AntApplication : public fea::Application
         void setup(const std::vector<std::string>& args) override;
         void destroy() override;
 
+        //messages//
+        virtual void handleMessage(const QuitMessage& mess) override;
+
     private:
+        fea::MessageBus messageBus;
         InputHandler input;
 };
 
 AntApplication::AntApplication()
+    :   input(messageBus)
 {
 }
 
@@ -36,3 +45,8 @@ void AntApplication::destroy()
 {
 }
 
+void AntApplication::handleMessage(const QuitMessage& mess)
+{
+    (void)mess;
+    quit();
+}
