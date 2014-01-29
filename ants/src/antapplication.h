@@ -34,7 +34,7 @@ AntApplication::AntApplication()
         renderer(messageBus)
 {
     messageBus.addSubscriber(*this);
-    window.create(fea::VideoMode(800, 600, 32), "Window and user input");
+    window.create(fea::VideoMode(800, 600, 32), "ants");
     renderer.setup();
 }
 
@@ -46,6 +46,8 @@ AntApplication::~AntApplication()
 void AntApplication::loop()
 {
     input.inputLoop();
+    renderer.render();
+    window.swapBuffers();
 }
 
 void AntApplication::setup(const std::vector<std::string>& args)
