@@ -1,10 +1,9 @@
 #pragma once
 #include "inputhandler.h"
+#include "renderer.h"
 #include "imageloader.h"
-#include "rainhandler.h"
 #include "interpolator.h"
 #include "messages.h"
-#include <featherkit/render2d.h>
 #include <featherkit/structure.h>
 #include <featherkit/util/window/sdl2/sdl2windowbackend.h>
 
@@ -14,6 +13,7 @@ class AntApplication
 {
     public:
         AntApplication();
+        ~AntApplication();
         void loop() override;
         void setup(const std::vector<std::string>& args) override;
         void destroy() override;
@@ -24,11 +24,23 @@ class AntApplication
     private:
         fea::MessageBus messageBus;
         InputHandler input;
+        fea::Window window;
+        Renderer renderer;
 };
 
 AntApplication::AntApplication()
-    :   input(messageBus)
+    :   input(messageBus),
+        window(new fea::util::SDL2WindowBackend()),
+        renderer(messageBus)
 {
+    messageBus.addSubscriber(*this);
+    window.create(fea::VideoMode(800, 600, 32), "Window and user input");
+    renderer.setup();
+}
+
+AntApplication::~AntApplication()
+{
+    messageBus.removeSubscriber(*this);
 }
 
 void AntApplication::loop()
@@ -43,6 +55,7 @@ void AntApplication::setup(const std::vector<std::string>& args)
 
 void AntApplication::destroy()
 {
+    window.close();              
 }
 
 void AntApplication::handleMessage(const QuitMessage& mess)

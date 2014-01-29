@@ -13,7 +13,7 @@ file(GLOB_RECURSE header_files "src/*.h")
 
 add_executable(${project_name} ${header_files} ${source_files})
 
-find_package(Featherkit REQUIRED COMPONENTS ui rendering structure)
+find_package(Featherkit REQUIRED COMPONENTS ui rendering structure messaging)
 find_package(SDL REQUIRED)
 find_package(GLM REQUIRED)
 
