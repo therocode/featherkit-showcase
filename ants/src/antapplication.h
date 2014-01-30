@@ -33,14 +33,14 @@ AntApplication::AntApplication()
         window(new fea::util::SDL2WindowBackend()),
         renderer(messageBus)
 {
-    messageBus.addSubscriber(*this);
+    messageBus.addSubscriber<QuitMessage>(*this);
     window.create(fea::VideoMode(800, 600, 32), "ants");
     renderer.setup();
 }
 
 AntApplication::~AntApplication()
 {
-    messageBus.removeSubscriber(*this);
+    messageBus.removeSubscriber<QuitMessage>(*this);
 }
 
 void AntApplication::loop()

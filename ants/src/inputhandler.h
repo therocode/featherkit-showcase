@@ -1,5 +1,6 @@
 #pragma once
 #include "messages.h"
+#include "direction.h"
 #include <featherkit/userinterface.h>
 #include <featherkit/util/input/sdl2/sdl2inputbackend.h>
 
@@ -12,12 +13,15 @@ class InputHandler
     private:
         fea::InputHandler input;
         fea::MessageBus& messageBus;
+
+        bool directions[4]; 
 };
 
 
 InputHandler::InputHandler(fea::MessageBus& bus)
     :   input(new fea::util::SDL2InputBackend()),
-        messageBus(bus)
+        messageBus(bus),
+        directions{false, false , false, false}
 {
 }
 
@@ -35,32 +39,50 @@ void InputHandler::inputLoop()
                 messageBus.send(QuitMessage());
             }
             else if(event.key.code == fea::Keyboard::W)
-                // do stuff
-            {}
+            {
+                directions[Direction::UP] = true;
+            }
             else if(event.key.code == fea::Keyboard::S)
-            {}
-                // do stuff
+            {
+                directions[Direction::DOWN] = true;
+            }
             else if(event.key.code == fea::Keyboard::A)
-            {}
-                // do stuff
+            {
+                directions[Direction::LEFT] = true;
+            }
             else if(event.key.code == fea::Keyboard::D)
-            {}
-                // do stuff
+            {
+                directions[Direction::RIGHT] = true;
+            }
         }
         else if(event.type == fea::Event::KEYRELEASED)
         {
             if(event.key.code == fea::Keyboard::W)
-            {}
-                // do stuff
+            {
+                directions[Direction::UP] = false;
+            }
             else if(event.key.code == fea::Keyboard::S)
-            {}
-                // do stuff
+            {
+                directions[Direction::DOWN] = false;
+            }
             else if(event.key.code == fea::Keyboard::A)
-            {}
-                // do stuff
+            {
+                directions[Direction::LEFT] = false;
+            }
             else if(event.key.code == fea::Keyboard::D)
-            {}
-                // do stuff
+            {
+                directions[Direction::RIGHT] = false;
+            }
         }
     }
+
+    if(directions[UP])
+        messageBus.send(CameraPositionMessage(glm::vec2(0.0f, -12.0f)));
+    if(directions[DOWN])
+        messageBus.send(CameraPositionMessage(glm::vec2(0.0f, 12.0f)));
+    if(directions[LEFT])
+        messageBus.send(CameraPositionMessage(glm::vec2(-12.0f, 0.0f)));
+    if(directions[RIGHT])
+        messageBus.send(CameraPositionMessage(glm::vec2(12.0f, 0.0f)));
+
 }

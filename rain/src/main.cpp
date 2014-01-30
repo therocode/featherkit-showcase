@@ -7,7 +7,7 @@
 #include "rainhandler.h"
 #include "interpolator.h"
 
-enum {UP, LEFT, RIGHT, DOWN};
+enum {UP, LEFT, RIGHT, DOWN};   
 
 class RainApplication : public fea::Application
 {
@@ -66,7 +66,7 @@ void RainApplication::loop()
             if(event.key.code == fea::Keyboard::Q || event.key.code == fea::Keyboard::ESCAPE)
                 quit();
             else if(event.key.code == fea::Keyboard::W)
-                directions[UP] = true;
+                directions[UP] = true;                      // input
             else if(event.key.code == fea::Keyboard::S)
                 directions[DOWN] = true;
             else if(event.key.code == fea::Keyboard::A)
@@ -88,7 +88,7 @@ void RainApplication::loop()
     }
 
     if(directions[UP])
-        camPos.y -= 12;
+        camPos.y -= 12;     //send message
     if(directions[DOWN])
         camPos.y += 12;
     if(directions[LEFT])
@@ -96,7 +96,7 @@ void RainApplication::loop()
     if(directions[RIGHT])
         camPos.x += 12;
 
-    if(camPos.x < 400.0f)
+    if(camPos.x < 400.0f)       // renderer
         camPos.x = 400.0f;
     else if(camPos.x > 1200.0f)
         camPos.x = 1200.0f;
