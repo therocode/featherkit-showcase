@@ -11,6 +11,14 @@ Renderer::Renderer(fea::MessageBus& bus)
     quad = fea::Quad(100.0f, 100.0f);
     quad.setColour(fea::Colour(255, 0, 0));
     quad.setPosition(400.0f, 300.0f);
+
+}
+
+void Renderer::createTexture(const std::string& name, const std::string& path, int width, int height, bool smooth, bool interactive)
+{
+    fea::Texture texture;
+    texture.create(width, height, loader.loadImage(path, width, height).data(), smooth, interactive);
+    textures.emplace(name, std::move(texture));
 }
 
 Renderer::~Renderer()
