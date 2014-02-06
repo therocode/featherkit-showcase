@@ -4,8 +4,8 @@ Renderer::Renderer(fea::MessageBus& bus)
     :   messageBus(bus),
         cameraPosition(800.0f, 600.0f),
         cameraInterpolator(cameraPosition),
-        renderer(fea::Viewport(800.0f, 600.0f, 0, 0, fea::Camera(cameraInterpolator.getPosition())))
-
+        renderer(fea::Viewport(800.0f, 600.0f, 0, 0, fea::Camera(cameraInterpolator.getPosition()))),
+        physics(bus)
 {
     messageBus.addSubscriber<CameraPositionMessage>(*this);
 }
@@ -60,7 +60,7 @@ void Renderer::render()
     cameraInterpolator.update();
     renderer.getViewport().getCamera().setPosition(cameraInterpolator.getPosition());
 
-    antQuad.setPosition(800, 600);
+    antQuad.setPosition(800.0f, 600.0f);
 
     renderer.clear(fea::Colour(255, 0, 0));
     renderer.queue(dirtBgQuad);

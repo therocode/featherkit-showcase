@@ -1,3 +1,4 @@
 #include "physicsbody.h"
 
-PhysicsBody::PhysicsBody();
+PhysicsBody::PhysicsBody()
+{}

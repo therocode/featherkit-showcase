@@ -1,5 +1,6 @@
 #pragma once
 #include "messages.h"
+#include "physicsbody.h"
 
 class Physics
 {

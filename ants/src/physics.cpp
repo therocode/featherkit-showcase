@@ -5,3 +5,7 @@ Physics::Physics(fea::MessageBus& bus)
 {
 
 }
+
+Physics::~Physics()
+{
+}

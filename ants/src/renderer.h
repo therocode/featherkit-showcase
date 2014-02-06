@@ -2,6 +2,7 @@
 #include "messages.h"
 #include "interpolator.h"
 #include "imageloader.h"
+#include "physics.h"
 #include <featherkit/render2d.h>
 
 class Renderer
