@@ -21,10 +21,13 @@ class Renderer
         glm::vec2 cameraPosition;
         Interpolator cameraInterpolator;
         fea::Renderer2D renderer;
+        Physics physics;
 
         ImageLoader loader;
         std::unordered_map<std::string, fea::Texture> textures;
         void createTexture(const std::string& name, const std::string& path, int width, int height, bool smooth = false, bool interactive = false);
 
-        fea::Quad quad;
+        fea::Quad antQuad;
+        fea::Quad dirtQuad;
+        fea::Quad dirtBgQuad;
 };

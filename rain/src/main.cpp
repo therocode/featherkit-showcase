@@ -110,7 +110,7 @@ void RainApplication::loop()
     auto collisions = rainHandler.getCollisions();
 
     for(const auto& collision : collisions)
-        groundTexture.setPixels([&] (uint32_t w, uint32_t h, uint8_t* data) 
+        groundTexture.setPixels([&] (uint32_t w, uint32_t h, std::unique_ptr<uint8_t[]>& data) 
                 {
                 (void)h;
                 uint32_t startX = collision.x - 6;
