@@ -108,23 +108,30 @@ void RainApplication::loop()
     rainHandler.update(groundTexture);
 
     auto collisions = rainHandler.getCollisions();
+    uint8_t* pixels = groundTexture.getPixelData();
+
+    auto pixelManipulator = [&] (float xPos, float yPos, uint32_t w, uint32_t h) 
+    {
+        uint32_t startX = xPos - 6;
+        uint32_t startY = yPos - 6;
+
+        for(uint32_t x = 0; x < 12; x++)
+        {
+            for(uint32_t y = 0; y < 12; y++)
+            {
+                if(x > 0 && y > 0 && x < w && y < h)
+                {
+                    if(glm::distance(glm::vec2(startX + x, startY + y), glm::vec2(xPos, yPos)) < 6.0f)
+                        pixels[((startX + x) + (startY + y) * w) * 4 + 3] = 0;
+                }
+            }
+        }
+    };
 
     for(const auto& collision : collisions)
-        groundTexture.setPixels([&] (uint32_t w, uint32_t h, uint8_t* data) 
-                {
-                (void)h;
-                uint32_t startX = collision.x - 6;
-                uint32_t startY = collision.y - 6;
-
-                for(uint32_t x = 0; x < 12; x++)
-                {
-                for(uint32_t y = 0; y < 12; y++)
-                {
-                if(glm::distance(glm::vec2(startX + x, startY + y), collision) < 6.0f)
-                data[((startX + x) + (startY + y) * w) * 4 + 3] = 0;
-                }
-                }
-                });
+    {
+        pixelManipulator(collision.x, collision.y, groundTexture.getSize().x, groundTexture.getSize().y);
+    }
 
     if(collisions.size() > 0)
         groundTexture.update();

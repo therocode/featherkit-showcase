@@ -29,6 +29,9 @@
             uint32_t pixelX = std::max(0, std::min((int32_t)(iterator->x + 10.0f), 1600)) / 2;
             uint32_t pixelY = std::max(0, std::min((int32_t)(iterator->y + 18.0f), 1200)) / 2;
             
+            float alpha;
+
+            if(pixelX > 0 && pixelY > 0 && pixelX < 800 && pixelY < 600)
             if(solidMask.getPixel(pixelX, pixelY).a() != 0.0f)
         {
             iterator = mRaindrops.erase(iterator);

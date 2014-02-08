@@ -21,6 +21,7 @@ Renderer::Renderer(fea::MessageBus& bus)
     :   messageBus(bus),
         renderer(fea::Viewport(800.0f, 600.0f, 0, 0, fea::Camera(800.0f / 2.0f, 600.0f / 2.0f)))
 {
+    (void)messageBus;
     quad = fea::Quad(100.0f, 100.0f);
     //quad.setColour(fea::Colour(255, 0, 0));
     quad.setPosition(400.0f, 300.0f);
