@@ -6,7 +6,8 @@
 #include <featherkit/render2d.h>
 
 class Renderer
-    :   public fea::MessageReceiver<CameraPositionMessage>
+    :   public fea::MessageReceiver<CameraPositionMessage>,
+        public fea::MessageReceiver<AntPositionMessage>
 {
     public:
         Renderer(fea::MessageBus& bus);
@@ -16,6 +17,7 @@ class Renderer
 
         //messages//
         virtual void handleMessage(const CameraPositionMessage& mess) override;
+        virtual void handleMessage(const AntPositionMessage& mess) override;
 
     private:
         fea::MessageBus& messageBus;

@@ -1,13 +1,15 @@
 #include "renderer.h"
+#include <iostream>
 
 Renderer::Renderer(fea::MessageBus& bus)
     :   messageBus(bus),
         cameraPosition(800.0f, 600.0f),
         cameraInterpolator(cameraPosition),
-        renderer(fea::Viewport(800.0f, 600.0f, 0, 0, fea::Camera(cameraInterpolator.getPosition()))),
+        renderer(fea::Viewport({800.0f, 600.0f}, {0, 0}, fea::Camera(cameraInterpolator.getPosition()))),
         physics(bus)
 {
     messageBus.addSubscriber<CameraPositionMessage>(*this);
+    messageBus.addSubscriber<AntPositionMessage>(*this);
 }
 
 void Renderer::createTexture(const std::string& name, const std::string& path, int width, int height, bool smooth, bool interactive)
@@ -20,6 +22,7 @@ void Renderer::createTexture(const std::string& name, const std::string& path, i
 Renderer::~Renderer()
 {
     messageBus.removeSubscriber<CameraPositionMessage>(*this);
+    messageBus.removeSubscriber<AntPositionMessage>(*this);
 }
 
 void Renderer::setup()
@@ -30,23 +33,39 @@ void Renderer::setup()
     createTexture("dirtbg", "ants/data/textures/dirtbg.png", 800, 600);
     createTexture("ant", "ants/data/textures/ant.png", 200, 100);
 
-    antQuad = fea::Quad(100, 50);
-    dirtQuad = fea::Quad(1600, 1200);
-    dirtBgQuad = fea::Quad(1600, 1200);
+    antQuad = fea::Quad({100, 50});
+    dirtQuad = fea::Quad({1600, 1200});
+    dirtBgQuad = fea::Quad({1600, 1200});
     dirtQuad.setTexture(textures.at("dirt"));
     dirtBgQuad.setTexture(textures.at("dirtbg"));
     antQuad.setTexture(textures.at("ant"));
+
+    physics.setTexture(&textures.at("dirt"));
+
+    antQuad.setOrigin({400.0f, 300.0f});
+    antQuad.setPosition({800.0f, 600.0f});
 }
 
 void Renderer::handleMessage(const CameraPositionMessage& mess)
 {
     glm::vec2 vel;
-    std::tie(vel) = mess.data;
+    std::tie(vel) = mess.mData;
     cameraPosition += vel;
+}
+
+void Renderer::handleMessage(const AntPositionMessage& mess)
+{
+    glm::vec2 position;
+    float angle;
+    std::tie(position, angle) = mess.mData;
+    antQuad.setPosition(position);
+    antQuad.setRotation(angle);
 }
 
 void Renderer::render()
 {
+    physics.update();
+
     if(cameraPosition.x < 400.0f)
         cameraPosition.x = 400.0f;
     else if(cameraPosition.x > 1200.0f)
@@ -60,11 +79,12 @@ void Renderer::render()
     cameraInterpolator.update();
     renderer.getViewport().getCamera().setPosition(cameraInterpolator.getPosition());
 
-    antQuad.setPosition(800.0f, 600.0f);
-
     renderer.clear(fea::Colour(255, 0, 0));
     renderer.queue(dirtBgQuad);
     renderer.queue(dirtQuad);
     renderer.queue(antQuad);
     renderer.render();
+
+    //glm::vec2 hej = antQuad.getPosition();
+    //std::cout << "ant position is: " << hej.x << " and " << hej.y << "\n";
 }

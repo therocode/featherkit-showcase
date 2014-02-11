@@ -2,8 +2,6 @@
 #include <glm/glm.hpp>
 #include <featherkit/messaging.h>
 
-struct QuitMsg_tag{};
-using QuitMessage = fea::Message<QuitMsg_tag>;
-
-struct CamPosMsg_tag{}; //                                vel to add
-using CameraPositionMessage = fea::Message<CamPosMsg_tag, glm::vec2>;
+FEA_DECLARE_MESSAGE(QuitMessage);
+FEA_DECLARE_MESSAGE(CameraPositionMessage, const glm::vec2&);       // vel to add
+FEA_DECLARE_MESSAGE(AntPositionMessage, const glm::vec2&, float);    // origin position, angle
