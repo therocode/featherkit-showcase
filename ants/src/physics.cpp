@@ -7,10 +7,10 @@ Physics::Physics(fea::MessageBus& bus)
 {
     ant = PhysicsBody({800.0f, 600.0f});
     dirtTexture = nullptr;
-    gravity = glm::vec2(0.0f, 5.0f);
+    gravity = glm::vec2(0.0f, 1.0f);
     thresholdAngle = 3.14f/2.0f;
     ant.getFGP().falling = true;
-    //ant.getBGP().falling = true;
+    ant.getBGP().falling = true;
 }
 
 Physics::~Physics()
@@ -40,6 +40,7 @@ void Physics::addVelocity(PhysicsBody& body)
     if(body.getFGP().falling && body.getBGP().falling)
     {
         body.setPosition(body.getPosition() + body.getFallingVelocity());
+        body.setFallingVelocity(body.getFallingVelocity() + gravity);
     }
 }
 

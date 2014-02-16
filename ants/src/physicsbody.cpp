@@ -5,9 +5,8 @@
 PhysicsBody::PhysicsBody(glm::vec2 pos)
 {
     baseVelocity = -2.0f;
-    angle = 0.0f;
-    //actualVelocity = glm::vec2(baseVelocity * cos(angle), baseVelocity * sin(angle));  
     fallingVelocity = glm::vec2(0.0f, 0.0f);
+    angle = 0.0f;
     position = pos;
     std::cout << "position is: " << position.x << " and " << position.y << "\n";
     frontGroundPoint = CollisionPoint({40.0f, 25.0f});
