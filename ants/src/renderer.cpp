@@ -42,7 +42,7 @@ void Renderer::setup()
 
     physics.setTexture(&textures.at("dirt"));
 
-    antQuad.setOrigin({400.0f, 300.0f});
+    antQuad.setOrigin({50.0f, 25.0f});
     antQuad.setPosition({800.0f, 600.0f});
 }
 
@@ -58,7 +58,7 @@ void Renderer::handleMessage(const AntPositionMessage& mess)
     glm::vec2 position;
     float angle;
     std::tie(position, angle) = mess.mData;
-    antQuad.setPosition(position);
+    //antQuad.setPosition(position);
     antQuad.setRotation(angle);
 }
 
@@ -85,6 +85,6 @@ void Renderer::render()
     renderer.queue(antQuad);
     renderer.render();
 
-    //glm::vec2 hej = antQuad.getPosition();
+    glm::vec2 hej = antQuad.getPosition();
     //std::cout << "ant position is: " << hej.x << " and " << hej.y << "\n";
 }

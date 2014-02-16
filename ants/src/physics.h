@@ -14,7 +14,7 @@ class Physics
 
     private:
         fea::MessageBus& messageBus;
-        float gravity;
+        glm::vec2 gravity;
         float thresholdAngle;
 
         void addVelocity(PhysicsBody& body);

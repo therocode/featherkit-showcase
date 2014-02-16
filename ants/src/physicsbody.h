@@ -5,21 +5,39 @@
 class PhysicsBody
 {
     public:
-        PhysicsBody();
+        PhysicsBody() = default;
+        PhysicsBody(glm::vec2 pos);
 
+        glm::vec2 frontGroundPointInWorldSpace();
+        glm::vec2 backGroundPointInWorldSpace();
+
+        CollisionPoint& getFGP();
+        CollisionPoint& getBGP();
+
+        glm::vec2 getPosition();
+        void setPosition(glm::vec2 pos);
+
+        float getAngle();
+        void setAngle(float a);
+
+        glm::vec2 recalculateVelocity();
+        glm::vec2 getActualVelocity();
+        glm::vec2 getFallingVelocity();
+        void setActualVelocity(glm::vec2 vel);
+        void setFallingVelocity(glm::vec2 vel);
+
+    private:
         // equivalent to middle of sprite
-        glm::vec2 origin;
+        glm::vec2 position;
 
-        // relative to origin
+        // relative to position
         CollisionPoint frontGroundPoint;
         CollisionPoint backGroundPoint;
 
-        float angle;    // radians
+        // in radians, starting from (1, 0)
+        float angle;    
 
         float baseVelocity;
         glm::vec2 actualVelocity;
         glm::vec2 fallingVelocity;
-
-        glm::vec2 frontGroundPointInWorldSpace();
-        glm::vec2 backGroundPointInWorldSpace();
 };
