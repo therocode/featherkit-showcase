@@ -56,8 +56,10 @@ void Physics::addFalling(PhysicsBody& body)
         point = originalPosition - point;    // get origin's position relative to the back point
         float degree = 0.0174532925f;    
         body.setAngle(body.getAngle() - degree);    // rotate the ant
-        point = glm::mat2x2(cos(degree), -sin(degree), sin(degree), cos(degree)) * point;   // rotate origin around the back point
-        body.setPosition(point + originalPosition);
+        std::cout << "position1 is: " << point.x << " and " << point.y << "\n";
+        point = glm::mat2x2(cos(-degree), -sin(-degree), sin(-degree), cos(-degree)) * point;   // rotate origin around the back point
+        std::cout << "position2 is: " << point.x << " and " << point.y << "\n";
+        body.setPosition(point + body.backGroundPointInWorldSpace());
         //messageBus.send(AntPositionMessage(body.origin, body.angle));
     }
     else if(body.getBGP().falling)

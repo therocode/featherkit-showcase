@@ -8,7 +8,6 @@ PhysicsBody::PhysicsBody(glm::vec2 pos)
     fallingVelocity = glm::vec2(0.0f, 0.0f);
     angle = 0.0f;
     position = pos;
-    std::cout << "position is: " << position.x << " and " << position.y << "\n";
     frontGroundPoint = CollisionPoint({40.0f, 25.0f});
     backGroundPoint = CollisionPoint({-40.0f, 25.0f});
 }
