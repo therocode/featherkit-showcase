@@ -58,7 +58,7 @@ void Renderer::handleMessage(const AntPositionMessage& mess)
     glm::vec2 position;
     float angle;
     std::tie(position, angle) = mess.mData;
-    //antQuad.setPosition(position);
+    antQuad.setPosition(position);
     antQuad.setRotation(angle);
 }
 

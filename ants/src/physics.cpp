@@ -24,8 +24,8 @@ void Physics::setTexture(fea::Texture* texture)
 
 void Physics::update()
 {
-    std::cout << "ant point states are: " << ant.getFGP().falling << " and " << ant.getBGP().falling << "\n";
-    //addVelocity(ant);
+    //std::cout << "ant point states are: " << ant.getFGP().falling << " and " << ant.getBGP().falling << "\n";
+    addVelocity(ant);
     //addFalling(ant);
     //terrainCheck(ant);
 
