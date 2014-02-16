@@ -25,9 +25,7 @@ glm::vec2 PhysicsBody::backGroundPointInWorldSpace()
 {
     glm::vec2 point;
     point = glm::mat2x2(cos(angle), -sin(angle), sin(angle), cos(angle)) * backGroundPoint.point;
-    std::cout << "back position2 is: " << point.x << " and " << point.y << "\n";
     point += position;
-    std::cout << "back position is: " << point.x << " and " << point.y << "\n";
     return point;
 }
 

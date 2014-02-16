@@ -86,5 +86,5 @@ void Renderer::render()
     renderer.render();
 
     glm::vec2 hej = antQuad.getPosition();
-    //std::cout << "ant position is: " << hej.x << " and " << hej.y << "\n";
+    std::cout << "ant position is: " << hej.x << " and " << hej.y << "\n";
 }

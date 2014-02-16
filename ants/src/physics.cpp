@@ -10,7 +10,7 @@ Physics::Physics(fea::MessageBus& bus)
     gravity = glm::vec2(0.0f, 1.0f);
     thresholdAngle = 3.14f/2.0f;
     ant.getFGP().falling = true;
-    ant.getBGP().falling = true;
+    //ant.getBGP().falling = true;
 }
 
 Physics::~Physics()
@@ -26,7 +26,7 @@ void Physics::update()
 {
     //std::cout << "ant point states are: " << ant.getFGP().falling << " and " << ant.getBGP().falling << "\n";
     addVelocity(ant);
-    //addFalling(ant);
+    addFalling(ant);
     //terrainCheck(ant);
 
     messageBus.send(AntPositionMessage(ant.getPosition(), ant.getAngle()));
@@ -40,7 +40,6 @@ void Physics::addVelocity(PhysicsBody& body)
     if(body.getFGP().falling && body.getBGP().falling)
     {
         body.setPosition(body.getPosition() + body.getFallingVelocity());
-        body.setFallingVelocity(body.getFallingVelocity() + gravity);
     }
 }
 
@@ -53,11 +52,12 @@ void Physics::addFalling(PhysicsBody& body)
     else if(body.getFGP().falling)
     {
         glm::vec2 point = body.backGroundPointInWorldSpace();    
-        point = body.getPosition() - point;    // get origin's position relative to the back point
+        glm::vec2 originalPosition = body.getPosition();
+        point = originalPosition - point;    // get origin's position relative to the back point
         float degree = 0.0174532925f;    
         body.setAngle(body.getAngle() - degree);    // rotate the ant
         point = glm::mat2x2(cos(degree), -sin(degree), sin(degree), cos(degree)) * point;   // rotate origin around the back point
-        body.setPosition(point);
+        body.setPosition(point + originalPosition);
         //messageBus.send(AntPositionMessage(body.origin, body.angle));
     }
     else if(body.getBGP().falling)
