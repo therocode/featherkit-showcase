@@ -108,7 +108,4 @@ void Renderer::render()
     renderer.queue(pointF);
     renderer.queue(pointB);
     renderer.render();
-
-    glm::vec2 hej = antQuad.getPosition();
-    std::cout << "ant position is: " << hej.x << " and " << hej.y << "\n";
 }
