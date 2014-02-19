@@ -12,7 +12,7 @@ PhysicsBody::PhysicsBody(glm::vec2 pos)
     backGroundPoint = CollisionPoint({-40.0f, 25.0f});
 }
 
-glm::vec2 PhysicsBody::frontGroundPointInWorldSpace()
+glm::vec2 PhysicsBody::getFGPInWorldSpace()
 {
     glm::vec2 point;
     point = glm::mat2x2(cos(angle), -sin(angle), sin(angle), cos(angle)) * frontGroundPoint.point;
@@ -20,7 +20,7 @@ glm::vec2 PhysicsBody::frontGroundPointInWorldSpace()
     return point;
 }
 
-glm::vec2 PhysicsBody::backGroundPointInWorldSpace()
+glm::vec2 PhysicsBody::getBGPInWorldSpace()
 {
     glm::vec2 point;
     point = glm::mat2x2(cos(angle), -sin(angle), sin(angle), cos(angle)) * backGroundPoint.point;
@@ -28,14 +28,24 @@ glm::vec2 PhysicsBody::backGroundPointInWorldSpace()
     return point;
 }
 
-CollisionPoint& PhysicsBody::getFGP()
+CollisionPoint PhysicsBody::getFGP()
 {
     return frontGroundPoint;
 }
 
-CollisionPoint& PhysicsBody::getBGP()
+CollisionPoint PhysicsBody::getBGP()
 {
     return backGroundPoint;
+}
+
+void PhysicsBody::setFGPAsFalling(bool falling)
+{
+    frontGroundPoint.falling = falling;
+}
+
+void PhysicsBody::setBGPAsFalling(bool falling)
+{
+    backGroundPoint.falling = falling;
 }
 
 glm::vec2 PhysicsBody::getPosition()

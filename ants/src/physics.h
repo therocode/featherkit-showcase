@@ -24,4 +24,6 @@ class Physics
 
         const fea::Texture* dirtTexture;
         PhysicsBody ant;
+
+        glm::vec2 rotatePoint(glm::vec2 pointToRotate, float degreesToRotate, glm::vec2 pointOfOrigin);
 };

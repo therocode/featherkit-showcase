@@ -9,8 +9,8 @@ Physics::Physics(fea::MessageBus& bus)
     dirtTexture = nullptr;
     gravity = glm::vec2(0.0f, 1.0f);
     thresholdAngle = 3.14f/2.0f;
-    //ant.getFGP().falling = true;
-    //ant.getBGP().falling = true;
+    ant.setFGPAsFalling(true);
+    //ant.setBGPAsFalling(true);
 }
 
 Physics::~Physics()
@@ -30,7 +30,7 @@ void Physics::update()
     //terrainCheck(ant);
 
     messageBus.send(AntPositionMessage(ant.getPosition(), ant.getAngle()));
-    messageBus.send(AntPointsMessage(ant.frontGroundPointInWorldSpace(), ant.backGroundPointInWorldSpace()));
+    messageBus.send(AntPointsMessage(ant.getFGPInWorldSpace(), ant.getBGPInWorldSpace()));
 }
 
 void Physics::addVelocity(PhysicsBody& body)
@@ -54,33 +54,35 @@ void Physics::addFalling(PhysicsBody& body)
     }
     else if(body.getFGP().falling)
     {
-        glm::vec2 point = body.backGroundPointInWorldSpace();    // get fixed point coords
-        point = body.getPosition() - point;    // get origin's position relative to the back point
         float degree = 0.0174532925f;    
-        point = glm::mat2x2(cos(-degree), -sin(-degree), sin(-degree), cos(-degree)) * point;   // rotate origin around the back point
-        body.setPosition(point + body.backGroundPointInWorldSpace());
+        body.setPosition(rotatePoint(body.getPosition(), -degree, body.getBGPInWorldSpace()));
         body.setAngle(body.getAngle() - degree);    // rotate the ant
     }
     else if(body.getBGP().falling)
     {
-        glm::vec2 point = body.frontGroundPointInWorldSpace();
-        point = body.getPosition() - point;    // get origin's position relative to the front point
         float degree = 0.0174532925f;    
-        point = glm::mat2x2(cos(degree), -sin(degree), sin(degree), cos(degree)) * point;   // rotate origin around the front point
-        body.setPosition(point + body.frontGroundPointInWorldSpace());
+        body.setPosition(rotatePoint(body.getPosition(), degree, body.getFGPInWorldSpace()));
         body.setAngle(body.getAngle() + degree);    // rotate the ant
     }
 }
 
 void Physics::terrainCheck(PhysicsBody& body)
 {
-    //glm::vec2 possiblePos = body.origin + body.frontGroundPoint + body.actualVelocity;
-    glm::vec2 possiblePos = glm::vec2(0.0f, 0.0f);
-    while(terrainCollisionAt(possiblePos))
+    // Front Point check
+    while(terrainCollisionAt(body.getFGPInWorldSpace()))
     {
-        body.setActualVelocity(glm::vec2(body.getActualVelocity().x, 0.0f));
         float degree = 0.0174532925f;    
         body.setAngle(body.getAngle() + degree);    // rotate the ant
+        //possiblePos = glm::mat2x2(cos(body.angle), -sin(body.angle), sin(body.angle), cos(body.angle)) * possiblePos;
+
+        // check for critical/threshold angle
+    }
+
+    // Back Point check
+    while(terrainCollisionAt(body.getBGPInWorldSpace()))
+    {
+        float degree = 0.0174532925f;    
+        body.setAngle(body.getAngle() - degree);    // rotate the ant
         //possiblePos = glm::mat2x2(cos(body.angle), -sin(body.angle), sin(body.angle), cos(body.angle)) * possiblePos;
 
         // check for critical/threshold angle
@@ -91,4 +93,11 @@ bool Physics::terrainCollisionAt(glm::vec2 pos)
 {
     glm::uvec2 position = (glm::uvec2)(pos / 2.0f);
     return dirtTexture->getPixel(position.x, position.y).a() != 0.0f;
+}
+
+glm::vec2 Physics::rotatePoint(glm::vec2 pointToRotate, float degreesToRotate, glm::vec2 pointOfOrigin)
+{
+    pointToRotate = pointToRotate - pointOfOrigin;    // get pointToRotate's position relative to the pointOfOrigin
+    pointToRotate = glm::mat2x2(cos(degreesToRotate), -sin(degreesToRotate), sin(degreesToRotate), cos(degreesToRotate)) * pointToRotate;   // rotate point around the pointOfOrigin
+    return pointToRotate + pointOfOrigin;
 }

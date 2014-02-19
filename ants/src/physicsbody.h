@@ -8,11 +8,14 @@ class PhysicsBody
         PhysicsBody() = default;
         PhysicsBody(glm::vec2 pos);
 
-        glm::vec2 frontGroundPointInWorldSpace();
-        glm::vec2 backGroundPointInWorldSpace();
+        glm::vec2 getFGPInWorldSpace();
+        glm::vec2 getBGPInWorldSpace();
 
-        CollisionPoint& getFGP();
-        CollisionPoint& getBGP();
+        CollisionPoint getFGP();
+        CollisionPoint getBGP();
+
+        void setFGPAsFalling(bool falling);
+        void setBGPAsFalling(bool falling);
 
         glm::vec2 getPosition();
         void setPosition(glm::vec2 pos);
