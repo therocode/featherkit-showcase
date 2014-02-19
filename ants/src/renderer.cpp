@@ -46,7 +46,7 @@ void Renderer::setup()
 
     antQuad.setOrigin({50.0f, 25.0f});
     antQuad.setPosition({800.0f, 600.0f});
-    antQuad.setHFlip(true);
+    //antQuad.setHFlip(true);
 
     pointF = fea::Quad({6, 6});
     pointB = fea::Quad({6, 6});

@@ -4,7 +4,7 @@
 
 PhysicsBody::PhysicsBody(glm::vec2 pos)
 {
-    baseVelocity = -2.0f;
+    baseVelocity = -1.0f;
     fallingVelocity = glm::vec2(0.0f, 0.0f);
     angle = 0.0f;   // radians
     position = pos;
