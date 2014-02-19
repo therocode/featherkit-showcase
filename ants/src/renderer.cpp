@@ -46,6 +46,7 @@ void Renderer::setup()
 
     antQuad.setOrigin({50.0f, 25.0f});
     antQuad.setPosition({800.0f, 600.0f});
+    antQuad.setHFlip(true);
 
     pointF = fea::Quad({6, 6});
     pointB = fea::Quad({6, 6});
@@ -54,6 +55,8 @@ void Renderer::setup()
 
     pointF.setPosition({0.0f, 0.0f});
     pointB.setPosition({0.0f, 0.0f});
+
+    pointF.setColour({0, 255, 0});
 }
 
 void Renderer::handleMessage(const CameraPositionMessage& mess)
