@@ -7,7 +7,8 @@
 
 class Renderer
     :   public fea::MessageReceiver<CameraPositionMessage>,
-        public fea::MessageReceiver<AntPositionMessage>
+        public fea::MessageReceiver<AntPositionMessage>,
+        public fea::MessageReceiver<AntPointsMessage>
 {
     public:
         Renderer(fea::MessageBus& bus);
@@ -18,6 +19,7 @@ class Renderer
         //messages//
         virtual void handleMessage(const CameraPositionMessage& mess) override;
         virtual void handleMessage(const AntPositionMessage& mess) override;
+        virtual void handleMessage(const AntPointsMessage& mess) override;
 
     private:
         fea::MessageBus& messageBus;
@@ -33,4 +35,10 @@ class Renderer
         fea::Quad antQuad;
         fea::Quad dirtQuad;
         fea::Quad dirtBgQuad;
+
+        fea::Quad pointF;
+        fea::Quad pointB;
+
+        glm::vec2 posF;
+        glm::vec2 posB;
 };

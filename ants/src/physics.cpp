@@ -30,6 +30,7 @@ void Physics::update()
     //terrainCheck(ant);
 
     messageBus.send(AntPositionMessage(ant.getPosition(), ant.getAngle()));
+    messageBus.send(AntPointsMessage(ant.frontGroundPointInWorldSpace(), ant.backGroundPointInWorldSpace()));
 }
 
 void Physics::addVelocity(PhysicsBody& body)
@@ -51,26 +52,21 @@ void Physics::addFalling(PhysicsBody& body)
     }
     else if(body.getFGP().falling)
     {
-        glm::vec2 point = body.backGroundPointInWorldSpace();    
-        glm::vec2 originalPosition = body.getPosition();
-        point = originalPosition - point;    // get origin's position relative to the back point
+        glm::vec2 point = body.backGroundPointInWorldSpace();    // get fixed point coords
+        point = body.getPosition() - point;    // get origin's position relative to the back point
         float degree = 0.0174532925f;    
-        body.setAngle(body.getAngle() - degree);    // rotate the ant
-        std::cout << "position1 is: " << point.x << " and " << point.y << "\n";
         point = glm::mat2x2(cos(-degree), -sin(-degree), sin(-degree), cos(-degree)) * point;   // rotate origin around the back point
-        std::cout << "position2 is: " << point.x << " and " << point.y << "\n";
         body.setPosition(point + body.backGroundPointInWorldSpace());
-        //messageBus.send(AntPositionMessage(body.origin, body.angle));
+        body.setAngle(body.getAngle() - degree);    // rotate the ant
     }
     else if(body.getBGP().falling)
     {
         glm::vec2 point = body.frontGroundPointInWorldSpace();
         point = body.getPosition() - point;    // get origin's position relative to the front point
         float degree = 0.0174532925f;    
-        body.setAngle(body.getAngle() + degree);    // rotate the ant
         point = glm::mat2x2(cos(degree), -sin(degree), sin(degree), cos(degree)) * point;   // rotate origin around the front point
-        body.setPosition(point);
-        //messageBus.send(AntPositionMessage(body.origin, body.angle));
+        body.setPosition(point + body.frontGroundPointInWorldSpace());
+        body.setAngle(body.getAngle() + degree);    // rotate the ant
     }
 }
 

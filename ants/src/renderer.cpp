@@ -10,6 +10,7 @@ Renderer::Renderer(fea::MessageBus& bus)
 {
     messageBus.addSubscriber<CameraPositionMessage>(*this);
     messageBus.addSubscriber<AntPositionMessage>(*this);
+    messageBus.addSubscriber<AntPointsMessage>(*this);
 }
 
 void Renderer::createTexture(const std::string& name, const std::string& path, int width, int height, bool smooth, bool interactive)
@@ -23,6 +24,7 @@ Renderer::~Renderer()
 {
     messageBus.removeSubscriber<CameraPositionMessage>(*this);
     messageBus.removeSubscriber<AntPositionMessage>(*this);
+    messageBus.removeSubscriber<AntPointsMessage>(*this);
 }
 
 void Renderer::setup()
@@ -44,6 +46,14 @@ void Renderer::setup()
 
     antQuad.setOrigin({50.0f, 25.0f});
     antQuad.setPosition({800.0f, 600.0f});
+
+    pointF = fea::Quad({6, 6});
+    pointB = fea::Quad({6, 6});
+    pointF.setOrigin({3.0f, 3.0f});
+    pointB.setOrigin({3.0f, 3.0f});
+
+    pointF.setPosition({0.0f, 0.0f});
+    pointB.setPosition({0.0f, 0.0f});
 }
 
 void Renderer::handleMessage(const CameraPositionMessage& mess)
@@ -60,6 +70,15 @@ void Renderer::handleMessage(const AntPositionMessage& mess)
     std::tie(position, angle) = mess.mData;
     antQuad.setPosition(position);
     antQuad.setRotation(angle);
+}
+
+void Renderer::handleMessage(const AntPointsMessage& mess)
+{
+    glm::vec2 positionF;
+    glm::vec2 positionB;
+    std::tie(positionF, positionB) = mess.mData;
+    pointF.setPosition(positionF);
+    pointB.setPosition(positionB);
 }
 
 void Renderer::render()
@@ -83,6 +102,8 @@ void Renderer::render()
     renderer.queue(dirtBgQuad);
     renderer.queue(dirtQuad);
     renderer.queue(antQuad);
+    renderer.queue(pointF);
+    renderer.queue(pointB);
     renderer.render();
 
     glm::vec2 hej = antQuad.getPosition();

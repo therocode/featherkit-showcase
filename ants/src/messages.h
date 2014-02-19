@@ -5,3 +5,4 @@
 FEA_DECLARE_MESSAGE(QuitMessage);
 FEA_DECLARE_MESSAGE(CameraPositionMessage, const glm::vec2&);       // vel to add
 FEA_DECLARE_MESSAGE(AntPositionMessage, const glm::vec2&, float);    // origin position, angle
+FEA_DECLARE_MESSAGE(AntPointsMessage, const glm::vec2&, const glm::vec2&);

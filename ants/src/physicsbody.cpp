@@ -6,7 +6,7 @@ PhysicsBody::PhysicsBody(glm::vec2 pos)
 {
     baseVelocity = -2.0f;
     fallingVelocity = glm::vec2(0.0f, 0.0f);
-    angle = 0.0f;
+    angle = 0.0f;   // radians
     position = pos;
     frontGroundPoint = CollisionPoint({40.0f, 25.0f});
     backGroundPoint = CollisionPoint({-40.0f, 25.0f});
