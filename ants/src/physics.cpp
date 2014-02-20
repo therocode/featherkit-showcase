@@ -7,10 +7,13 @@ const float degree = 0.0174532925f;
 Physics::Physics(fea::MessageBus& bus)
     :   messageBus(bus)
 {
-    ant = PhysicsBody({800.0f, 600.0f});
+    ants.push_back(PhysicsBody({800.0f, 600.0f}));
+    messageBus.send(AntQuadCreationMessage({800.0f, 600.0f}));
+    ants.push_back(PhysicsBody({400.0f, 600.0f}));
+    messageBus.send(AntQuadCreationMessage({400.0f, 600.0f}));
     dirtTexture = nullptr;
     gravity = glm::vec2(0.0f, 1.0f);
-    thresholdAngle = 3.14f/2.0f;
+    //thresholdAngle = 3.14f/2.0f;
 }
 
 Physics::~Physics()
@@ -24,12 +27,16 @@ void Physics::setTexture(fea::Texture* texture)
 
 void Physics::update()
 {
-    addVelocity(ant);
-    addFalling(ant);
-    terrainCheck(ant);
+    for(int i = 0; i < ants.size(); i++)
+    {
+        PhysicsBody ant = ants.at(i);
+        addVelocity(ant);
+        addFalling(ant);
+        terrainCheck(ant);
 
-    messageBus.send(AntPositionMessage(ant.getPosition(), ant.getAngle()));
-    messageBus.send(AntPointsMessage(ant.getFGPInWorldSpace(), ant.getBGPInWorldSpace()));
+        messageBus.send(AntPositionMessage(i, ant.getPosition(), ant.getAngle()));
+        messageBus.send(AntPointsMessage(ant.getFGPInWorldSpace(), ant.getBGPInWorldSpace()));
+    }
 }
 
 void Physics::addVelocity(PhysicsBody& body)
@@ -73,7 +80,7 @@ void Physics::terrainCheck(PhysicsBody& body)
         // check for critical/threshold angle
     }
     bool frontColliding = terrainCollisionAt(body.getFGPInWorldSpace() + glm::vec2(0.0f, 5.0f));
-    ant.setFGPAsFalling(!frontColliding);   // falls if air below, otherwise not falling
+    body.setFGPAsFalling(!frontColliding);   // falls if air below, otherwise not falling
 
     // Back Point check
     while(terrainCollisionAt(body.getBGPInWorldSpace()))
@@ -83,7 +90,7 @@ void Physics::terrainCheck(PhysicsBody& body)
         // check for critical/threshold angle
     }
     bool backColliding = terrainCollisionAt(body.getBGPInWorldSpace() + glm::vec2(0.0f, 5.0f));
-    ant.setBGPAsFalling(!backColliding);
+    body.setBGPAsFalling(!backColliding);
 }
 
 bool Physics::terrainCollisionAt(glm::vec2 pos)

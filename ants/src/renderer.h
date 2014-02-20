@@ -8,6 +8,7 @@
 class Renderer
     :   public fea::MessageReceiver<CameraPositionMessage>,
         public fea::MessageReceiver<AntPositionMessage>,
+        public fea::MessageReceiver<AntQuadCreationMessage>,
         public fea::MessageReceiver<AntPointsMessage>
 {
     public:
@@ -19,6 +20,7 @@ class Renderer
         //messages//
         virtual void handleMessage(const CameraPositionMessage& mess) override;
         virtual void handleMessage(const AntPositionMessage& mess) override;
+        virtual void handleMessage(const AntQuadCreationMessage& mess) override;
         virtual void handleMessage(const AntPointsMessage& mess) override;
 
     private:
@@ -32,13 +34,12 @@ class Renderer
         std::unordered_map<std::string, fea::Texture> textures;
         void createTexture(const std::string& name, const std::string& path, int width, int height, bool smooth = false, bool interactive = false);
 
-        fea::Quad antQuad;
+        std::vector<fea::Quad> antQuads;
         fea::Quad dirtQuad;
         fea::Quad dirtBgQuad;
 
         fea::Quad pointF;
         fea::Quad pointB;
-
         glm::vec2 posF;
         glm::vec2 posB;
 };

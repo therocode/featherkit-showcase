@@ -15,7 +15,7 @@ class Physics
     private:
         fea::MessageBus& messageBus;
         glm::vec2 gravity;
-        float thresholdAngle;
+        //float thresholdAngle;
 
         void addVelocity(PhysicsBody& body);
         void addFalling(PhysicsBody& body);
@@ -23,7 +23,7 @@ class Physics
         bool terrainCollisionAt(glm::vec2 pos);
 
         const fea::Texture* dirtTexture;
-        PhysicsBody ant;
+        std::vector<PhysicsBody> ants;
 
         glm::vec2 rotatePoint(glm::vec2 pointToRotate, float degreesToRotate, glm::vec2 pointOfOrigin);
 };

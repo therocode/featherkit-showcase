@@ -10,6 +10,7 @@ Renderer::Renderer(fea::MessageBus& bus)
 {
     messageBus.addSubscriber<CameraPositionMessage>(*this);
     messageBus.addSubscriber<AntPositionMessage>(*this);
+    messageBus.addSubscriber<AntQuadCreationMessage>(*this);
     messageBus.addSubscriber<AntPointsMessage>(*this);
 }
 
@@ -24,6 +25,7 @@ Renderer::~Renderer()
 {
     messageBus.removeSubscriber<CameraPositionMessage>(*this);
     messageBus.removeSubscriber<AntPositionMessage>(*this);
+    messageBus.removeSubscriber<AntQuadCreationMessage>(*this);
     messageBus.removeSubscriber<AntPointsMessage>(*this);
 }
 
@@ -35,18 +37,12 @@ void Renderer::setup()
     createTexture("dirtbg", "ants/data/textures/dirtbg.png", 800, 600);
     createTexture("ant", "ants/data/textures/ant.png", 200, 100);
 
-    antQuad = fea::Quad({100, 50});
     dirtQuad = fea::Quad({1600, 1200});
     dirtBgQuad = fea::Quad({1600, 1200});
     dirtQuad.setTexture(textures.at("dirt"));
     dirtBgQuad.setTexture(textures.at("dirtbg"));
-    antQuad.setTexture(textures.at("ant"));
 
     physics.setTexture(&textures.at("dirt"));
-
-    antQuad.setOrigin({50.0f, 25.0f});
-    antQuad.setPosition({800.0f, 600.0f});
-    antQuad.setHFlip(true);
 
     pointF = fea::Quad({6, 6});
     pointB = fea::Quad({6, 6});
@@ -66,13 +62,28 @@ void Renderer::handleMessage(const CameraPositionMessage& mess)
     cameraPosition += vel;
 }
 
-void Renderer::handleMessage(const AntPositionMessage& mess)
+void Renderer::handleMessage(const AntQuadCreationMessage& mess)
 {
     glm::vec2 position;
-    float angle;
-    std::tie(position, angle) = mess.mData;
+    std::tie(position) = mess.mData;
+
+    fea::Quad antQuad = fea::Quad({100, 50});
+    antQuad.setTexture(textures.at("ant"));
+    antQuad.setOrigin({50.0f, 25.0f});
     antQuad.setPosition(position);
-    antQuad.setRotation(angle);
+    antQuad.setHFlip(true);
+
+    antQuads.push_back(antQuad);
+}
+
+void Renderer::handleMessage(const AntPositionMessage& mess)
+{
+    int index;
+    glm::vec2 position;
+    float angle;
+    std::tie(index, position, angle) = mess.mData;
+    antQuads.at(index).setPosition(position);
+    antQuads.at(index).setRotation(angle);
 }
 
 void Renderer::handleMessage(const AntPointsMessage& mess)
@@ -104,8 +115,11 @@ void Renderer::render()
     renderer.clear(fea::Colour(0, 125, 255));
     renderer.queue(dirtBgQuad);
     renderer.queue(dirtQuad);
-    renderer.queue(antQuad);
-    renderer.queue(pointF);
-    renderer.queue(pointB);
+    for(auto& antQuad : antQuads)
+    {
+        renderer.queue(antQuad);
+    }
+    //renderer.queue(pointF);
+    //renderer.queue(pointB);
     renderer.render();
 }
