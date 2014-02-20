@@ -4,7 +4,8 @@
 #include <featherkit/render2d.h>
 
 class Physics
-    :   public fea::MessageReceiver<DirtTextureSetMessage>
+    :   public fea::MessageReceiver<DirtTextureSetMessage>,
+        public fea::MessageReceiver<AntCreationMessage>
 {
     public:
         Physics(fea::MessageBus& bus);
@@ -13,6 +14,7 @@ class Physics
         void update();
 
         virtual void handleMessage(const DirtTextureSetMessage& mess) override;
+        virtual void handleMessage(const AntCreationMessage& mess) override;
 
     private:
         fea::MessageBus& messageBus;

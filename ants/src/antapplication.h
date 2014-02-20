@@ -23,6 +23,8 @@ class AntApplication
         //messages//
         virtual void handleMessage(const QuitMessage& mess) override;
 
+        void createInitialAnts();
+
     private:
         fea::MessageBus messageBus;
         InputHandler input;

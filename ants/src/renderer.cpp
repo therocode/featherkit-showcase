@@ -9,7 +9,7 @@ Renderer::Renderer(fea::MessageBus& bus)
 {
     messageBus.addSubscriber<CameraPositionMessage>(*this);
     messageBus.addSubscriber<AntPositionMessage>(*this);
-    messageBus.addSubscriber<AntCreationMessage>(*this);// take this away
+    messageBus.addSubscriber<AntCreationMessage>(*this);
     messageBus.addSubscriber<AntPointsMessage>(*this);
 }
 
