@@ -25,9 +25,9 @@ class AntApplication
 
     private:
         fea::MessageBus messageBus;
+        InputHandler input;
         AntManager antManager;
         Physics physics;
-        InputHandler input;
         fea::Window window;
         Renderer renderer;
 };

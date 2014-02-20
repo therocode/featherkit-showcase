@@ -7,7 +7,7 @@
 class Renderer
     :   public fea::MessageReceiver<CameraPositionMessage>,
         public fea::MessageReceiver<AntPositionMessage>,
-        public fea::MessageReceiver<AntQuadCreationMessage>,
+        public fea::MessageReceiver<AntCreationMessage>,
         public fea::MessageReceiver<AntPointsMessage>
 {
     public:
@@ -19,7 +19,7 @@ class Renderer
         //messages//
         virtual void handleMessage(const CameraPositionMessage& mess) override;
         virtual void handleMessage(const AntPositionMessage& mess) override;
-        virtual void handleMessage(const AntQuadCreationMessage& mess) override;
+        virtual void handleMessage(const AntCreationMessage& mess) override;
         virtual void handleMessage(const AntPointsMessage& mess) override;
 
     private:

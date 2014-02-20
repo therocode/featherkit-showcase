@@ -10,6 +10,7 @@ AntApplication::AntApplication()
     messageBus.addSubscriber<QuitMessage>(*this);
     window.create(fea::VideoMode(800, 600, 32), "ants");
     renderer.setup();
+    antManager.createInitialAnts();
 }
 
 AntApplication::~AntApplication()

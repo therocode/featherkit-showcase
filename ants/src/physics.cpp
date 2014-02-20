@@ -9,10 +9,6 @@ Physics::Physics(fea::MessageBus& bus)
 {
     messageBus.addSubscriber<DirtTextureSetMessage>(*this);
 
-    ants.push_back(PhysicsBody({800.0f, 600.0f}));
-    messageBus.send(AntQuadCreationMessage({800.0f, 600.0f}));
-    ants.push_back(PhysicsBody({400.0f, 600.0f}));
-    messageBus.send(AntQuadCreationMessage({400.0f, 600.0f}));
     dirtTexture = nullptr;
     gravity = glm::vec2(0.0f, 1.0f);
     //thresholdAngle = 3.14f/2.0f;

@@ -9,7 +9,7 @@ Renderer::Renderer(fea::MessageBus& bus)
 {
     messageBus.addSubscriber<CameraPositionMessage>(*this);
     messageBus.addSubscriber<AntPositionMessage>(*this);
-    messageBus.addSubscriber<AntQuadCreationMessage>(*this);// take this away
+    messageBus.addSubscriber<AntCreationMessage>(*this);// take this away
     messageBus.addSubscriber<AntPointsMessage>(*this);
 }
 
@@ -24,7 +24,7 @@ Renderer::~Renderer()
 {
     messageBus.removeSubscriber<CameraPositionMessage>(*this);
     messageBus.removeSubscriber<AntPositionMessage>(*this);
-    messageBus.removeSubscriber<AntQuadCreationMessage>(*this);
+    messageBus.removeSubscriber<AntCreationMessage>(*this);
     messageBus.removeSubscriber<AntPointsMessage>(*this);
 }
 
@@ -61,16 +61,17 @@ void Renderer::handleMessage(const CameraPositionMessage& mess)
     cameraPosition += vel;
 }
 
-void Renderer::handleMessage(const AntQuadCreationMessage& mess)
+void Renderer::handleMessage(const AntCreationMessage& mess)
 {
+    bool digging;
     glm::vec2 position;
-    std::tie(position) = mess.mData;
+    std::tie(digging, position) = mess.mData;
 
     fea::Quad antQuad = fea::Quad({100, 50});
-    antQuad.setTexture(textures.at("ant"));
+    antQuad.setTexture(textures.at("ant")); // if digging or carrying, different sprites
     antQuad.setOrigin({50.0f, 25.0f});
     antQuad.setPosition(position);
-    antQuad.setHFlip(true);
+    antQuad.setHFlip(true); // should depend on the velocity
 
     antQuads.push_back(antQuad);
 }
