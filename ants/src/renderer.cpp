@@ -5,12 +5,11 @@ Renderer::Renderer(fea::MessageBus& bus)
     :   messageBus(bus),
         cameraPosition(800.0f, 600.0f),
         cameraInterpolator(cameraPosition),
-        renderer(fea::Viewport({800.0f, 600.0f}, {0, 0}, fea::Camera(cameraInterpolator.getPosition()))),
-        physics(bus)
+        renderer(fea::Viewport({800.0f, 600.0f}, {0, 0}, fea::Camera(cameraInterpolator.getPosition())))
 {
     messageBus.addSubscriber<CameraPositionMessage>(*this);
     messageBus.addSubscriber<AntPositionMessage>(*this);
-    messageBus.addSubscriber<AntQuadCreationMessage>(*this);
+    messageBus.addSubscriber<AntQuadCreationMessage>(*this);// take this away
     messageBus.addSubscriber<AntPointsMessage>(*this);
 }
 
@@ -42,7 +41,7 @@ void Renderer::setup()
     dirtQuad.setTexture(textures.at("dirt"));
     dirtBgQuad.setTexture(textures.at("dirtbg"));
 
-    physics.setTexture(&textures.at("dirt"));
+    messageBus.send(DirtTextureSetMessage(&textures.at("dirt")));
 
     pointF = fea::Quad({6, 6});
     pointB = fea::Quad({6, 6});
@@ -97,8 +96,6 @@ void Renderer::handleMessage(const AntPointsMessage& mess)
 
 void Renderer::render()
 {
-    physics.update();
-
     if(cameraPosition.x < 400.0f)
         cameraPosition.x = 400.0f;
     else if(cameraPosition.x > 1200.0f)

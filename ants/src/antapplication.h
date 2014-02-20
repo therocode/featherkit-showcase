@@ -1,9 +1,11 @@
 #pragma once
 #include "inputhandler.h"
+#include "antmanager.h"
 #include "renderer.h"
 #include "imageloader.h"
 #include "interpolator.h"
 #include "messages.h"
+#include "physics.h"
 #include <featherkit/structure.h>
 #include <featherkit/util/window/sdl2/sdl2windowbackend.h>
 
@@ -23,6 +25,8 @@ class AntApplication
 
     private:
         fea::MessageBus messageBus;
+        AntManager antManager;
+        Physics physics;
         InputHandler input;
         fea::Window window;
         Renderer renderer;

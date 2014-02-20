@@ -2,6 +2,8 @@
 
 AntApplication::AntApplication()
     :   input(messageBus),
+        antManager(messageBus),
+        physics(messageBus),
         window(new fea::util::SDL2WindowBackend()),
         renderer(messageBus)
 {
@@ -18,6 +20,8 @@ AntApplication::~AntApplication()
 void AntApplication::loop()
 {
     input.inputLoop();
+    //antManager.update();
+    physics.update();
     renderer.render();
     window.swapBuffers();
 }

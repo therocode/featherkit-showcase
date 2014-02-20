@@ -4,13 +4,15 @@
 #include <featherkit/render2d.h>
 
 class Physics
+    :   public fea::MessageReceiver<DirtTextureSetMessage>
 {
     public:
         Physics(fea::MessageBus& bus);
         ~Physics();
 
         void update();
-        void setTexture(fea::Texture* texture);
+
+        virtual void handleMessage(const DirtTextureSetMessage& mess) override;
 
     private:
         fea::MessageBus& messageBus;

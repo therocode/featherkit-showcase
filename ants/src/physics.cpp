@@ -7,6 +7,8 @@ const float degree = 0.0174532925f;
 Physics::Physics(fea::MessageBus& bus)
     :   messageBus(bus)
 {
+    messageBus.addSubscriber<DirtTextureSetMessage>(*this);
+
     ants.push_back(PhysicsBody({800.0f, 600.0f}));
     messageBus.send(AntQuadCreationMessage({800.0f, 600.0f}));
     ants.push_back(PhysicsBody({400.0f, 600.0f}));
@@ -18,11 +20,12 @@ Physics::Physics(fea::MessageBus& bus)
 
 Physics::~Physics()
 {
+    messageBus.removeSubscriber<DirtTextureSetMessage>(*this);
 }
 
-void Physics::setTexture(fea::Texture* texture)
+void Physics::handleMessage(const DirtTextureSetMessage& mess)
 {
-    dirtTexture = texture;
+    std::tie(dirtTexture) = mess.mData;
 }
 
 void Physics::update()

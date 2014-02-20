@@ -2,7 +2,6 @@
 #include "messages.h"
 #include "interpolator.h"
 #include "imageloader.h"
-#include "physics.h"
 #include <featherkit/render2d.h>
 
 class Renderer
@@ -28,7 +27,6 @@ class Renderer
         glm::vec2 cameraPosition;
         Interpolator cameraInterpolator;
         fea::Renderer2D renderer;
-        Physics physics;
 
         ImageLoader loader;
         std::unordered_map<std::string, fea::Texture> textures;
