@@ -51,7 +51,7 @@ void Renderer::setup()
     pointF.setPosition({0.0f, 0.0f});
     pointB.setPosition({0.0f, 0.0f});
 
-    pointF.setColour({0, 255, 0});
+    pointF.setColor({0, 255, 0});
 }
 
 void Renderer::handleMessage(const CameraPositionMessage& mess)
@@ -110,7 +110,7 @@ void Renderer::render()
     cameraInterpolator.update();
     renderer.getViewport().getCamera().setPosition(cameraInterpolator.getPosition());
 
-    renderer.clear(fea::Colour(0, 125, 255));
+    renderer.clear(fea::Color(0, 125, 255));
     renderer.queue(dirtBgQuad);
     renderer.queue(dirtQuad);
     for(auto& antQuad : antQuads)
