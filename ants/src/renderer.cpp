@@ -5,11 +5,11 @@ Renderer::Renderer(fea::MessageBus& bus)
     :   messageBus(bus),
         cameraPosition(800.0f, 600.0f),
         cameraInterpolator(cameraPosition),
-        renderer(fea::Viewport({800.0f, 600.0f}, {0, 0}, fea::Camera(cameraInterpolator.getPosition()))),
-        physics(bus)
+        renderer(fea::Viewport({800.0f, 600.0f}, {0, 0}, fea::Camera(cameraInterpolator.getPosition())))
 {
     messageBus.addSubscriber<CameraPositionMessage>(*this);
     messageBus.addSubscriber<AntPositionMessage>(*this);
+    messageBus.addSubscriber<AntCreationMessage>(*this);
     messageBus.addSubscriber<AntPointsMessage>(*this);
 }
 
@@ -24,6 +24,7 @@ Renderer::~Renderer()
 {
     messageBus.removeSubscriber<CameraPositionMessage>(*this);
     messageBus.removeSubscriber<AntPositionMessage>(*this);
+    messageBus.removeSubscriber<AntCreationMessage>(*this);
     messageBus.removeSubscriber<AntPointsMessage>(*this);
 }
 
@@ -35,18 +36,12 @@ void Renderer::setup()
     createTexture("dirtbg", "ants/data/textures/dirtbg.png", 800, 600);
     createTexture("ant", "ants/data/textures/ant.png", 200, 100);
 
-    antQuad = fea::Quad({100, 50});
     dirtQuad = fea::Quad({1600, 1200});
     dirtBgQuad = fea::Quad({1600, 1200});
     dirtQuad.setTexture(textures.at("dirt"));
     dirtBgQuad.setTexture(textures.at("dirtbg"));
-    antQuad.setTexture(textures.at("ant"));
 
-    physics.setTexture(&textures.at("dirt"));
-
-    antQuad.setOrigin({50.0f, 25.0f});
-    antQuad.setPosition({800.0f, 600.0f});
-    antQuad.setHFlip(true);
+    messageBus.send(DirtTextureSetMessage(&textures.at("dirt")));
 
     pointF = fea::Quad({6, 6});
     pointB = fea::Quad({6, 6});
@@ -56,7 +51,7 @@ void Renderer::setup()
     pointF.setPosition({0.0f, 0.0f});
     pointB.setPosition({0.0f, 0.0f});
 
-    pointF.setColour({0, 255, 0});
+    pointF.setColor({0, 255, 0});
 }
 
 void Renderer::handleMessage(const CameraPositionMessage& mess)
@@ -66,13 +61,29 @@ void Renderer::handleMessage(const CameraPositionMessage& mess)
     cameraPosition += vel;
 }
 
+void Renderer::handleMessage(const AntCreationMessage& mess)
+{
+    bool digging;
+    glm::vec2 position;
+    std::tie(digging, position) = mess.mData;
+
+    fea::Quad antQuad = fea::Quad({100, 50});
+    antQuad.setTexture(textures.at("ant")); // if digging or carrying, different sprites
+    antQuad.setOrigin({50.0f, 25.0f});
+    antQuad.setPosition(position);
+    antQuad.setHFlip(true); // should depend on the velocity
+
+    antQuads.push_back(antQuad);
+}
+
 void Renderer::handleMessage(const AntPositionMessage& mess)
 {
+    int index;
     glm::vec2 position;
     float angle;
-    std::tie(position, angle) = mess.mData;
-    antQuad.setPosition(position);
-    antQuad.setRotation(angle);
+    std::tie(index, position, angle) = mess.mData;
+    antQuads.at(index).setPosition(position);
+    antQuads.at(index).setRotation(angle);
 }
 
 void Renderer::handleMessage(const AntPointsMessage& mess)
@@ -86,8 +97,6 @@ void Renderer::handleMessage(const AntPointsMessage& mess)
 
 void Renderer::render()
 {
-    physics.update();
-
     if(cameraPosition.x < 400.0f)
         cameraPosition.x = 400.0f;
     else if(cameraPosition.x > 1200.0f)
@@ -101,11 +110,14 @@ void Renderer::render()
     cameraInterpolator.update();
     renderer.getViewport().getCamera().setPosition(cameraInterpolator.getPosition());
 
-    renderer.clear(fea::Colour(0, 125, 255));
+    renderer.clear(fea::Color(0, 125, 255));
     renderer.queue(dirtBgQuad);
     renderer.queue(dirtQuad);
-    renderer.queue(antQuad);
-    renderer.queue(pointF);
-    renderer.queue(pointB);
+    for(auto& antQuad : antQuads)
+    {
+        renderer.queue(antQuad);
+    }
+    //renderer.queue(pointF);
+    //renderer.queue(pointB);
     renderer.render();
 }

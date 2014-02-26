@@ -7,30 +7,51 @@ const float degree = 0.0174532925f;
 Physics::Physics(fea::MessageBus& bus)
     :   messageBus(bus)
 {
-    ant = PhysicsBody({800.0f, 600.0f});
+    messageBus.addSubscriber<DirtTextureSetMessage>(*this);
+    messageBus.addSubscriber<AntCreationMessage>(*this);
+
     dirtTexture = nullptr;
     gravity = glm::vec2(0.0f, 1.0f);
-    thresholdAngle = 3.14f/2.0f;
+    //thresholdAngle = 3.14f/2.0f;
 }
 
 Physics::~Physics()
 {
+    messageBus.removeSubscriber<DirtTextureSetMessage>(*this);
+    messageBus.removeSubscriber<AntCreationMessage>(*this);
 }
 
-void Physics::setTexture(fea::Texture* texture)
+void Physics::handleMessage(const DirtTextureSetMessage& mess)
 {
-    dirtTexture = texture;
+    std::tie(dirtTexture) = mess.mData;
+}
+
+void Physics::handleMessage(const AntCreationMessage& mess)
+{
+    bool digging;
+    glm::vec2 position;
+    std::tie(digging, position) = mess.mData;
+
+    PhysicsBody ant(position);
+
+    ants.push_back(ant);
 }
 
 void Physics::update()
 {
-    addVelocity(ant);
-    addFalling(ant);
-    terrainCheck(ant);
+    for(int i = 0; i < ants.size(); i++)
+    {
+        PhysicsBody& ant = ants.at(i);
+        addVelocity(ant);
+        addFalling(ant);
+        terrainCheck(ant);
 
-    messageBus.send(AntPositionMessage(ant.getPosition(), ant.getAngle()));
-    messageBus.send(AntPointsMessage(ant.getFGPInWorldSpace(), ant.getBGPInWorldSpace()));
+        messageBus.send(AntPositionMessage(i, ant.getPosition(), ant.getAngle()));
+        messageBus.send(AntPointsMessage(ant.getFGPInWorldSpace(), ant.getBGPInWorldSpace()));
+    }
 }
+
+// private //   //////////////////////////////////////////////////////////////////////////////////////////////
 
 void Physics::addVelocity(PhysicsBody& body)
 {
@@ -73,7 +94,7 @@ void Physics::terrainCheck(PhysicsBody& body)
         // check for critical/threshold angle
     }
     bool frontColliding = terrainCollisionAt(body.getFGPInWorldSpace() + glm::vec2(0.0f, 5.0f));
-    ant.setFGPAsFalling(!frontColliding);   // falls if air below, otherwise not falling
+    body.setFGPAsFalling(!frontColliding);   // falls if air below, otherwise not falling
 
     // Back Point check
     while(terrainCollisionAt(body.getBGPInWorldSpace()))
@@ -83,7 +104,7 @@ void Physics::terrainCheck(PhysicsBody& body)
         // check for critical/threshold angle
     }
     bool backColliding = terrainCollisionAt(body.getBGPInWorldSpace() + glm::vec2(0.0f, 5.0f));
-    ant.setBGPAsFalling(!backColliding);
+    body.setBGPAsFalling(!backColliding);
 }
 
 bool Physics::terrainCollisionAt(glm::vec2 pos)

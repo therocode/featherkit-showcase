@@ -4,18 +4,22 @@
 #include <featherkit/render2d.h>
 
 class Physics
+    :   public fea::MessageReceiver<DirtTextureSetMessage>,
+        public fea::MessageReceiver<AntCreationMessage>
 {
     public:
         Physics(fea::MessageBus& bus);
         ~Physics();
 
         void update();
-        void setTexture(fea::Texture* texture);
+
+        virtual void handleMessage(const DirtTextureSetMessage& mess) override;
+        virtual void handleMessage(const AntCreationMessage& mess) override;
 
     private:
         fea::MessageBus& messageBus;
         glm::vec2 gravity;
-        float thresholdAngle;
+        //float thresholdAngle;
 
         void addVelocity(PhysicsBody& body);
         void addFalling(PhysicsBody& body);
@@ -23,7 +27,7 @@ class Physics
         bool terrainCollisionAt(glm::vec2 pos);
 
         const fea::Texture* dirtTexture;
-        PhysicsBody ant;
+        std::vector<PhysicsBody> ants;
 
         glm::vec2 rotatePoint(glm::vec2 pointToRotate, float degreesToRotate, glm::vec2 pointOfOrigin);
 };

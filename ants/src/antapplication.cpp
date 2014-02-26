@@ -2,12 +2,15 @@
 
 AntApplication::AntApplication()
     :   input(messageBus),
+        antManager(messageBus),
+        physics(messageBus),
         window(new fea::util::SDL2WindowBackend()),
         renderer(messageBus)
 {
     messageBus.addSubscriber<QuitMessage>(*this);
     window.create(fea::VideoMode(800, 600, 32), "ants");
     renderer.setup();
+    createInitialAnts();
 }
 
 AntApplication::~AntApplication()
@@ -18,6 +21,8 @@ AntApplication::~AntApplication()
 void AntApplication::loop()
 {
     input.inputLoop();
+    //antManager.update();
+    physics.update();
     renderer.render();
     window.swapBuffers();
 }
@@ -36,4 +41,10 @@ void AntApplication::handleMessage(const QuitMessage& mess)
 {
     (void)mess;
     quit();
+}
+
+void AntApplication::createInitialAnts()
+{
+    antManager.createAnt(true, glm::vec2(800.0f, 600.0f));
+    antManager.createAnt(true, glm::vec2(400.0f, 600.0f));
 }
