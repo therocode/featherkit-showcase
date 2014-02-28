@@ -10,6 +10,7 @@ Renderer::Renderer(fea::MessageBus& bus)
     messageBus.addSubscriber<CameraPositionMessage>(*this);
     messageBus.addSubscriber<AntPositionMessage>(*this);
     messageBus.addSubscriber<AntCreationMessage>(*this);
+    messageBus.addSubscriber<AntDeletionMessage>(*this);
     messageBus.addSubscriber<AntPointsMessage>(*this);
 }
 
@@ -25,6 +26,7 @@ Renderer::~Renderer()
     messageBus.removeSubscriber<CameraPositionMessage>(*this);
     messageBus.removeSubscriber<AntPositionMessage>(*this);
     messageBus.removeSubscriber<AntCreationMessage>(*this);
+    messageBus.removeSubscriber<AntDeletionMessage>(*this);
     messageBus.removeSubscriber<AntPointsMessage>(*this);
 }
 
@@ -75,6 +77,14 @@ void Renderer::handleMessage(const AntCreationMessage& mess)
     antQuad.setHFlip(goingRight);
 
     antQuads.push_back(antQuad);
+}
+
+void Renderer::handleMessage(const AntDeletionMessage& mess)
+{
+    int index;
+    std::tie(index) = mess.mData;
+
+    antQuads.erase(antQuads.begin() + index);
 }
 
 void Renderer::handleMessage(const AntPositionMessage& mess)

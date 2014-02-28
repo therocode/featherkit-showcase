@@ -5,7 +5,8 @@
 
 class Physics
     :   public fea::MessageReceiver<DirtTextureSetMessage>,
-        public fea::MessageReceiver<AntCreationMessage>
+        public fea::MessageReceiver<AntCreationMessage>,
+        public fea::MessageReceiver<AntDeletionMessage>
 {
     public:
         Physics(fea::MessageBus& bus);
@@ -15,6 +16,7 @@ class Physics
 
         virtual void handleMessage(const DirtTextureSetMessage& mess) override;
         virtual void handleMessage(const AntCreationMessage& mess) override;
+        virtual void handleMessage(const AntDeletionMessage& mess) override;
 
     private:
         fea::MessageBus& messageBus;

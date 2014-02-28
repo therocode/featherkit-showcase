@@ -9,6 +9,7 @@ Physics::Physics(fea::MessageBus& bus)
 {
     messageBus.addSubscriber<DirtTextureSetMessage>(*this);
     messageBus.addSubscriber<AntCreationMessage>(*this);
+    messageBus.addSubscriber<AntDeletionMessage>(*this);
 
     dirtTexture = nullptr;
     gravity = glm::vec2(0.0f, 1.0f);
@@ -19,6 +20,7 @@ Physics::~Physics()
 {
     messageBus.removeSubscriber<DirtTextureSetMessage>(*this);
     messageBus.removeSubscriber<AntCreationMessage>(*this);
+    messageBus.removeSubscriber<AntDeletionMessage>(*this);
 }
 
 void Physics::handleMessage(const DirtTextureSetMessage& mess)
@@ -38,6 +40,14 @@ void Physics::handleMessage(const AntCreationMessage& mess)
     ants.push_back(ant);
 }
 
+void Physics::handleMessage(const AntDeletionMessage& mess)
+{
+    int index;
+    std::tie(index) = mess.mData;
+
+    ants.erase(ants.begin() + index);
+}
+
 void Physics::update()
 {
     for(int i = 0; i < ants.size(); i++)
@@ -49,7 +59,15 @@ void Physics::update()
 
         messageBus.send(AntPositionMessage(i, ant.getPosition(), ant.getAngle()));
         messageBus.send(AntPointsMessage(ant.getFGPInWorldSpace(), ant.getBGPInWorldSpace()));
+
+        // check if any ants outside of boundary
+        if((ant.getPosition().x < 424.0f) || (ant.getPosition().x > 1176.0f))
+        {
+            messageBus.send(AntOutsideBoundariesMessage(i));
+            i--;
+        }
     }
+
 }
 
 // private //   //////////////////////////////////////////////////////////////////////////////////////////////
@@ -112,7 +130,6 @@ void Physics::terrainCheck(PhysicsBody& body)
     bool backColliding = terrainCollisionAt(body.getBGPInWorldSpace() + glm::vec2(0.0f, 5.0f));
     body.setBGPAsFalling(!backColliding);
     */
-
     
     // Front Point check
     while(terrainCollisionAt(body.getFGPInWorldSpace()))
