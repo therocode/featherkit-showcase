@@ -1,4 +1,5 @@
 #include "inputhandler.h"
+#include <iostream>
 
 InputHandler::InputHandler(fea::MessageBus& bus)
     :   input(new fea::util::SDL2InputBackend()),
@@ -54,6 +55,13 @@ void InputHandler::inputLoop()
             else if(event.key.code == fea::Keyboard::D)
             {
                 directions[Direction::RIGHT] = false;
+            }
+        }
+        else if(event.type == fea::Event::MOUSEBUTTONPRESSED)
+        {
+            if(event.mouseButton.button == fea::Mouse::LEFT)
+            {
+                std::cout << "at " << event.mouseButton.x << ", " << event.mouseButton.y << "\n";
             }
         }
     }

@@ -3,7 +3,7 @@
 
 Renderer::Renderer(fea::MessageBus& bus)
     :   messageBus(bus),
-        cameraPosition(800.0f, 600.0f),
+        cameraPosition(800.0f, 700.0f),
         cameraInterpolator(cameraPosition),
         renderer(fea::Viewport({800.0f, 600.0f}, {0, 0}, fea::Camera(cameraInterpolator.getPosition())))
 {
@@ -64,14 +64,15 @@ void Renderer::handleMessage(const CameraPositionMessage& mess)
 void Renderer::handleMessage(const AntCreationMessage& mess)
 {
     bool digging;
+    bool goingRight;
     glm::vec2 position;
-    std::tie(digging, position) = mess.mData;
+    std::tie(digging, goingRight, position) = mess.mData;
 
-    fea::Quad antQuad = fea::Quad({100, 50});
+    fea::Quad antQuad = fea::Quad({50, 25});
     antQuad.setTexture(textures.at("ant")); // if digging or carrying, different sprites
-    antQuad.setOrigin({50.0f, 25.0f});
+    antQuad.setOrigin({25.0f, 12.5f});
     antQuad.setPosition(position);
-    antQuad.setHFlip(true); // should depend on the velocity
+    antQuad.setHFlip(goingRight);
 
     antQuads.push_back(antQuad);
 }
@@ -97,10 +98,10 @@ void Renderer::handleMessage(const AntPointsMessage& mess)
 
 void Renderer::render()
 {
-    if(cameraPosition.x < 400.0f)
-        cameraPosition.x = 400.0f;
-    else if(cameraPosition.x > 1200.0f)
-        cameraPosition.x = 1200.0f;
+    if(cameraPosition.x < 350.0f)
+        cameraPosition.x = 350.0f;
+    else if(cameraPosition.x > 1250.0f)
+        cameraPosition.x = 1250.0f;
     if(cameraPosition.y < 300.0f)
         cameraPosition.y = 300.0f;
     else if(cameraPosition.y > 900.0f)

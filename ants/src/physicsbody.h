@@ -6,7 +6,7 @@ class PhysicsBody
 {
     public:
         PhysicsBody() = default;
-        PhysicsBody(glm::vec2 pos);
+        PhysicsBody(glm::vec2 pos, bool goingRight);
 
         glm::vec2 getFGPInWorldSpace();
         glm::vec2 getBGPInWorldSpace();

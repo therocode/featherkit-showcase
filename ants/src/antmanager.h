@@ -7,8 +7,7 @@ class AntManager
     public:
         AntManager(fea::MessageBus& bus);
 
-        void createInitialAnts();
-        void createAnt(bool type, glm::vec2 position);
+        void createAnt(bool type, bool goingRight, glm::vec2 position);
 
     private:
         fea::MessageBus& messageBus;

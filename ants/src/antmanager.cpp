@@ -5,8 +5,8 @@ AntManager::AntManager(fea::MessageBus& bus)
 {
 }
 
-void AntManager::createAnt(bool type, glm::vec2 position)
+void AntManager::createAnt(bool type, bool goingRight, glm::vec2 position)
 {
     ants.push_back(Ant(type));
-    messageBus.send(AntCreationMessage(type, position));
+    messageBus.send(AntCreationMessage(type, goingRight, position));
 }

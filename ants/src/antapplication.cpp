@@ -45,6 +45,6 @@ void AntApplication::handleMessage(const QuitMessage& mess)
 
 void AntApplication::createInitialAnts()
 {
-    antManager.createAnt(true, glm::vec2(800.0f, 600.0f));
-    antManager.createAnt(true, glm::vec2(400.0f, 600.0f));
+    //antManager.createAnt(true, true, glm::vec2(400.0f, 500.0f));
+    antManager.createAnt(true, false, glm::vec2(600.0f, 600.0f));
 }
