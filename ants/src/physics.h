@@ -29,7 +29,7 @@ class Physics
         bool terrainCollisionAt(glm::vec2 pos);
 
         const fea::Texture* dirtTexture;
-        std::vector<PhysicsBody> ants;
+        std::unordered_map<size_t, PhysicsBody> ants;
 
         glm::vec2 rotatePoint(glm::vec2 pointToRotate, float degreesToRotate, glm::vec2 pointOfOrigin);
 };

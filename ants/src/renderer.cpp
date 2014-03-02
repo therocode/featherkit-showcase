@@ -65,10 +65,11 @@ void Renderer::handleMessage(const CameraPositionMessage& mess)
 
 void Renderer::handleMessage(const AntCreationMessage& mess)
 {
+    size_t id;
     bool digging;
     bool goingRight;
     glm::vec2 position;
-    std::tie(digging, goingRight, position) = mess.mData;
+    std::tie(id, digging, goingRight, position) = mess.mData;
 
     fea::Quad antQuad = fea::Quad({50, 25});
     antQuad.setTexture(textures.at("ant")); // if digging or carrying, different sprites
@@ -76,7 +77,7 @@ void Renderer::handleMessage(const AntCreationMessage& mess)
     antQuad.setPosition(position);
     antQuad.setHFlip(goingRight);
 
-    antQuads.push_back(antQuad);
+    antQuads.emplace(id, antQuad);
 }
 
 void Renderer::handleMessage(const AntDeletionMessage& mess)
@@ -84,7 +85,7 @@ void Renderer::handleMessage(const AntDeletionMessage& mess)
     int index;
     std::tie(index) = mess.mData;
 
-    antQuads.erase(antQuads.begin() + index);
+    antQuads.erase(index);
 }
 
 void Renderer::handleMessage(const AntPositionMessage& mess)
@@ -126,7 +127,7 @@ void Renderer::render()
     renderer.queue(dirtQuad);
     for(auto& antQuad : antQuads)
     {
-        renderer.queue(antQuad);
+        renderer.queue(antQuad.second);
     }
     //renderer.queue(pointF);
     //renderer.queue(pointB);

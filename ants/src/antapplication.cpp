@@ -4,7 +4,7 @@ AntApplication::AntApplication()
     :   input(messageBus),
         antManager(messageBus),
         physics(messageBus),
-        window(new fea::util::SDL2WindowBackend()),
+        window(new fea::SDL2WindowBackend()),
         renderer(messageBus)
 {
     messageBus.addSubscriber<QuitMessage>(*this);
@@ -46,5 +46,5 @@ void AntApplication::handleMessage(const QuitMessage& mess)
 void AntApplication::createInitialAnts()
 {
     antManager.createAnt(true, true, glm::vec2(400.0f, 500.0f));
-    antManager.createAnt(true, false, glm::vec2(600.0f, 600.0f));
+    //antManager.createAnt(true, false, glm::vec2(600.0f, 600.0f));
 }

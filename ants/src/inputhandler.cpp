@@ -2,7 +2,7 @@
 #include <iostream>
 
 InputHandler::InputHandler(fea::MessageBus& bus)
-    :   input(new fea::util::SDL2InputBackend()),
+    :   input(new fea::SDL2InputBackend()),
         messageBus(bus),
         directions{false, false , false, false}
 {
@@ -10,7 +10,6 @@ InputHandler::InputHandler(fea::MessageBus& bus)
 
 void InputHandler::inputLoop()
 {
-    input.processEvents();
     fea::Event event;
 
     while(input.pollEvent(event))
@@ -61,7 +60,11 @@ void InputHandler::inputLoop()
         {
             if(event.mouseButton.button == fea::Mouse::LEFT)
             {
+                /*
+                std::cout << "\n\n///////////////////////////////\n\n";
                 std::cout << "at " << event.mouseButton.x << ", " << event.mouseButton.y << "\n";
+                std::cout << "\n\n///////////////////////////////\n\n";
+                */
             }
         }
     }

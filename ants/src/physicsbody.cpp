@@ -4,15 +4,23 @@
 
 PhysicsBody::PhysicsBody(glm::vec2 pos, bool goingRight)
 {
-    if(goingRight)
-        baseVelocity = 1.0f;
-    else
-        baseVelocity = -1.0f;
     fallingVelocity = glm::vec2(0.0f, 0.0f);
     angle = 0.0f;   // radians
     position = pos;
-    frontGroundPoint = CollisionPoint({15.0f, 8.0f});
-    backGroundPoint = CollisionPoint({-15.0f, 8.0f});
+
+    if(goingRight)
+    {
+        baseVelocity = 1.0f;
+        frontGroundPoint = CollisionPoint({-15.0f, 8.0f});
+        backGroundPoint = CollisionPoint({15.0f, 8.0f});
+    }
+    else
+    {
+        baseVelocity = -1.0f;
+        frontGroundPoint = CollisionPoint({15.0f, 8.0f});
+        backGroundPoint = CollisionPoint({-15.0f, 8.0f});
+    }
+
 }
 
 glm::vec2 PhysicsBody::getFGPInWorldSpace()

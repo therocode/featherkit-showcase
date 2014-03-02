@@ -15,5 +15,6 @@ class AntManager
 
     private:
         fea::MessageBus& messageBus;
-        std::vector<Ant> ants;
+        std::unordered_map<size_t, Ant> ants;
+        size_t nextAntId;
 };
