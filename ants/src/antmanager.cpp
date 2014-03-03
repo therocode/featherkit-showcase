@@ -4,6 +4,13 @@ AntManager::AntManager(fea::MessageBus& bus)
     :   messageBus(bus)
 {
     nextAntId = 0;
+
+    messageBus.addSubscriber<AntOutsideBoundariesMessage>(*this);
+}
+
+AntManager::~AntManager()
+{
+    messageBus.removeSubscriber<AntOutsideBoundariesMessage>(*this);
 }
 
 void AntManager::update()
@@ -21,11 +28,8 @@ void AntManager::createAnt(bool type, bool goingRight, glm::vec2 position)
 
 void AntManager::handleMessage(const AntOutsideBoundariesMessage& mess)
 {
-    std::cout << "hello\n";
-    /*
     int index;
     std::tie(index) = mess.mData;
-    ants.erase(ants.begin() + index);
+    ants.erase(index);
     messageBus.send(AntDeletionMessage(index));
-    */
 }

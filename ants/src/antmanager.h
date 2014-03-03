@@ -7,6 +7,7 @@ class AntManager
 {
     public:
         AntManager(fea::MessageBus& bus);
+        ~AntManager();
 
         void update();
         void createAnt(bool type, bool goingRight, glm::vec2 position);
