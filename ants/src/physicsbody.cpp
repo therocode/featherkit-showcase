@@ -2,7 +2,7 @@
 #include <iostream>
 //#include <math.h>
 
-PhysicsBody::PhysicsBody(glm::vec2 pos, bool goingRight)
+PhysicsBody::PhysicsBody(glm::vec2 pos, bool goingRight, float velocity)
 {
     fallingVelocity = glm::vec2(0.0f, 0.0f);
     angle = 0.0f;   // radians
@@ -10,16 +10,15 @@ PhysicsBody::PhysicsBody(glm::vec2 pos, bool goingRight)
 
     if(goingRight)
     {
-        baseVelocity = 1.0f;
-        frontGroundPoint = CollisionPoint({15.0f, 8.0f});
-        backGroundPoint = CollisionPoint({-15.0f, 8.0f});
+        baseVelocity = 1.0f * velocity;
     }
     else
     {
-        baseVelocity = -1.0f;
-        frontGroundPoint = CollisionPoint({15.0f, 8.0f});
-        backGroundPoint = CollisionPoint({-15.0f, 8.0f});
+        baseVelocity = -1.0f * velocity;
     }
+
+    frontGroundPoint = CollisionPoint({15.0f, 8.0f});
+    backGroundPoint = CollisionPoint({-15.0f, 8.0f});
 
 }
 

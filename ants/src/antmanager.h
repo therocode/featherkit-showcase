@@ -10,7 +10,7 @@ class AntManager
         ~AntManager();
 
         void update();
-        void createAnt(bool type, bool goingRight, glm::vec2 position);
+        void createAnt(bool type, bool goingRight, glm::vec2 position, float velocity);
 
         virtual void handleMessage(const AntOutsideBoundariesMessage& mess) override;
 

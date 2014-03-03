@@ -34,9 +34,10 @@ void Physics::handleMessage(const AntCreationMessage& mess)
     bool digging;
     bool goingRight;
     glm::vec2 position;
-    std::tie(id, digging, goingRight, position) = mess.mData;
+    float velocity;
+    std::tie(id, digging, goingRight, position, velocity) = mess.mData;
 
-    PhysicsBody ant(position, goingRight);
+    PhysicsBody ant(position, goingRight, velocity);
 
     ants.emplace(id, ant);
 }
@@ -63,7 +64,7 @@ void Physics::update()
         //messageBus.send(AntPointsMessage(ant.getFGPInWorldSpace(), ant.getBGPInWorldSpace()));
 
         // check if any ants outside of boundary
-        if((ant.getPosition().x < 24.0f) || (ant.getPosition().x > 1176.0f))
+        if((ant.getPosition().x < 20.0f) || (ant.getPosition().x > 1576.0f)) // fix this second value :S
         {
             antsOutsideOfBoundary.push_back(i->first);
         }
@@ -98,14 +99,14 @@ void Physics::addFalling(PhysicsBody& body)
     else if(body.getFGP().falling)
     {
         body.setFallingVelocity(glm::vec2(0.0f, 0.0f));
-        body.setPosition(rotatePoint(body.getPosition(), -degree, body.getBGPInWorldSpace()));
-        body.setAngle(body.getAngle() - degree);    // rotate the ant
+        body.setPosition(rotatePoint(body.getPosition(), -degree * 3.0f, body.getBGPInWorldSpace()));
+        body.setAngle(body.getAngle() - degree * 3.0f);    // rotate the ant
     }
     else if(body.getBGP().falling)
     {
         body.setFallingVelocity(glm::vec2(0.0f, 0.0f));
-        body.setPosition(rotatePoint(body.getPosition(), degree, body.getFGPInWorldSpace()));
-        body.setAngle(body.getAngle() + degree);    // rotate the ant
+        body.setPosition(rotatePoint(body.getPosition(), degree * 3.0f, body.getFGPInWorldSpace()));
+        body.setAngle(body.getAngle() + degree * 3.0f);    // rotate the ant
     }
     else
     {

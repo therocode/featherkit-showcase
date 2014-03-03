@@ -69,7 +69,7 @@ void Renderer::handleMessage(const AntCreationMessage& mess)
     bool digging;
     bool goingRight;
     glm::vec2 position;
-    std::tie(id, digging, goingRight, position) = mess.mData;
+    std::tie(id, digging, goingRight, position, std::ignore) = mess.mData;
 
     fea::Quad antQuad = fea::Quad({50, 25});
     antQuad.setTexture(textures.at("ant")); // if digging or carrying, different sprites
@@ -109,10 +109,16 @@ void Renderer::handleMessage(const AntPointsMessage& mess)
 
 void Renderer::render()
 {
+    /*  to see whole screen
     if(cameraPosition.x < 350.0f)
         cameraPosition.x = 350.0f;
     else if(cameraPosition.x > 1250.0f)
         cameraPosition.x = 1250.0f;
+    */
+    if(cameraPosition.x < 450.0f)
+        cameraPosition.x = 450.0f;
+    else if(cameraPosition.x > 1150.0f)
+        cameraPosition.x = 1150.0f;
     if(cameraPosition.y < 300.0f)
         cameraPosition.y = 300.0f;
     else if(cameraPosition.y > 900.0f)
