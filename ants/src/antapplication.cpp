@@ -45,8 +45,9 @@ void AntApplication::handleMessage(const QuitMessage& mess)
 
 void AntApplication::createInitialAnts()
 {
+    // digger ant! :) //
+    antManager.createAnt(true, true, glm::vec2(346.0f, 952.0f), 3.5f);
     /*
-    antManager.createAnt(true, false, glm::vec2(100.0f, 300.0f));
     antManager.createAnt(true, true, glm::vec2(600.0f, 600.0f));
     antManager.createAnt(true, false, glm::vec2(150.0f, 300.0f));
     antManager.createAnt(true, true, glm::vec2(200.0f, 300.0f));

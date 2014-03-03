@@ -10,7 +10,7 @@ class AntManager
         ~AntManager();
 
         void update();
-        void createAnt(bool type, bool goingRight, glm::vec2 position, float velocity);
+        size_t createAnt(bool type, bool goingRight, glm::vec2 position, float velocity);
 
         virtual void handleMessage(const AntOutsideBoundariesMessage& mess) override;
 
@@ -19,7 +19,7 @@ class AntManager
         std::unordered_map<size_t, Ant> ants;
         size_t nextAntId;
 
-        void spawn();
+        void spawnAnts();
 
         glm::vec2 spawnPositionA;
         glm::vec2 spawnPositionB;

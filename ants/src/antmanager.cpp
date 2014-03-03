@@ -19,14 +19,17 @@ AntManager::~AntManager()
 
 void AntManager::update()
 {
-    spawn();
+    spawnAnts();
 }
 
-void AntManager::createAnt(bool type, bool goingRight, glm::vec2 position, float velocity)
+size_t AntManager::createAnt(bool type, bool goingRight, glm::vec2 position, float velocity)
 {
-    ants.emplace(nextAntId, Ant(type));
-    messageBus.send(AntCreationMessage(nextAntId, type, goingRight, position, velocity));
+    size_t createdId = nextAntId;
     nextAntId++;
+
+    ants.emplace(createdId, Ant(type));
+    messageBus.send(AntCreationMessage(createdId, type, goingRight, position, velocity));
+    return createdId;
 }
 
 void AntManager::handleMessage(const AntOutsideBoundariesMessage& mess)
@@ -37,7 +40,7 @@ void AntManager::handleMessage(const AntOutsideBoundariesMessage& mess)
     messageBus.send(AntDeletionMessage(index));
 }
 
-void AntManager::spawn()
+void AntManager::spawnAnts()
 {
     if(rand() % 100 < 2)
     {
