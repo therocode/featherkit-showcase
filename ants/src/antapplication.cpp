@@ -5,7 +5,8 @@ AntApplication::AntApplication()
         antManager(messageBus),
         physics(messageBus),
         window(new fea::SDL2WindowBackend()),
-        renderer(messageBus)
+        renderer(messageBus),
+        digging(messageBus)
 {
     messageBus.addSubscriber<QuitMessage>(*this);
     window.create(fea::VideoMode(800, 600, 32), "ants");
@@ -46,7 +47,8 @@ void AntApplication::handleMessage(const QuitMessage& mess)
 void AntApplication::createInitialAnts()
 {
     // digger ant! :) //
-    antManager.createAnt(true, true, glm::vec2(346.0f, 952.0f), 3.5f);
+    size_t diggerAntId = antManager.createAnt(true, true, glm::vec2(346.0f, 952.0f), 3.5f);
+    messageBus.send(DiggerAntCreatedMessage(diggerAntId));
     /*
     antManager.createAnt(true, true, glm::vec2(600.0f, 600.0f));
     antManager.createAnt(true, false, glm::vec2(150.0f, 300.0f));

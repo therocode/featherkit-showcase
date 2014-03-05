@@ -6,6 +6,7 @@
 #include "interpolator.h"
 #include "messages.h"
 #include "physics.h"
+#include "digging.h"
 #include <featherkit/structure.h>
 #include <featherkit/window/sdl2windowbackend.h>
 
@@ -32,4 +33,5 @@ class AntApplication
         Physics physics;
         fea::Window window;
         Renderer renderer;
+        Digging digging;
 };

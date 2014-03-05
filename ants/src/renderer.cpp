@@ -90,7 +90,7 @@ void Renderer::handleMessage(const AntDeletionMessage& mess)
 
 void Renderer::handleMessage(const AntPositionMessage& mess)
 {
-    int index;
+    size_t index;
     glm::vec2 position;
     float angle;
     std::tie(index, position, angle) = mess.mData;
