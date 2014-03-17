@@ -1,6 +1,8 @@
 #pragma once
 #include "messages.h"
 
+enum DiggingSpot { DIG_OFF = 0, DIG_A, DIG_B, DIG_C };
+
 class Digging
     :   public fea::MessageReceiver<AntPositionMessage>,
         public fea::MessageReceiver<DiggerAntCreatedMessage>
@@ -23,6 +25,10 @@ class Digging
         glm::vec2 diggingPositionEndA;
         glm::vec2 diggingPositionStartB;
         glm::vec2 diggingPositionEndB;
+
+        int diggingPosition;
+
+        float radius;
 
         fea::MessageBus& messageBus;
 };

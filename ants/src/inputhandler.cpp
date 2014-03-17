@@ -60,9 +60,7 @@ void InputHandler::inputLoop()
         {
             if(event.mouseButton.button == fea::Mouse::LEFT)
             {
-                std::cout << "\n\n///////////////////////////////\n\n";
-                std::cout << "at " << event.mouseButton.x << ", " << event.mouseButton.y << "\n";
-                std::cout << "\n\n///////////////////////////////\n\n";
+                messageBus.send(MouseClickMessage(glm::vec2(event.mouseButton.x, event.mouseButton.y)));
             }
         }
     }

@@ -7,6 +7,7 @@ Renderer::Renderer(fea::MessageBus& bus)
         cameraInterpolator(cameraPosition),
         renderer(fea::Viewport({800.0f, 600.0f}, {0, 0}, fea::Camera(cameraInterpolator.getPosition())))
 {
+    messageBus.addSubscriber<MouseClickMessage>(*this);
     messageBus.addSubscriber<CameraPositionMessage>(*this);
     messageBus.addSubscriber<AntPositionMessage>(*this);
     messageBus.addSubscriber<AntCreationMessage>(*this);
@@ -23,6 +24,7 @@ void Renderer::createTexture(const std::string& name, const std::string& path, i
 
 Renderer::~Renderer()
 {
+    messageBus.removeSubscriber<MouseClickMessage>(*this);
     messageBus.removeSubscriber<CameraPositionMessage>(*this);
     messageBus.removeSubscriber<AntPositionMessage>(*this);
     messageBus.removeSubscriber<AntCreationMessage>(*this);
@@ -61,6 +63,15 @@ void Renderer::handleMessage(const CameraPositionMessage& mess)
     glm::vec2 vel;
     std::tie(vel) = mess.mData;
     cameraPosition += vel;
+}
+
+void Renderer::handleMessage(const MouseClickMessage& mess)
+{
+    glm::vec2 mousePos;
+    std::tie(mousePos) = mess.mData;
+    mousePos += cameraPosition;
+    mousePos -= glm::vec2(400.0f, 300.0f);
+    std::cout << "at " << mousePos.x << ", " << mousePos.y << "\n";
 }
 
 void Renderer::handleMessage(const AntCreationMessage& mess)

@@ -11,5 +11,7 @@ FEA_DECLARE_MESSAGE(AntCreationMessage, size_t, bool, bool, const glm::vec2&, fl
 FEA_DECLARE_MESSAGE(AntOutsideBoundariesMessage, int) // ant id
 FEA_DECLARE_MESSAGE(AntDeletionMessage, int) // ant id
 FEA_DECLARE_MESSAGE(DiggerAntCreatedMessage, size_t); // digger ant id
+FEA_DECLARE_MESSAGE(AntStartedDiggingMessage, bool); // A and not B
+FEA_DECLARE_MESSAGE(MouseClickMessage, glm::vec2);
 
 FEA_DECLARE_MESSAGE(DirtTextureSetMessage, const fea::Texture*);    // dirt texture

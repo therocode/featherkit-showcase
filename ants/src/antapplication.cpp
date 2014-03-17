@@ -24,6 +24,7 @@ void AntApplication::loop()
     input.inputLoop();
     antManager.update();
     physics.update();
+    digging.update();
     renderer.render();
     window.swapBuffers();
 }
