@@ -10,6 +10,8 @@ Physics::Physics(fea::MessageBus& bus)
     messageBus.addSubscriber<DirtTextureSetMessage>(*this);
     messageBus.addSubscriber<AntCreationMessage>(*this);
     messageBus.addSubscriber<AntDeletionMessage>(*this);
+    messageBus.addSubscriber<AntStartedDiggingMessage>(*this);
+    messageBus.addSubscriber<AntStoppedDiggingMessage>(*this);
 
     dirtTexture = nullptr;
     gravity = glm::vec2(0.0f, 1.0f);
@@ -21,6 +23,8 @@ Physics::~Physics()
     messageBus.removeSubscriber<DirtTextureSetMessage>(*this);
     messageBus.removeSubscriber<AntCreationMessage>(*this);
     messageBus.removeSubscriber<AntDeletionMessage>(*this);
+    messageBus.removeSubscriber<AntStartedDiggingMessage>(*this);
+    messageBus.removeSubscriber<AntStoppedDiggingMessage>(*this);
 }
 
 void Physics::handleMessage(const DirtTextureSetMessage& mess)
@@ -50,13 +54,30 @@ void Physics::handleMessage(const AntDeletionMessage& mess)
     ants.erase(index);
 }
 
+void Physics::handleMessage(const AntStartedDiggingMessage& mess)
+{
+    size_t index;
+    glm::vec2 targetPosition;
+    std::tie(index, targetPosition) = mess.mData;
+
+    targetPositions.emplace(index, targetPosition);
+}
+
+void Physics::handleMessage(const AntStoppedDiggingMessage& mess)
+{
+    size_t index;
+    std::tie(index) = mess.mData;
+
+    targetPositions.erase(index);
+}
+
 void Physics::update()
 {
     std::vector<size_t> antsOutsideOfBoundary;
     for(auto i = ants.begin(); i != ants.end(); i++)
     {
         PhysicsBody& ant = i->second;
-        addVelocity(ant);
+        addVelocity(ant, i->first);
         addFalling(ant);
         terrainCheck(ant);
 
@@ -77,7 +98,7 @@ void Physics::update()
 
 // private //   //////////////////////////////////////////////////////////////////////////////////////////////
 
-void Physics::addVelocity(PhysicsBody& body)
+void Physics::addVelocity(PhysicsBody& body, size_t id)
 {
     if(body.getFGP().falling && body.getBGP().falling)  // if both falling, then fall
     {
@@ -86,6 +107,17 @@ void Physics::addVelocity(PhysicsBody& body)
     else if(!(body.getFGP().falling || body.getBGP().falling))  // if none falling, then walk
     {
         glm::vec2 velocity = body.recalculateVelocity();
+        auto iterator = targetPositions.find(id); // if body is in targetPos map, i.e. if digger ant is digging
+        if(iterator != targetPositions.end()) // found
+        {
+            std::cout << "found!\n";
+            velocity = body.recalculateVelocity(targetPositions.at(id));
+        }
+        else    // not found
+        {
+            std::cout << "not found!\n";
+            velocity = body.recalculateVelocity();
+        }
         body.setPosition(body.getPosition() + velocity);
     }
 }

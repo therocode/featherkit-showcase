@@ -25,6 +25,7 @@ Digging::~Digging()
 
 void Digging::update()
 {
+    // please refactor this >.<
     if(!digging)
     {
         //std::cout << "ant pos is: " << antPosition.x << ", " << antPosition.y << "\n";
@@ -33,13 +34,15 @@ void Digging::update()
         if(glm::length(antPosition - diggingPositionStartA) < radius)
         {
             std::cout << "YEYEYEY\n";
-            messageBus.send(AntStartedDiggingMessage(true));
+            messageBus.send(AntStartedDiggingMessage(diggerAntId, diggingPositionEndA));     // send to renderer to change animation? 
             digging = true;
+            diggingPosition = DIG_A;
         }
         else if(glm::length(antPosition - diggingPositionStartB) < radius)
         {
-            messageBus.send(AntStartedDiggingMessage(false));
+            messageBus.send(AntStartedDiggingMessage(diggerAntId, diggingPositionEndB));
             digging = true;
+            diggingPosition = DIG_B;
         }
     }
     else
@@ -47,10 +50,8 @@ void Digging::update()
         if((glm::length(antPosition - diggingPositionEndA) < radius) || (glm::length(antPosition - diggingPositionEndB) < radius))
         {
             digging = false;
-        }
-        else
-        {
-            // make ant vel towards B
+            diggingPosition = DIG_OFF;
+            messageBus.send(AntStoppedDiggingMessage(diggerAntId));
         }
     }
 }

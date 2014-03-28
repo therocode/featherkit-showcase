@@ -78,6 +78,16 @@ void PhysicsBody::setAngle(float a)
     angle = a;
 }
 
+float PhysicsBody::getBaseVelocity()
+{
+    return baseVelocity;
+}
+
+glm::vec2 PhysicsBody::recalculateVelocity(glm::vec2 targetPosition)
+{
+    return glm::normalize(targetPosition - position) * baseVelocity;
+}
+
 glm::vec2 PhysicsBody::recalculateVelocity()
 {
     return glm::vec2(baseVelocity * cos(angle), baseVelocity * sin(angle));

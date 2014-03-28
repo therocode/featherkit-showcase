@@ -1,8 +1,8 @@
 #pragma once
 #include "messages.h"
 #include "direction.h"
-#include <featherkit/userinterface.h>
-#include <featherkit/input/sdl2inputbackend.h>
+#include <featherkit/userinterface.hpp>
+#include <featherkit/ui/sdl2inputbackend.hpp>
 
 class InputHandler
 {

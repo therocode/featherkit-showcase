@@ -23,6 +23,8 @@ class PhysicsBody
         float getAngle();
         void setAngle(float a);
 
+        float getBaseVelocity();
+        glm::vec2 recalculateVelocity(glm::vec2 targetPosition);
         glm::vec2 recalculateVelocity();
         glm::vec2 getActualVelocity();
         glm::vec2 getFallingVelocity();

@@ -7,8 +7,8 @@
 #include "messages.h"
 #include "physics.h"
 #include "digging.h"
-#include <featherkit/structure.h>
-#include <featherkit/window/sdl2windowbackend.h>
+#include <featherkit/structure.hpp>
+#include <featherkit/ui/sdl2windowbackend.hpp>
 
 class AntApplication
     : public fea::Application,

@@ -2,7 +2,7 @@
 #include "messages.h"
 #include "interpolator.h"
 #include "imageloader.h"
-#include <featherkit/render2d.h>
+#include <featherkit/render2d.hpp>
 
 class Renderer
     :   public fea::MessageReceiver<CameraPositionMessage>,
