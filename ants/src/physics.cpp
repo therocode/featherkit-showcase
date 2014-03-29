@@ -76,10 +76,15 @@ void Physics::update()
     std::vector<size_t> antsOutsideOfBoundary;
     for(auto i = ants.begin(); i != ants.end(); i++)
     {
+        auto iterator = targetPositions.find(i->first); // if body is in targetPos map, i.e. if digger ant is digging
+
         PhysicsBody& ant = i->second;
         addVelocity(ant, i->first);
-        addFalling(ant);
-        terrainCheck(ant);
+        if(!(iterator != targetPositions.end())) // not found
+        {
+            addFalling(ant);
+            terrainCheck(ant);
+        }
 
         messageBus.send(AntPositionMessage(i->first, ant.getPosition(), ant.getAngle()));
         //messageBus.send(AntPointsMessage(ant.getFGPInWorldSpace(), ant.getBGPInWorldSpace()));
@@ -100,25 +105,28 @@ void Physics::update()
 
 void Physics::addVelocity(PhysicsBody& body, size_t id)
 {
-    if(body.getFGP().falling && body.getBGP().falling)  // if both falling, then fall
+    // if the digger ant is digging:
+    auto iterator = targetPositions.find(id); // if body is in targetPos map, i.e. if digger ant is digging
+    if(iterator != targetPositions.end()) // found
     {
-        body.setPosition(body.getPosition() + body.getFallingVelocity());
-    }
-    else if(!(body.getFGP().falling || body.getBGP().falling))  // if none falling, then walk
-    {
-        glm::vec2 velocity = body.recalculateVelocity();
-        auto iterator = targetPositions.find(id); // if body is in targetPos map, i.e. if digger ant is digging
-        if(iterator != targetPositions.end()) // found
-        {
-            std::cout << "found!\n";
-            velocity = body.recalculateVelocity(targetPositions.at(id));
-        }
-        else    // not found
-        {
-            std::cout << "not found!\n";
-            velocity = body.recalculateVelocity();
-        }
+        glm::vec2 velocity = body.recalculateVelocity(targetPositions.at(id));
         body.setPosition(body.getPosition() + velocity);
+    }
+
+    // if any other ant
+    else
+    {
+        // if both points falling, then fall
+        if(body.getFGP().falling && body.getBGP().falling)  
+        {
+            body.setPosition(body.getPosition() + body.getFallingVelocity());
+        }
+        // if none falling, then walk
+        else if(!(body.getFGP().falling || body.getBGP().falling))  
+        {
+            glm::vec2 velocity = body.recalculateVelocity();
+            body.setPosition(body.getPosition() + velocity);
+        }
     }
 }
 

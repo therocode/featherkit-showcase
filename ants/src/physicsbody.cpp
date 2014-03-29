@@ -85,7 +85,10 @@ float PhysicsBody::getBaseVelocity()
 
 glm::vec2 PhysicsBody::recalculateVelocity(glm::vec2 targetPosition)
 {
-    return glm::normalize(targetPosition - position) * baseVelocity;
+    std::cout << "hej\n";
+    glm::vec2 velocity = glm::normalize(targetPosition - position) * baseVelocity;
+    std::cout << "velocity to add: " << velocity.x << ", " << velocity.y << "\n";
+    return velocity;
 }
 
 glm::vec2 PhysicsBody::recalculateVelocity()
