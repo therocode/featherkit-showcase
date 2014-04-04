@@ -17,4 +17,4 @@ FEA_DECLARE_MESSAGE(AntStoppedDiggingMessage, size_t); // position of digging ta
 
 FEA_DECLARE_MESSAGE(MouseClickMessage, glm::vec2);
 
-FEA_DECLARE_MESSAGE(DirtTextureSetMessage, const fea::Texture*);    // dirt texture
+FEA_DECLARE_MESSAGE(DirtTextureSetMessage, fea::Texture*);    // dirt texture

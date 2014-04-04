@@ -7,11 +7,14 @@ Digging::Digging(fea::MessageBus& bus)
 
     messageBus.addSubscriber<AntPositionMessage>(*this);
     messageBus.addSubscriber<DiggerAntCreatedMessage>(*this);
+    messageBus.addSubscriber<DirtTextureSetMessage>(*this);
+
+    dirtTexture = nullptr;
 
     diggingPositionStartA = glm::vec2(568.0f, 900.0f);
-    diggingPositionEndA = glm::vec2(959.0f, 1067.0f);
-    diggingPositionStartB = glm::vec2(751.0f, 1047.0f);
-    diggingPositionEndB = glm::vec2(1122.0f, 1105.0f);
+    diggingPositionEndA = glm::vec2(745.0f, 926.0f);
+    diggingPositionStartB = glm::vec2(968.0f, 925.0f);
+    diggingPositionEndB = glm::vec2(1122.0f, 973.0f);
     radius = 10.0f;
 
     diggingPosition = DIG_OFF;
@@ -21,16 +24,13 @@ Digging::~Digging()
 {
     messageBus.removeSubscriber<AntPositionMessage>(*this);
     messageBus.removeSubscriber<DiggerAntCreatedMessage>(*this);
+    messageBus.removeSubscriber<DirtTextureSetMessage>(*this);
 }
 
 void Digging::update()
 {
-    // please refactor this >.<
     if(!digging)
     {
-        //std::cout << "ant pos is: " << antPosition.x << ", " << antPosition.y << "\n";
-        //std::cout << "dig pos is: " << diggingPositionStartA.x << ", " << diggingPositionStartA.y << "\n\n";
-
         if(glm::length(antPosition - diggingPositionStartA) < radius)
         {
             std::cout << "YEYEYEY\n";
@@ -45,13 +45,28 @@ void Digging::update()
             diggingPosition = DIG_B;
         }
     }
-    else
+    else // digging
     {
+        // check it's not at an end point
         if((glm::length(antPosition - diggingPositionEndA) < radius) || (glm::length(antPosition - diggingPositionEndB) < radius))
         {
+            std::cout << "hello, I am at the end position :)\n";
             digging = false;
             diggingPosition = DIG_OFF;
             messageBus.send(AntStoppedDiggingMessage(diggerAntId));
+        }
+        // dig!
+        else
+        {
+            // dig away the texture here
+            for(int i = 0; i < 10; i++)
+            {
+                for(int j = 0; j < 10; j++)
+                {
+                    dirtTexture->setPixel(antPosition.x/2 + i, antPosition.y/2 + j, fea::Color(255, 255, 255, 0));
+                }
+            }
+            dirtTexture->update();
         }
     }
 }
@@ -74,4 +89,9 @@ void Digging::handleMessage(const DiggerAntCreatedMessage& mess)
     std::tie(id) = mess.mData;
 
     diggerAntId = id;
+}
+
+void Digging::handleMessage(const DirtTextureSetMessage& mess)
+{
+    std::tie(dirtTexture) = mess.mData;
 }

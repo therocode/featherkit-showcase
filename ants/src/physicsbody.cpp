@@ -1,6 +1,5 @@
 #include "physicsbody.h"
 #include <iostream>
-//#include <math.h>
 
 PhysicsBody::PhysicsBody(glm::vec2 pos, bool goingRight, float velocity)
 {
@@ -85,9 +84,9 @@ float PhysicsBody::getBaseVelocity()
 
 glm::vec2 PhysicsBody::recalculateVelocity(glm::vec2 targetPosition)
 {
-    std::cout << "hej\n";
-    glm::vec2 velocity = glm::normalize(targetPosition - position) * baseVelocity;
-    std::cout << "velocity to add: " << velocity.x << ", " << velocity.y << "\n";
+    //std::cout << "hej\n";
+    glm::vec2 velocity = glm::normalize(targetPosition - position) * baseVelocity * 0.2f;
+    //std::cout << "velocity to add: " << velocity.x << ", " << velocity.y << "\n";
     return velocity;
 }
 

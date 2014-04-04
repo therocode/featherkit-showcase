@@ -76,14 +76,19 @@ void Physics::update()
     std::vector<size_t> antsOutsideOfBoundary;
     for(auto i = ants.begin(); i != ants.end(); i++)
     {
-        auto iterator = targetPositions.find(i->first); // if body is in targetPos map, i.e. if digger ant is digging
-
         PhysicsBody& ant = i->second;
         addVelocity(ant, i->first);
-        if(!(iterator != targetPositions.end())) // not found
+
+        auto iterator = targetPositions.find(i->first); // return iterator of digging ant
+        if(!(iterator != targetPositions.end())) // if the iterator exists
         {
+            // for the non-digging ants only:
             addFalling(ant);
             terrainCheck(ant);
+        }
+
+        if((iterator != targetPositions.end())) // if the iterator exists
+        {
         }
 
         messageBus.send(AntPositionMessage(i->first, ant.getPosition(), ant.getAngle()));
@@ -95,6 +100,7 @@ void Physics::update()
             antsOutsideOfBoundary.push_back(i->first);
         }
     }
+
     for(size_t& id : antsOutsideOfBoundary)
     {
         messageBus.send(AntOutsideBoundariesMessage(id));
@@ -109,8 +115,14 @@ void Physics::addVelocity(PhysicsBody& body, size_t id)
     auto iterator = targetPositions.find(id); // if body is in targetPos map, i.e. if digger ant is digging
     if(iterator != targetPositions.end()) // found
     {
-        glm::vec2 velocity = body.recalculateVelocity(targetPositions.at(id));
+        glm::vec2 targetPosition = targetPositions.at(id);
+        glm::vec2 velocity = body.recalculateVelocity(targetPosition);
         body.setPosition(body.getPosition() + velocity);
+
+        float angle = (float)atan(targetPosition.x/targetPosition.y);
+        body.setAngle(-angle);
+        angle = angle * 57.29578f;
+        std::cout << "setting angle to: " << angle << " degrees\n";
     }
 
     // if any other ant
@@ -148,9 +160,6 @@ void Physics::addFalling(PhysicsBody& body)
         body.setPosition(rotatePoint(body.getPosition(), degree * 3.0f, body.getFGPInWorldSpace()));
         body.setAngle(body.getAngle() + degree * 3.0f);    // rotate the ant
     }
-    else
-    {
-    }
 }
 
 void Physics::terrainCheck(PhysicsBody& body)
@@ -171,30 +180,6 @@ void Physics::terrainCheck(PhysicsBody& body)
     }
     bool backColliding = terrainCollisionAt(body.getBGPInWorldSpace() + glm::vec2(0.0f, 4.0f));
     body.setBGPAsFalling(!backColliding);
-
-    /*
-    // Front Point check
-    while(terrainCollisionAt(body.getFGPInWorldSpace()))
-    {
-        body.setPosition(rotatePoint(body.getPosition(), degree, body.getBGPInWorldSpace()));
-        body.setAngle(body.getAngle() + degree);    
-        // check for critical/threshold angle
-        float hej = glm::degrees(body.getAngle());
-    }
-    bool frontColliding = terrainCollisionAt(body.getFGPInWorldSpace() + glm::vec2(0.0f, 5.0f));
-    body.setFGPAsFalling(!frontColliding);   // falls if air below, otherwise not falling
-
-    // Back Point check
-    while(terrainCollisionAt(body.getBGPInWorldSpace()))
-    {
-        body.setPosition(rotatePoint(body.getPosition(), -degree, body.getFGPInWorldSpace()));
-        body.setAngle(body.getAngle() - degree);
-        // check for critical/threshold angle
-    }
-    bool backColliding = terrainCollisionAt(body.getBGPInWorldSpace() + glm::vec2(0.0f, 5.0f));
-    body.setBGPAsFalling(!backColliding);
-    */
-    
 }
 
 bool Physics::terrainCollisionAt(glm::vec2 pos)
