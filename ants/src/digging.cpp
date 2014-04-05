@@ -15,6 +15,8 @@ Digging::Digging(fea::MessageBus& bus)
     diggingPositionEndA = glm::vec2(745.0f, 926.0f);
     diggingPositionStartB = glm::vec2(968.0f, 925.0f);
     diggingPositionEndB = glm::vec2(1122.0f, 973.0f);
+    diggingPositionStartC = glm::vec2(1305.0f, 994.0f);
+    diggingPositionEndC = glm::vec2(1575.0f, 995.0f);
     radius = 10.0f;
 
     diggingPosition = DIG_OFF;
@@ -33,7 +35,6 @@ void Digging::update()
     {
         if(glm::length(antPosition - diggingPositionStartA) < radius)
         {
-            std::cout << "YEYEYEY\n";
             messageBus.send(AntStartedDiggingMessage(diggerAntId, diggingPositionEndA));     // send to renderer to change animation? 
             digging = true;
             diggingPosition = DIG_A;
@@ -44,13 +45,18 @@ void Digging::update()
             digging = true;
             diggingPosition = DIG_B;
         }
+        else if(glm::length(antPosition - diggingPositionStartC) < radius)
+        {
+            messageBus.send(AntStartedDiggingMessage(diggerAntId, diggingPositionEndC));
+            digging = true;
+            diggingPosition = DIG_C;
+        }
     }
     else // digging
     {
         // check it's not at an end point
-        if((glm::length(antPosition - diggingPositionEndA) < radius) || (glm::length(antPosition - diggingPositionEndB) < radius))
+        if((glm::length(antPosition - diggingPositionEndA) < radius) || (glm::length(antPosition - diggingPositionEndB) < radius) || (glm::length(antPosition - diggingPositionEndC) < radius))
         {
-            std::cout << "hello, I am at the end position :)\n";
             digging = false;
             diggingPosition = DIG_OFF;
             messageBus.send(AntStoppedDiggingMessage(diggerAntId));
@@ -61,9 +67,9 @@ void Digging::update()
             // dig away the texture here
             for(int i = 0; i < 10; i++)
             {
-                for(int j = 0; j < 10; j++)
+                for(int j = 0; j < 11; j++)
                 {
-                    dirtTexture->setPixel(antPosition.x/2 + i, antPosition.y/2 + j, fea::Color(255, 255, 255, 0));
+                    dirtTexture->setPixel(antPosition.x/2 + i, antPosition.y/2 + j - 4, fea::Color(255, 255, 255, 0));
                 }
             }
             dirtTexture->update();

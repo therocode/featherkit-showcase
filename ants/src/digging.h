@@ -29,6 +29,8 @@ class Digging
         glm::vec2 diggingPositionEndA;
         glm::vec2 diggingPositionStartB;
         glm::vec2 diggingPositionEndB;
+        glm::vec2 diggingPositionStartC;
+        glm::vec2 diggingPositionEndC;
 
         int diggingPosition;
 

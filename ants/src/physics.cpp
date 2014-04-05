@@ -119,10 +119,9 @@ void Physics::addVelocity(PhysicsBody& body, size_t id)
         glm::vec2 velocity = body.recalculateVelocity(targetPosition);
         body.setPosition(body.getPosition() + velocity);
 
-        float angle = (float)atan(targetPosition.x/targetPosition.y);
+        float angle = (float)atan(velocity.y/velocity.x);
         body.setAngle(-angle);
         angle = angle * 57.29578f;
-        std::cout << "setting angle to: " << angle << " degrees\n";
     }
 
     // if any other ant
