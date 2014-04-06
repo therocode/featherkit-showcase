@@ -7,14 +7,7 @@ PhysicsBody::PhysicsBody(glm::vec2 pos, bool goingRight, float velocity)
     angle = 0.0f;   // radians
     position = pos;
 
-    if(goingRight)
-    {
-        baseVelocity = 1.0f * velocity;
-    }
-    else
-    {
-        baseVelocity = -1.0f * velocity;
-    }
+    baseVelocity = (goingRight ? 1.0f : -1.0f) * velocity;
 
     frontGroundPoint = CollisionPoint({15.0f, 8.0f});
     backGroundPoint = CollisionPoint({-15.0f, 8.0f});
@@ -84,9 +77,7 @@ float PhysicsBody::getBaseVelocity()
 
 glm::vec2 PhysicsBody::recalculateVelocity(glm::vec2 targetPosition)
 {
-    //std::cout << "hej\n";
     glm::vec2 velocity = glm::normalize(targetPosition - position) * baseVelocity * 0.2f;
-    //std::cout << "velocity to add: " << velocity.x << ", " << velocity.y << "\n";
     return velocity;
 }
 

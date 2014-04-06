@@ -25,10 +25,9 @@ class Physics
     private:
         fea::MessageBus& messageBus;
         glm::vec2 gravity;
-        //float thresholdAngle;
 
-        void addVelocity(PhysicsBody& body, size_t id);
-        void addFalling(PhysicsBody& body);
+        void updateVelocity(PhysicsBody& body, size_t id);
+        void updateGravityState(PhysicsBody& body);
         void terrainCheck(PhysicsBody& body);
         bool terrainCollisionAt(glm::vec2 pos);
 

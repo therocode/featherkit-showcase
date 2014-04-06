@@ -12,7 +12,6 @@ Renderer::Renderer(fea::MessageBus& bus)
     messageBus.addSubscriber<AntPositionMessage>(*this);
     messageBus.addSubscriber<AntCreationMessage>(*this);
     messageBus.addSubscriber<AntDeletionMessage>(*this);
-    messageBus.addSubscriber<AntPointsMessage>(*this);
 }
 
 void Renderer::createTexture(const std::string& name, const std::string& path, int width, int height, bool smooth, bool interactive)
@@ -29,7 +28,6 @@ Renderer::~Renderer()
     messageBus.removeSubscriber<AntPositionMessage>(*this);
     messageBus.removeSubscriber<AntCreationMessage>(*this);
     messageBus.removeSubscriber<AntDeletionMessage>(*this);
-    messageBus.removeSubscriber<AntPointsMessage>(*this);
 }
 
 void Renderer::setup()
@@ -46,16 +44,33 @@ void Renderer::setup()
     dirtBgQuad.setTexture(textures.at("dirtbg"));
 
     messageBus.send(DirtTextureSetMessage(&textures.at("dirt")));
+}
 
-    pointF = fea::Quad({6, 6});
-    pointB = fea::Quad({6, 6});
-    pointF.setOrigin({3.0f, 3.0f});
-    pointB.setOrigin({3.0f, 3.0f});
+void Renderer::render()
+{
+    // camera positions //
+    if(cameraPosition.x < 450.0f)
+        cameraPosition.x = 450.0f;
+    else if(cameraPosition.x > 1150.0f)
+        cameraPosition.x = 1150.0f;
+    if(cameraPosition.y < 300.0f)
+        cameraPosition.y = 300.0f;
+    else if(cameraPosition.y > 900.0f)
+        cameraPosition.y = 900.0f;
 
-    pointF.setPosition({0.0f, 0.0f});
-    pointB.setPosition({0.0f, 0.0f});
+    cameraInterpolator.setPosition(cameraPosition);
+    cameraInterpolator.update();
+    renderer.getViewport().getCamera().setPosition(cameraInterpolator.getPosition());
 
-    pointF.setColor({0, 255, 0});
+    // actual rendering //
+    renderer.clear(fea::Color(0, 125, 255));
+    renderer.queue(dirtBgQuad);
+    renderer.queue(dirtQuad);
+    for(auto& antQuad : antQuads)
+    {
+        renderer.queue(antQuad.second);
+    }
+    renderer.render();
 }
 
 void Renderer::handleMessage(const CameraPositionMessage& mess)
@@ -107,46 +122,4 @@ void Renderer::handleMessage(const AntPositionMessage& mess)
     std::tie(index, position, angle) = mess.mData;
     antQuads.at(index).setPosition(position);
     antQuads.at(index).setRotation(angle);
-}
-
-void Renderer::handleMessage(const AntPointsMessage& mess)
-{
-    glm::vec2 positionF;
-    glm::vec2 positionB;
-    std::tie(positionF, positionB) = mess.mData;
-    pointF.setPosition(positionF);
-    pointB.setPosition(positionB);
-}
-
-void Renderer::render()
-{
-    /*  to see whole screen
-    if(cameraPosition.x < 350.0f)
-        cameraPosition.x = 350.0f;
-    else if(cameraPosition.x > 1250.0f)
-        cameraPosition.x = 1250.0f;
-    */
-    if(cameraPosition.x < 450.0f)
-        cameraPosition.x = 450.0f;
-    else if(cameraPosition.x > 1150.0f)
-        cameraPosition.x = 1150.0f;
-    if(cameraPosition.y < 300.0f)
-        cameraPosition.y = 300.0f;
-    else if(cameraPosition.y > 900.0f)
-        cameraPosition.y = 900.0f;
-
-    cameraInterpolator.setPosition(cameraPosition);
-    cameraInterpolator.update();
-    renderer.getViewport().getCamera().setPosition(cameraInterpolator.getPosition());
-
-    renderer.clear(fea::Color(0, 125, 255));
-    renderer.queue(dirtBgQuad);
-    renderer.queue(dirtQuad);
-    for(auto& antQuad : antQuads)
-    {
-        renderer.queue(antQuad.second);
-    }
-    //renderer.queue(pointF);
-    //renderer.queue(pointB);
-    renderer.render();
 }

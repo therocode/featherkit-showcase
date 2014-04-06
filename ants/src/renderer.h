@@ -9,8 +9,7 @@ class Renderer
         public fea::MessageReceiver<MouseClickMessage>,
         public fea::MessageReceiver<AntPositionMessage>,
         public fea::MessageReceiver<AntCreationMessage>,
-        public fea::MessageReceiver<AntDeletionMessage>,
-        public fea::MessageReceiver<AntPointsMessage>
+        public fea::MessageReceiver<AntDeletionMessage>
 {
     public:
         Renderer(fea::MessageBus& bus);
@@ -24,7 +23,6 @@ class Renderer
         virtual void handleMessage(const AntPositionMessage& mess) override;
         virtual void handleMessage(const AntCreationMessage& mess) override;
         virtual void handleMessage(const AntDeletionMessage& mess) override;
-        virtual void handleMessage(const AntPointsMessage& mess) override;
 
     private:
         fea::MessageBus& messageBus;
@@ -39,9 +37,4 @@ class Renderer
         std::unordered_map<size_t, fea::Quad> antQuads;
         fea::Quad dirtQuad;
         fea::Quad dirtBgQuad;
-
-        fea::Quad pointF;
-        fea::Quad pointB;
-        glm::vec2 posF;
-        glm::vec2 posB;
 };
