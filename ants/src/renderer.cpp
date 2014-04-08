@@ -36,7 +36,7 @@ void Renderer::setup()
 
     createTexture("dirt", "ants/data/textures/dirt.png", 800, 600, false, true);
     createTexture("dirtbg", "ants/data/textures/dirtbg.png", 800, 600);
-    createTexture("sky", "ants/data/textures/sky.png", 400, 300);
+    createTexture("sky", "ants/data/textures/sky.png", 1, 300);
     createTexture("ant", "ants/data/textures/ant.png", 800, 100);
 
     dirtQuad = fea::Quad({1600, 1200});
