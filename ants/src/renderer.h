@@ -34,7 +34,10 @@ class Renderer
         std::unordered_map<std::string, fea::Texture> textures;
         void createTexture(const std::string& name, const std::string& path, int width, int height, bool smooth = false, bool interactive = false);
 
-        std::unordered_map<size_t, fea::Quad> antQuads;
+        std::unordered_map<size_t, fea::AnimatedQuad> antQuads;
+        fea::Animation antAnimation;
+
         fea::Quad dirtQuad;
         fea::Quad dirtBgQuad;
+        fea::Quad skyQuad;
 };
