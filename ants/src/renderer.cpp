@@ -34,17 +34,27 @@ void Renderer::setup()
 {
     renderer.setup();
 
-    createTexture("dirt", "ants/data/textures/dirt.png", 800, 600, false, true);
-    createTexture("dirtbg", "ants/data/textures/dirtbg.png", 800, 600);
+    createTexture("dirt", "ants/data/textures/dirt2.png", 400, 300, true, true);
+    createTexture("dirtbg", "ants/data/textures/dirtbg2.png", 400, 300, true);
+    createTexture("backhills", "ants/data/textures/backhills.png", 400, 300, true);
+    createTexture("fronthills", "ants/data/textures/fronthills.png", 400, 300, true);
     createTexture("sky", "ants/data/textures/sky.png", 1, 300);
     createTexture("ant", "ants/data/textures/ant.png", 800, 100);
 
     dirtQuad = fea::Quad({1600, 1200});
     dirtBgQuad = fea::Quad({1600, 1200});
+    frontHillsQuad = fea::Quad({1600, 1200});
+    backHillsQuad = fea::Quad({1600, 1200});
     skyQuad = fea::Quad({1600, 1200});
+
     dirtQuad.setTexture(textures.at("dirt"));
     dirtBgQuad.setTexture(textures.at("dirtbg"));
+    frontHillsQuad.setTexture(textures.at("fronthills"));
+    backHillsQuad.setTexture(textures.at("backhills"));
     skyQuad.setTexture(textures.at("sky"));
+
+    frontHillsQuad.setParallax({1.1f, 1.0f});
+    backHillsQuad.setParallax({1.4f, 1.0f});
 
     antAnimation = fea::Animation(glm::vec2(0.0f, 0.0f), glm::vec2(200.0f/800.0f, 100.0f/100.0f), 4, 1, 8);
 
@@ -70,6 +80,8 @@ void Renderer::render()
     // actual rendering //
     renderer.clear(fea::Color(0, 125, 255));
     renderer.queue(skyQuad);
+    renderer.queue(backHillsQuad);
+    renderer.queue(frontHillsQuad);
     renderer.queue(dirtBgQuad);
     renderer.queue(dirtQuad);
     for(auto& antQuad : antQuads)
