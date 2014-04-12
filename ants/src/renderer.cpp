@@ -43,8 +43,8 @@ void Renderer::setup()
 
     dirtQuad = fea::Quad({1600, 1200});
     dirtBgQuad = fea::Quad({1600, 1200});
-    frontHillsQuad = fea::Quad({1600, 1200});
-    backHillsQuad = fea::Quad({1600, 1200});
+    frontHillsQuad = fea::Quad({1670, 1200});
+    backHillsQuad = fea::Quad({2020, 1200});
     skyQuad = fea::Quad({1600, 1200});
 
     dirtQuad.setTexture(textures.at("dirt"));
