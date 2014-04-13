@@ -39,5 +39,7 @@ class Renderer
 
         fea::Quad dirtQuad;
         fea::Quad dirtBgQuad;
+        fea::Quad frontHillsQuad;
+        fea::Quad backHillsQuad;
         fea::Quad skyQuad;
 };

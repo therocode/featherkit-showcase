@@ -9,8 +9,8 @@ PhysicsBody::PhysicsBody(glm::vec2 pos, bool goingRight, float velocity)
 
     baseVelocity = (goingRight ? 1.0f : -1.0f) * velocity;
 
-    frontGroundPoint = CollisionPoint({15.0f, 8.0f});
-    backGroundPoint = CollisionPoint({-15.0f, 8.0f});
+    frontGroundPoint = CollisionPoint({15.0f, 5.0f});
+    backGroundPoint = CollisionPoint({-15.0f, 5.0f});
 
 }
 
