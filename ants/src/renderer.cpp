@@ -3,7 +3,7 @@
 
 Renderer::Renderer(fea::MessageBus& bus)
     :   messageBus(bus),
-        cameraPosition(800.0f, 700.0f),
+        cameraPosition(600.0f, 900.0f),
         cameraInterpolator(cameraPosition),
         renderer(fea::Viewport({800.0f, 600.0f}, {0, 0}, fea::Camera(cameraInterpolator.getPosition())))
 {
@@ -43,8 +43,8 @@ void Renderer::setup()
 
     dirtQuad = fea::Quad({1600, 1200});
     dirtBgQuad = fea::Quad({1600, 1200});
-    frontHillsQuad = fea::Quad({1670, 1200});
-    backHillsQuad = fea::Quad({2020, 1200});
+    frontHillsQuad = fea::Quad({1700, 1200});
+    backHillsQuad = fea::Quad({2240, 1200});
     skyQuad = fea::Quad({1600, 1200});
 
     dirtQuad.setTexture(textures.at("dirt"));
@@ -56,7 +56,7 @@ void Renderer::setup()
     frontHillsQuad.setParallax({1.1f, 1.0f});
     backHillsQuad.setParallax({1.4f, 1.0f});
 
-    antAnimation = fea::Animation(glm::vec2(0.0f, 0.0f), glm::vec2(200.0f/800.0f, 100.0f/100.0f), 4, 1, 8);
+    antAnimation = fea::Animation(glm::vec2(0.0f, 0.0f), glm::vec2(200.0f/800.0f, 100.0f/100.0f), 4, 16);
 
     messageBus.send(DirtTextureSetMessage(&textures.at("dirt")));
 }

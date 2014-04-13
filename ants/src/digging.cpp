@@ -11,12 +11,12 @@ Digging::Digging(fea::MessageBus& bus)
 
     dirtTexture = nullptr;
 
-    diggingPositionStartA = glm::vec2(568.0f, 900.0f);
-    diggingPositionEndA = glm::vec2(745.0f, 926.0f);
-    diggingPositionStartB = glm::vec2(968.0f, 925.0f);
-    diggingPositionEndB = glm::vec2(1122.0f, 973.0f);
-    diggingPositionStartC = glm::vec2(1305.0f, 994.0f);
-    diggingPositionEndC = glm::vec2(1575.0f, 995.0f);
+    diggingPositionStartA = glm::vec2(459.0f, 1061.0f);
+    diggingPositionEndA = glm::vec2(697.0f, 1053.0f);
+    diggingPositionStartB = glm::vec2(950.0f, 1067.0f);
+    diggingPositionEndB = glm::vec2(1189.0f, 1102.0f);
+    diggingPositionStartC = glm::vec2(1395.0f, 1102.0f);
+    diggingPositionEndC = glm::vec2(1575.0f, 1180.0f);
     radius = 10.0f;
 
     diggingPosition = DIG_OFF;
