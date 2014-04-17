@@ -35,7 +35,7 @@ void Renderer::setup()
     renderer.setup();
 
     createTexture("dirt", "ants/data/textures/dirt2.png", 800, 600, true, true);
-    createTexture("dirtbg", "ants/data/textures/dirtbg2.png", 800, 600, true);
+    createTexture("dirtbg", "ants/data/textures/dirtbg2.png", 800, 600, false);
     createTexture("backhills", "ants/data/textures/backhills.png", 800, 600, true);
     createTexture("fronthills", "ants/data/textures/fronthills.png", 800, 600, true);
     createTexture("sky", "ants/data/textures/sky.png", 1, 300);
