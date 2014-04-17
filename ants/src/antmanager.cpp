@@ -47,7 +47,7 @@ void AntManager::spawnAnts()
         createAnt(AntType::NORMAL, false, spawnPositionTop, ((float)(rand() % 25 + 10))/10.0f);
     }
 
-    if(rand() % 100 < 2)
+    if(rand() % 100 < 1)
     {
         createAnt(randomCrystalAntType(), true, spawnPositionBottom, ((float)(rand() % 25 + 10))/10.0f);
     }

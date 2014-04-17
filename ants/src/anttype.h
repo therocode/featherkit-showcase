@@ -5,9 +5,9 @@ enum AntType
 {
     NORMAL = 0,
     DIGGING,
-    BLUE,
+    RED,
     GREEN,
-    RED
+    BLUE
 };
 
 template<>

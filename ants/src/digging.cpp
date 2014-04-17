@@ -16,7 +16,7 @@ Digging::Digging(fea::MessageBus& bus)
     diggingPositionStartB = glm::vec2(950.0f, 1067.0f);
     diggingPositionEndB = glm::vec2(1189.0f, 1102.0f);
     diggingPositionStartC = glm::vec2(1395.0f, 1102.0f);
-    diggingPositionEndC = glm::vec2(1575.0f, 1180.0f);
+    diggingPositionEndC = glm::vec2(1575.0f, 1100.0f);
     radius = 10.0f;
 
     diggingPosition = DIG_OFF;
