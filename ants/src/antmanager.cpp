@@ -6,8 +6,8 @@ AntManager::AntManager(fea::MessageBus& bus)
 {
     nextAntId = 0;
 
-    spawnPositionA = glm::vec2(20.0f, 1100.0f);
-    spawnPositionB = glm::vec2(1575.0f, 925.0f);
+    spawnPositionTop = glm::vec2(1575.0f, 925.0f);
+    spawnPositionBottom = glm::vec2(20.0f, 1100.0f);
 
     messageBus.addSubscriber<AntOutsideBoundariesMessage>(*this);
 }
@@ -22,7 +22,7 @@ void AntManager::update()
     spawnAnts();
 }
 
-size_t AntManager::createAnt(bool type, bool goingRight, glm::vec2 position, float velocity)
+size_t AntManager::createAnt(AntType type, bool goingRight, glm::vec2 position, float velocity)
 {
     size_t createdId = nextAntId;
     nextAntId++;
@@ -44,11 +44,26 @@ void AntManager::spawnAnts()
 {
     if(rand() % 100 < 2)
     {
-        createAnt((rand() % 2), true, spawnPositionA, ((float)(rand() % 25 + 10))/10.0f);
+        createAnt(AntType::NORMAL, false, spawnPositionTop, ((float)(rand() % 25 + 10))/10.0f);
     }
 
     if(rand() % 100 < 2)
     {
-        createAnt((rand() % 2), false, spawnPositionB, ((float)(rand() % 25 + 10))/10.0f);
+        createAnt(randomCrystalAntType(), true, spawnPositionBottom, ((float)(rand() % 25 + 10))/10.0f);
     }
+}
+
+AntType AntManager::randomCrystalAntType()
+{
+    int kalle = rand() % 3;
+    AntType hej;
+
+    if(kalle == 0)
+        hej = AntType::RED;
+    else if(kalle == 1)
+        hej = AntType::GREEN;
+    else
+        hej = AntType::BLUE;
+
+    return hej;
 }

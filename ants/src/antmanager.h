@@ -1,6 +1,7 @@
 #pragma once
 #include "messages.h"
 #include "ant.h"
+#include "anttype.h"
 
 class AntManager
     :   public fea::MessageReceiver<AntOutsideBoundariesMessage>
@@ -10,7 +11,7 @@ class AntManager
         ~AntManager();
 
         void update();
-        size_t createAnt(bool type, bool goingRight, glm::vec2 position, float velocity);
+        size_t createAnt(AntType type, bool goingRight, glm::vec2 position, float velocity);
 
         virtual void handleMessage(const AntOutsideBoundariesMessage& mess) override;
 
@@ -20,7 +21,8 @@ class AntManager
         size_t nextAntId;
 
         void spawnAnts();
+        AntType randomCrystalAntType();
 
-        glm::vec2 spawnPositionA;
-        glm::vec2 spawnPositionB;
+        glm::vec2 spawnPositionTop;
+        glm::vec2 spawnPositionBottom;
 };

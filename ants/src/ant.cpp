@@ -1,6 +1,6 @@
 #include "ant.h"
 
-Ant::Ant(bool dig)
+Ant::Ant(AntType type)
 {
-    digging = dig;
+    antType = type;
 }

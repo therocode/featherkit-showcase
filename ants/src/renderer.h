@@ -2,6 +2,7 @@
 #include "messages.h"
 #include "interpolator.h"
 #include "imageloader.h"
+#include "antsprite.h"
 #include <featherkit/render2d.hpp>
 
 class Renderer
@@ -34,8 +35,8 @@ class Renderer
         std::unordered_map<std::string, fea::Texture> textures;
         void createTexture(const std::string& name, const std::string& path, int width, int height, bool smooth = false, bool interactive = false);
 
-        std::unordered_map<size_t, fea::AnimatedQuad> antQuads;
-        fea::Animation antAnimation;
+        std::unordered_map<size_t, AntSprite> antSprites;
+        std::unordered_map<int, fea::Animation> animations;
 
         fea::Quad dirtQuad;
         fea::Quad dirtBgQuad;

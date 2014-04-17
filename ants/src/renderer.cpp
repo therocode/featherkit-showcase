@@ -39,7 +39,7 @@ void Renderer::setup()
     createTexture("backhills", "ants/data/textures/backhills.png", 800, 600, true);
     createTexture("fronthills", "ants/data/textures/fronthills.png", 800, 600, true);
     createTexture("sky", "ants/data/textures/sky.png", 1, 300);
-    createTexture("ant", "ants/data/textures/ant.png", 800, 100);
+    createTexture("ant", "ants/data/textures/ant.png", 800, 800);
 
     dirtQuad = fea::Quad({1600, 1200});
     dirtBgQuad = fea::Quad({1600, 1200});
@@ -56,8 +56,12 @@ void Renderer::setup()
     frontHillsQuad.setParallax({1.1f, 1.0f});
     backHillsQuad.setParallax({1.4f, 1.0f});
 
-    antAnimation = fea::Animation(glm::vec2(0.0f, 0.0f), glm::vec2(200.0f/800.0f, 100.0f/100.0f), 4, 16);
-
+    animations.emplace((int)AntType::NORMAL, fea::Animation(glm::vec2(0.0f, 0.0f), glm::vec2(200.0f/800.0f, 100.0f/800.0f), 4, 16));
+    animations.emplace((int)AntType::DIGGING, fea::Animation(glm::vec2(0.0f, 100.0f/800.0f), glm::vec2(200.0f/800.0f, 100.0f/800.0f), 4, 8));
+    animations.emplace((int)AntType::BLUE, fea::Animation(glm::vec2(0.0f, 200.0f/800.0f), glm::vec2(200.0f/800.0f, 100.0f/800.0f), 4, 16));
+    animations.emplace((int)AntType::GREEN, fea::Animation(glm::vec2(0.0f, 300.0f/800.0f), glm::vec2(200.0f/800.0f, 100.0f/800.0f), 4, 16));
+    animations.emplace((int)AntType::RED, fea::Animation(glm::vec2(0.0f, 400.0f/800.0f), glm::vec2(200.0f/800.0f, 100.0f/800.0f), 4, 16));
+        
     messageBus.send(DirtTextureSetMessage(&textures.at("dirt")));
 }
 
@@ -84,10 +88,10 @@ void Renderer::render()
     renderer.queue(frontHillsQuad);
     renderer.queue(dirtBgQuad);
     renderer.queue(dirtQuad);
-    for(auto& antQuad : antQuads)
+    for(auto& antSprite : antSprites)
     {
-        renderer.queue(antQuad.second);
-        antQuad.second.tick();
+        renderer.queue(antSprite.second.quad);
+        antSprite.second.quad.tick();
     }
     renderer.render();
 }
@@ -111,19 +115,19 @@ void Renderer::handleMessage(const MouseClickMessage& mess)
 void Renderer::handleMessage(const AntCreationMessage& mess)
 {
     size_t id;
-    bool digging;
+    AntType type;
     bool goingRight;
     glm::vec2 position;
-    std::tie(id, digging, goingRight, position, std::ignore) = mess.mData;
+    std::tie(id, type, goingRight, position, std::ignore) = mess.mData;
 
     fea::AnimatedQuad antQuad = fea::AnimatedQuad({50, 25});
-    antQuad.setTexture(textures.at("ant")); // if digging or carrying, different sprites
-    antQuad.setAnimation(antAnimation);
+    antQuad.setTexture(textures.at("ant")); 
+    antQuad.setAnimation(animations.at(type));
     antQuad.setOrigin({25.0f, 12.5f});
     antQuad.setPosition(position);
     antQuad.setHFlip(goingRight);
 
-    antQuads.emplace(id, antQuad);
+    antSprites.emplace(id, AntSprite(antQuad, type));  
 }
 
 void Renderer::handleMessage(const AntDeletionMessage& mess)
@@ -131,7 +135,7 @@ void Renderer::handleMessage(const AntDeletionMessage& mess)
     int index;
     std::tie(index) = mess.mData;
 
-    antQuads.erase(index);
+    antSprites.erase(index);
 }
 
 void Renderer::handleMessage(const AntPositionMessage& mess)
@@ -140,6 +144,6 @@ void Renderer::handleMessage(const AntPositionMessage& mess)
     glm::vec2 position;
     float angle;
     std::tie(index, position, angle) = mess.mData;
-    antQuads.at(index).setPosition(position);
-    antQuads.at(index).setRotation(angle);
+    antSprites.at(index).quad.setPosition(position);
+    antSprites.at(index).quad.setRotation(angle);
 }

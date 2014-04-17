@@ -1,8 +1,9 @@
 #pragma once
+#include "anttype.h"
 
 struct Ant
 {
     public:
-        Ant(bool dig);
-        bool digging;   // if false, then carrying
+        Ant(AntType type);
+        AntType antType;
 };
