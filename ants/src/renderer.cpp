@@ -5,7 +5,8 @@ Renderer::Renderer(fea::MessageBus& bus)
     :   messageBus(bus),
         cameraPosition(600.0f, 900.0f),
         cameraInterpolator(cameraPosition),
-        renderer(fea::Viewport({800.0f, 600.0f}, {0, 0}, fea::Camera(cameraInterpolator.getPosition())))
+        renderer(fea::Viewport({800.0f, 600.0f}, {0, 0}, fea::Camera(cameraInterpolator.getPosition()))),
+        targetVP(fea::Viewport({1600.0f, 600.0f}, {0, 0}, fea::Camera({800.0f, 300.0f})))
 {
     messageBus.addSubscriber<MouseClickMessage>(*this);
     messageBus.addSubscriber<CameraPositionMessage>(*this);
@@ -40,6 +41,8 @@ void Renderer::setup()
     createTexture("fronthills", "ants/data/textures/fronthills.png", 800, 600, false);
     createTexture("sky", "ants/data/textures/sky.png", 1, 300);
     createTexture("ant", "ants/data/textures/ant.png", 800, 800);
+    createTexture("darkness", "ants/data/textures/darkness.png", 800, 300);
+    createTexture("halo", "ants/data/textures/halo.png", 145, 145);
 
     dirtQuad = fea::Quad({1600, 1200});
     dirtBgQuad = fea::Quad({1600, 1200});
@@ -61,6 +64,17 @@ void Renderer::setup()
     animations.emplace((int)AntType::BLUE, fea::Animation(glm::vec2(0.0f, 200.0f/800.0f), glm::vec2(200.0f/800.0f, 100.0f/800.0f), 4, 16));
     animations.emplace((int)AntType::GREEN, fea::Animation(glm::vec2(0.0f, 300.0f/800.0f), glm::vec2(200.0f/800.0f, 100.0f/800.0f), 4, 16));
     animations.emplace((int)AntType::RED, fea::Animation(glm::vec2(0.0f, 400.0f/800.0f), glm::vec2(200.0f/800.0f, 100.0f/800.0f), 4, 16));
+
+    lightingTarget.create(1600, 600);
+    lightingQuad = fea::Quad({1600, 600});
+    darknessQuad = fea::Quad({1600, 600});
+    largeHalo = fea::Quad({290, 290});
+    //smallHalo = fea::Quad(
+
+    lightingQuad.setPosition({0, 600});
+    lightingQuad.setTexture(lightingTarget.getTexture());
+    darknessQuad.setTexture(textures.at("darkness"));
+    largeHalo.setTexture(textures.at("halo"));
         
     messageBus.send(DirtTextureSetMessage(&textures.at("dirt")));
 }
@@ -79,9 +93,18 @@ void Renderer::render()
 
     cameraInterpolator.setPosition(cameraPosition);
     cameraInterpolator.update();
-    renderer.getViewport().getCamera().setPosition(cameraInterpolator.getPosition());
+    const fea::Viewport& vp = renderer.getViewport();
+
+    // rendering to lighting render target //
+    renderer.setViewport(targetVP);
+    renderer.clear(lightingTarget, fea::Color(0, 0, 0, 0));
+    renderer.queue(darknessQuad);
+    renderer.queue(largeHalo);
+    renderer.render(lightingTarget);
 
     // actual rendering //
+    renderer.setViewport(vp);
+    renderer.getViewport().getCamera().setPosition(cameraInterpolator.getPosition());
     renderer.clear(fea::Color(0, 125, 255));
     renderer.queue(skyQuad);
     renderer.queue(backHillsQuad);
@@ -93,6 +116,7 @@ void Renderer::render()
         renderer.queue(antSprite.second.quad);
         antSprite.second.quad.tick();
     }
+    renderer.queue(lightingQuad);
     renderer.render();
 }
 

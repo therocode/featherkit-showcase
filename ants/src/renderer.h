@@ -43,4 +43,11 @@ class Renderer
         fea::Quad frontHillsQuad;
         fea::Quad backHillsQuad;
         fea::Quad skyQuad;
+
+        fea::RenderTarget lightingTarget;
+        const fea::Viewport targetVP;
+        fea::Quad lightingQuad;
+        fea::Quad darknessQuad;
+        fea::Quad largeHalo;
+        fea::Quad smallHalo;
 };
