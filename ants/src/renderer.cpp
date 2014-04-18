@@ -72,6 +72,7 @@ void Renderer::setup()
     //smallHalo = fea::Quad(
 
     lightingQuad.setPosition({0, 600});
+    lightingQuad.setVFlip(true);
     lightingQuad.setTexture(lightingTarget.getTexture());
     darknessQuad.setTexture(textures.at("darkness"));
     largeHalo.setTexture(textures.at("halo"));
@@ -93,7 +94,7 @@ void Renderer::render()
 
     cameraInterpolator.setPosition(cameraPosition);
     cameraInterpolator.update();
-    const fea::Viewport& vp = renderer.getViewport();
+    const fea::Viewport vp = renderer.getViewport();
 
     // rendering to lighting render target //
     renderer.setViewport(targetVP);
