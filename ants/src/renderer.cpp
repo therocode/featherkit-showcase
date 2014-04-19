@@ -69,13 +69,14 @@ void Renderer::setup()
     lightingQuad = fea::Quad({1600, 600});
     darknessQuad = fea::Quad({1600, 600});
     largeHalo = fea::Quad({290, 290});
-    //smallHalo = fea::Quad(
+    smallHalo = fea::Quad({200, 200});
 
     lightingQuad.setPosition({0, 600});
     lightingQuad.setVFlip(true);
     lightingQuad.setTexture(lightingTarget.getTexture());
     darknessQuad.setTexture(textures.at("darkness"));
     largeHalo.setTexture(textures.at("halo"));
+    smallHalo.setTexture(textures.at("halo"));
         
     messageBus.send(DirtTextureSetMessage(&textures.at("dirt")));
 }
@@ -98,12 +99,47 @@ void Renderer::render()
 
     // rendering to lighting render target //
     renderer.setViewport(targetVP);
-    renderer.clear(lightingTarget, fea::Color(0, 0, 0, 0));
+    renderer.clear(lightingTarget, fea::Color(0, 0, 0, 255));
     renderer.queue(darknessQuad);
+    renderer.setBlendMode(fea::BlendMode::ADD);
+    //R
+    largeHalo.setColor(fea::Color(255, 0, 0, 70));
+    largeHalo.setPosition({1155, 325});
     renderer.queue(largeHalo);
+    //G
+    largeHalo.setColor(fea::Color(0, 255, 0, 70));
+    largeHalo.setPosition({668, 311});
+    renderer.queue(largeHalo);
+    //B
+    largeHalo.setColor(fea::Color(0, 0, 255, 70));
+    largeHalo.setPosition({185, 312});
+    renderer.queue(largeHalo);
+    //small halos
+    for(auto& antSprite : antSprites)
+    {
+        if(antSprite.second.type == AntType::RED)
+        {
+            smallHalo.setColor(fea::Color(255, 0, 0, 70));
+            smallHalo.setPosition(antSprite.second.quad.getPosition() - glm::vec2(100.0f, 700.0f));
+            renderer.queue(smallHalo);
+        }
+        else if(antSprite.second.type == AntType::GREEN)
+        {
+            smallHalo.setColor(fea::Color(0, 255, 0, 70));
+            smallHalo.setPosition(antSprite.second.quad.getPosition() - glm::vec2(100.0f, 700.0f));
+            renderer.queue(smallHalo);
+        }
+        else if(antSprite.second.type == AntType::BLUE)
+        {
+            smallHalo.setColor(fea::Color(0, 0, 255, 70));
+            smallHalo.setPosition(antSprite.second.quad.getPosition() - glm::vec2(100.0f, 700.0f));
+            renderer.queue(smallHalo);
+        }
+    }
     renderer.render(lightingTarget);
 
     // actual rendering //
+    renderer.setBlendMode(fea::BlendMode::ALPHA);
     renderer.setViewport(vp);
     renderer.getViewport().getCamera().setPosition(cameraInterpolator.getPosition());
     renderer.clear(fea::Color(0, 125, 255));
@@ -117,7 +153,9 @@ void Renderer::render()
         renderer.queue(antSprite.second.quad);
         antSprite.second.quad.tick();
     }
+    renderer.setBlendMode(fea::BlendMode::MULTIPLY);
     renderer.queue(lightingQuad);
+    renderer.setBlendMode(fea::BlendMode::ALPHA);
     renderer.render();
 }
 
