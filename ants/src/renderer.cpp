@@ -145,7 +145,7 @@ void Renderer::render()
     renderer.clear(fea::Color(0, 125, 255));
     renderer.queue(skyQuad);
     renderer.queue(backHillsQuad);
-    renderer.queue(frontHillsQuad);
+     renderer.queue(frontHillsQuad);
     renderer.queue(dirtBgQuad);
     renderer.queue(dirtQuad);
     for(auto& antSprite : antSprites)
