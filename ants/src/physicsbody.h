@@ -6,7 +6,7 @@ class PhysicsBody
 {
     public:
         PhysicsBody() = default;
-        PhysicsBody(glm::vec2 pos, bool goingRight, float velocity);
+        PhysicsBody(glm::vec2 pos, bool goingR, float velocity);
 
         glm::vec2 getFGPInWorldSpace();
         glm::vec2 getBGPInWorldSpace();
@@ -30,6 +30,7 @@ class PhysicsBody
         glm::vec2 getFallingVelocity();
         void setActualVelocity(glm::vec2 vel);
         void setFallingVelocity(glm::vec2 vel);
+        void resetFallingVelocity();
 
     private:
         // equivalent to middle of sprite
@@ -45,4 +46,6 @@ class PhysicsBody
         float baseVelocity;
         glm::vec2 actualVelocity;
         glm::vec2 fallingVelocity;
+
+        bool goingRight;
 };
