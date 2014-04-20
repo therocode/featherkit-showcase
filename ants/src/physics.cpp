@@ -48,7 +48,7 @@ void Physics::update()
         messageBus.send(AntPositionMessage(antId, ant.getPosition(), ant.getAngle()));
 
         // check if any ants are outside of the screen boundaries
-        if((ant.getPosition().x < 20.0f) || (ant.getPosition().x > 1560.0f))
+        if((ant.getPosition().x < 20.0f) || (ant.getPosition().x > 1580.0f))
         {
             antsOutsideOfBoundary.push_back(antId);
         }
