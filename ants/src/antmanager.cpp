@@ -43,7 +43,9 @@ void AntManager::handleMessage(const AntOutsideBoundariesMessage& mess)
 void AntManager::spawnAnts()
 {
     std::cout << "In spawnAnts()\n";
-    if(rand() % 100 < 20)
+    for(int i = 0; i < 100; i++)
+        std::cout << "rand is really " << rand() % 100 << " nalle\n";
+    if(rand() % 100 < 2)
     {
         std::cout << "Should be spawning a top ant here\n";
         createAnt(AntType::NORMAL, false, spawnPositionTop, ((float)(rand() % 25 + 10))/10.0f);
