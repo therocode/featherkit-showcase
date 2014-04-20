@@ -40,6 +40,9 @@ void Renderer::setup()
     createTexture("backhills", "ants/data/textures/backhills.png", 800, 600, false);
     createTexture("fronthills", "ants/data/textures/fronthills.png", 800, 600, false);
     createTexture("sky", "ants/data/textures/sky.png", 1, 300);
+    createTexture("cloud1", "ants/data/textures/cloud1.png", 320, 200);
+    createTexture("cloud2", "ants/data/textures/cloud2.png", 320, 200);
+    createTexture("cloud3", "ants/data/textures/cloud3.png", 320, 200);
     createTexture("ant", "ants/data/textures/ant.png", 800, 800);
     createTexture("darkness", "ants/data/textures/darkness.png", 800, 300);
     createTexture("halo", "ants/data/textures/halo.png", 145, 145);
@@ -49,12 +52,22 @@ void Renderer::setup()
     frontHillsQuad = fea::Quad({1700, 1200});
     backHillsQuad = fea::Quad({2240, 1200});
     skyQuad = fea::Quad({1600, 1200});
+    fea::Quad cloud1Quad = fea::Quad({320, 200});
+    fea::Quad cloud2Quad = fea::Quad({320, 200});
+    fea::Quad cloud3Quad = fea::Quad({320, 200});
 
     dirtQuad.setTexture(textures.at("dirt"));
     dirtBgQuad.setTexture(textures.at("dirtbg"));
     frontHillsQuad.setTexture(textures.at("fronthills"));
     backHillsQuad.setTexture(textures.at("backhills"));
     skyQuad.setTexture(textures.at("sky"));
+    cloud1Quad.setTexture(textures.at("cloud1"));
+    cloud2Quad.setTexture(textures.at("cloud2"));
+    cloud3Quad.setTexture(textures.at("cloud3"));
+
+    cloudQuads.push_back(cloud1Quad);
+    cloudQuads.push_back(cloud2Quad);
+    cloudQuads.push_back(cloud3Quad);
 
     frontHillsQuad.setParallax({1.1f, 1.0f});
     backHillsQuad.setParallax({1.4f, 1.0f});
@@ -96,6 +109,8 @@ void Renderer::render()
     cameraInterpolator.setPosition(cameraPosition);
     cameraInterpolator.update();
     const fea::Viewport vp = renderer.getViewport();
+
+    cloudHandler.update();
 
     // rendering to lighting render target //
     renderer.setViewport(targetVP);
@@ -144,6 +159,11 @@ void Renderer::render()
     renderer.getViewport().getCamera().setPosition(cameraInterpolator.getPosition());
     renderer.clear(fea::Color(0, 125, 255));
     renderer.queue(skyQuad);
+    for(int32_t i = 0; i < cloudHandler.getCloudPositions().size(); i++)
+    {
+        cloudQuads.at(i).setPosition(cloudHandler.getCloudPositions().at(i));
+        renderer.queue(cloudQuads.at(i));
+    }
     renderer.queue(backHillsQuad);
     renderer.queue(frontHillsQuad);
     renderer.queue(dirtBgQuad);

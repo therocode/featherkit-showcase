@@ -3,6 +3,7 @@
 #include "interpolator.h"
 #include "imageloader.h"
 #include "antsprite.h"
+#include "cloudhandler.h"
 #include <featherkit/render2d.hpp>
 
 class Renderer
@@ -43,6 +44,8 @@ class Renderer
         fea::Quad frontHillsQuad;
         fea::Quad backHillsQuad;
         fea::Quad skyQuad;
+        std::vector<fea::Quad> cloudQuads;
+        CloudHandler cloudHandler;
 
         fea::RenderTarget lightingTarget;
         const fea::Viewport targetVP;
