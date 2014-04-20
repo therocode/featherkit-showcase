@@ -2,7 +2,7 @@
 #include "messages.h"
 #include "direction.h"
 #include <featherkit/userinterface.hpp>
-#include <featherkit/ui/sdl2inputbackend.hpp>
+#include <featherkit/ui/sdlinputbackend.hpp>
 
 class InputHandler
 {

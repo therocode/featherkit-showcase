@@ -2,7 +2,7 @@
 #include <iostream>
 
 InputHandler::InputHandler(fea::MessageBus& bus)
-    :   input(new fea::SDL2InputBackend()),
+    :   input(new fea::SDLInputBackend()),
         messageBus(bus),
         directions{false, false , false, false}
 {

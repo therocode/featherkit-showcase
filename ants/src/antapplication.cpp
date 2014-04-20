@@ -5,7 +5,7 @@ AntApplication::AntApplication()
     :   input(messageBus),
         antManager(messageBus),
         physics(messageBus),
-        window(new fea::SDL2WindowBackend()),
+        window(new fea::SDLWindowBackend()),
         renderer(messageBus),
         digging(messageBus)
 {
