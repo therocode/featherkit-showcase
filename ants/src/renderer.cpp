@@ -43,6 +43,7 @@ void Renderer::setup()
     createTexture("cloud1", "ants/data/textures/cloud1.png", 320, 200);
     createTexture("cloud2", "ants/data/textures/cloud2.png", 320, 200);
     createTexture("cloud3", "ants/data/textures/cloud3.png", 320, 200);
+    createTexture("cloud4", "ants/data/textures/cloud4.png", 160, 200);
     createTexture("ant", "ants/data/textures/ant.png", 800, 800);
     createTexture("darkness", "ants/data/textures/darkness.png", 800, 300);
     createTexture("halo", "ants/data/textures/halo.png", 145, 145);
@@ -55,6 +56,7 @@ void Renderer::setup()
     fea::Quad cloud1Quad = fea::Quad({320, 200});
     fea::Quad cloud2Quad = fea::Quad({320, 200});
     fea::Quad cloud3Quad = fea::Quad({320, 200});
+    fea::Quad cloud4Quad = fea::Quad({160, 200});
 
     dirtQuad.setTexture(textures.at("dirt"));
     dirtBgQuad.setTexture(textures.at("dirtbg"));
@@ -64,10 +66,12 @@ void Renderer::setup()
     cloud1Quad.setTexture(textures.at("cloud1"));
     cloud2Quad.setTexture(textures.at("cloud2"));
     cloud3Quad.setTexture(textures.at("cloud3"));
+    cloud4Quad.setTexture(textures.at("cloud4"));
 
     cloudQuads.push_back(cloud1Quad);
     cloudQuads.push_back(cloud2Quad);
     cloudQuads.push_back(cloud3Quad);
+    cloudQuads.push_back(cloud4Quad);
 
     frontHillsQuad.setParallax({1.1f, 1.0f});
     backHillsQuad.setParallax({1.4f, 1.0f});

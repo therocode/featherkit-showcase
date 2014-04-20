@@ -16,7 +16,6 @@ class AntManager
 
     private:
         fea::MessageBus& messageBus;
-        //std::unordered_map<size_t, Ant> ants;
         size_t nextAntId;
 
         void spawnAnts();
