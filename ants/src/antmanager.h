@@ -1,6 +1,5 @@
 #pragma once
 #include "messages.h"
-#include "ant.h"
 #include "anttype.h"
 
 class AntManager
@@ -17,7 +16,7 @@ class AntManager
 
     private:
         fea::MessageBus& messageBus;
-        std::unordered_map<size_t, Ant> ants;
+        //std::unordered_map<size_t, Ant> ants;
         size_t nextAntId;
 
         void spawnAnts();

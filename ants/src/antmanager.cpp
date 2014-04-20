@@ -27,7 +27,7 @@ size_t AntManager::createAnt(AntType type, bool goingRight, glm::vec2 position, 
     size_t createdId = nextAntId;
     nextAntId++;
 
-    ants.emplace(createdId, Ant(type));
+    //ants.emplace(createdId, Ant(type));
     messageBus.send(AntCreationMessage(createdId, type, goingRight, position, velocity));
     return createdId;
 }
@@ -36,7 +36,7 @@ void AntManager::handleMessage(const AntOutsideBoundariesMessage& mess)
 {
     int index;
     std::tie(index) = mess.mData;
-    ants.erase(index);
+    //ants.erase(index);
     messageBus.send(AntDeletionMessage(index));
 }
 
