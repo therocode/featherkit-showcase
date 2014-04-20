@@ -6,7 +6,7 @@ AntManager::AntManager(fea::MessageBus& bus)
 {
     nextAntId = 0;
 
-    spawnPositionTop = glm::vec2(1000.0f, 925.0f);
+    spawnPositionTop = glm::vec2(1550.0f, 925.0f);
     spawnPositionBottom = glm::vec2(20.0f, 1100.0f);
 
     messageBus.addSubscriber<AntOutsideBoundariesMessage>(*this);
