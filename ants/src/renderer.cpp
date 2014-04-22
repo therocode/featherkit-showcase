@@ -107,7 +107,6 @@ void Renderer::handleMessage(const AntPositionMessage& mess)
 
 void Renderer::createTextures()
 {
-    std::cout << "texture setup\n";
     createTexture("dirt", "ants/data/textures/dirt2.png", 800, 600, true, true);
     createTexture("dirtbg", "ants/data/textures/dirtbg2.png", 800, 600, false);
     createTexture("backhills", "ants/data/textures/backhills.png", 800, 600, false);
@@ -124,7 +123,6 @@ void Renderer::createTextures()
 
 void Renderer::setupQuads()
 {
-    std::cout << "quad setup\n";
     dirtQuad = fea::Quad({1600, 1200});
     dirtBgQuad = fea::Quad({1600, 1200});
     frontHillsQuad = fea::Quad({1700, 1200});
@@ -156,7 +154,6 @@ void Renderer::setupQuads()
 
 void Renderer::createAnimations()
 {
-    std::cout << "animation setup\n";
     animations.emplace((int)AntType::NORMAL, fea::Animation(glm::vec2(0.0f, 0.0f), glm::vec2(200.0f/800.0f, 100.0f/800.0f), 4, 16));
     animations.emplace((int)AntType::DIGGING, fea::Animation(glm::vec2(0.0f, 100.0f/800.0f), glm::vec2(200.0f/800.0f, 100.0f/800.0f), 4, 8));
     animations.emplace((int)AntType::BLUE, fea::Animation(glm::vec2(0.0f, 200.0f/800.0f), glm::vec2(200.0f/800.0f, 100.0f/800.0f), 4, 16));
@@ -166,7 +163,6 @@ void Renderer::createAnimations()
 
 void Renderer::setupRenderTarget()
 {
-    std::cout << "rendertarget setup\n";
     lightingTarget.create(1600, 600);
     lightingQuad = fea::Quad({1600, 600});
     darknessQuad = fea::Quad({1600, 600});
