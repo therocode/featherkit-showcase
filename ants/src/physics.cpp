@@ -15,7 +15,7 @@ Physics::Physics(fea::MessageBus& bus)
 
     dirtTexture = nullptr;
     gravity = glm::vec2(0.0f, 1.0f);
-    terrainCollisionThreshold = 20.0f;
+    terrainCollisionThreshold = 100.0f;
 }
 
 Physics::~Physics()
@@ -163,24 +163,15 @@ void Physics::terrainCheck(PhysicsBody& body)
     glm::vec2 verticalOffset = glm::vec2(0.0f, 0.0f);
     while(terrainCollisionAt(body.getFGPInWorldSpace()))
     {
-        body.setPosition(body.getPosition() + glm::vec2(0.0f, 1.0f));
+        body.setPosition(body.getPosition() - glm::vec2(0.0f, 1.0f));
         verticalOffset += glm::vec2(0.0f, 1.0f);
     }
-    if(verticalOffset.y < terrainCollisionThreshold)
-    {
-        //body.setPosition(body.getPosition() + verticalOffset);
-    }
-    else
+    // a check to make sure they don't go through the roof
+    if(verticalOffset.y > terrainCollisionThreshold)
     {
         glm::vec2 velocity = body.recalculateVelocity();
         body.setPosition(originalPosition - velocity);
     }
-    /* old shit
-    while(terrainCollisionAt(body.getFGPInWorldSpace()))
-    {
-        body.setPosition(body.getPosition() - glm::vec2(0.0f, 1.0f));
-    }
-    */
     bool frontColliding = terrainCollisionAt(body.getFGPInWorldSpace() + glm::vec2(0.0f, 4.0f));
     body.setFGPAsFalling(!frontColliding);   // falls if air below, otherwise not falling
 
