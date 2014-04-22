@@ -15,6 +15,7 @@ Physics::Physics(fea::MessageBus& bus)
 
     dirtTexture = nullptr;
     gravity = glm::vec2(0.0f, 1.0f);
+    terrainCollisionThreshold = 20.0f;
 }
 
 Physics::~Physics()
@@ -158,6 +159,28 @@ void Physics::updateGravityState(PhysicsBody& body)
 void Physics::terrainCheck(PhysicsBody& body)
 {
     // Front Point check
+    /*
+    glm::vec2 originalPosition = body.getPosition();
+    glm::vec2 verticalOffset = glm::vec2(0.0f, 0.0f);
+    std::cout << "door\n";
+    while(terrainCollisionAt(body.getFGPInWorldSpace()))
+    {
+        std::cout << "hi\n";
+        body.setPosition(body.getPosition() + glm::vec2(0.0f, 1.0f));
+        verticalOffset += glm::vec2(0.0f, 1.0f);
+    }
+    std::cout << "cya\n";
+    if(verticalOffset.y < terrainCollisionThreshold)
+    {
+        std::cout << "if\n";
+        //body.setPosition(body.getPosition() + verticalOffset);
+    }
+    else
+    {
+        std::cout << "else\n";
+        body.setPosition(originalPosition);
+    }
+    */
     while(terrainCollisionAt(body.getFGPInWorldSpace()))
     {
         body.setPosition(body.getPosition() - glm::vec2(0.0f, 1.0f));

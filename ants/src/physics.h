@@ -25,6 +25,7 @@ class Physics
     private:
         fea::MessageBus& messageBus;
         glm::vec2 gravity;
+        float terrainCollisionThreshold;
 
         void updateVelocity(PhysicsBody& body, size_t id);
         void updateGravityState(PhysicsBody& body);

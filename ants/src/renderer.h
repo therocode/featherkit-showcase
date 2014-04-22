@@ -47,10 +47,20 @@ class Renderer
         std::vector<fea::Quad> cloudQuads;
         CloudHandler cloudHandler;
 
-        fea::RenderTarget lightingTarget;
+        fea::Viewport sceneVP;
         const fea::Viewport targetVP;
+        fea::RenderTarget lightingTarget;
         fea::Quad lightingQuad;
         fea::Quad darknessQuad;
         fea::Quad largeHalo;
         fea::Quad smallHalo;
+
+        void createTextures();
+        void setupQuads();
+        void createAnimations();
+        void setupRenderTarget();
+
+        void updateCamera();
+        void renderRenderTarget();
+        void renderScene();
 };

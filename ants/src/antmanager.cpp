@@ -40,7 +40,7 @@ void AntManager::handleMessage(const AntOutsideBoundariesMessage& mess)
 
 void AntManager::spawnAnts()
 {
-    if(rand() % 1000 < 20)
+    if(rand() % 1000 < 15)
     {
         createAnt(AntType::NORMAL, false, spawnPositionTop, ((float)(rand() % 25 + 10))/10.0f);
     }
