@@ -4,6 +4,7 @@
 #include "imageloader.h"
 #include "antsprite.h"
 #include "cloudhandler.h"
+#include "gui.h"
 #include <featherkit/render2d.hpp>
 
 class Renderer

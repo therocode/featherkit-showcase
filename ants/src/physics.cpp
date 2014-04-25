@@ -166,7 +166,6 @@ void Physics::terrainCheck(PhysicsBody& body)
         body.setPosition(body.getPosition() - glm::vec2(0.0f, 1.0f));
         verticalOffset += glm::vec2(0.0f, 1.0f);
     }
-    // a check to make sure they don't go through the roof
     if(verticalOffset.y > terrainCollisionThreshold)
     {
         glm::vec2 velocity = body.recalculateVelocity();
