@@ -32,6 +32,7 @@ class Renderer
         glm::vec2 cameraPosition;
         Interpolator cameraInterpolator;
         fea::Renderer2D renderer;
+        GUI gui;
 
         ImageLoader loader;
         std::unordered_map<std::string, fea::Texture> textures;
@@ -64,4 +65,5 @@ class Renderer
         void updateCamera();
         void renderRenderTarget();
         void renderScene();
+        void renderGUI();
 };

@@ -35,6 +35,8 @@ void Renderer::setup()
 {
     renderer.setup();
 
+    gui.setup();
+
     createTextures();
     setupQuads();
     createAnimations();
@@ -49,6 +51,7 @@ void Renderer::render()
     cloudHandler.update();
     renderRenderTarget();
     renderScene();
+    renderGUI();
 }
 
 void Renderer::handleMessage(const CameraPositionMessage& mess)
@@ -260,5 +263,14 @@ void Renderer::renderScene()
     renderer.setBlendMode(fea::BlendMode::MULTIPLY);
     renderer.queue(lightingQuad);
     renderer.setBlendMode(fea::BlendMode::ALPHA);
+    renderer.render();
+}
+
+void Renderer::renderGUI()
+{
+    for(auto& drawable : gui.getDrawables())
+    {
+        renderer.queue(*drawable);
+    }
     renderer.render();
 }
