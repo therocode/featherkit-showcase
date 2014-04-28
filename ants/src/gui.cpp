@@ -7,7 +7,8 @@ GUI::GUI()
 void GUI::setup()
 {
     backgroundQuad = fea::Quad({200, 600});
-    backgroundQuad.setPosition({0, 0});
+    backgroundQuad.setPosition({-400, -300});
+    backgroundQuad.setParallax({0, 0});
     backgroundQuad.setColor(fea::Color(123, 123, 123, 123));
 
     drawables.push_back(&backgroundQuad);

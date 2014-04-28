@@ -13,4 +13,5 @@ class GUI
         std::vector<fea::Drawable2D*> drawables;
         std::vector<FeatureButton> featureButtons;
         fea::Quad backgroundQuad;
+        glm::vec2 cameraPosition;
 };
