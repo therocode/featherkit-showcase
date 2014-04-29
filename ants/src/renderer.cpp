@@ -270,6 +270,8 @@ void Renderer::renderGUI()
 {
     for(auto& drawable : gui.getDrawables())
     {
+        //fea::Drawable2D copy = *drawable;
+        //copy.setPosition(asdf);
         renderer.queue(*drawable);
     }
     renderer.render();

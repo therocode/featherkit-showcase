@@ -6,11 +6,15 @@
 class FeatureButton
 {
     public:
-        FeatureButton();
-        const glm::vec2& getPosition();
+        FeatureButton(glm::vec2 pos, glm::vec2 size, std::string title);
+        const glm::vec2& getPosition(); // necessary?
         void setPosition(glm::vec2 pos);
+        bool withinPosition(glm::vec2 pos);
         void setClicked(bool click);
         void setHovered(bool hover);
+        bool isHovered();
+
+        std::vector<fea::Drawable2D*> getDrawables();
 
     private:
         glm::vec2 position;

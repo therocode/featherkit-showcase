@@ -15,6 +15,7 @@ FEA_DECLARE_MESSAGE(DiggerAntCreatedMessage, size_t); // digger ant id
 FEA_DECLARE_MESSAGE(AntStartedDiggingMessage, size_t, glm::vec2); // position of digging target, digger ant id
 FEA_DECLARE_MESSAGE(AntStoppedDiggingMessage, size_t); // position of digging target, digger ant id
 
-FEA_DECLARE_MESSAGE(MouseClickMessage, glm::vec2);
+FEA_DECLARE_MESSAGE(MouseClickMessage, glm::vec2); // mouse position of the click
+FEA_DECLARE_MESSAGE(MousePositionMessage, glm::vec2); // mouse position in window coords
 
 FEA_DECLARE_MESSAGE(DirtTextureSetMessage, fea::Texture*);    // dirt texture
