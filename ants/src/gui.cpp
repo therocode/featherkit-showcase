@@ -16,7 +16,7 @@ void GUI::setup()
 
     drawables.push_back(&backgroundQuad);
 
-    for(int32_t i = 0; i < 3; i++)
+    for(size_t i = 0; i < 3; i++)
     {
         featureButtons.push_back(std::unique_ptr<FeatureButton>(new FeatureButton(glm::vec2(origin.x, origin.y + buttonSize.y * i), buttonSize, "hej")));
     }
@@ -40,12 +40,20 @@ void GUI::handleMessage(const MousePositionMessage& mess)
     // check for hovering
     glm::vec2 position;
     std::tie(position) = mess.mData;
-    /*
-    for(auto& button : featureButtons)
+    for(size_t i = 0; i < featureButtons.size(); i++)
     {
-        button.setHovered(button.withinArea(position));
+        featureButtons.at(i)->setHovered(withinArea(position, i));
     }
-    */
+}
+
+bool GUI::withinArea(glm::vec2 position, size_t index)
+{
+    glm::vec2 boundaryPosition = glm::vec2(0.0f, buttonSize.y * index);
+    glm::vec2 boundaryPosition2 = boundaryPosition + buttonSize;
+    return((position.x >= boundaryPosition.x) &&
+           (position.x <= boundaryPosition2.x) &&
+           (position.y >= boundaryPosition.y) &&
+           (position.y <= boundaryPosition2.y));
 }
 
 void GUI::handleMessage(const MouseClickMessage& mess)

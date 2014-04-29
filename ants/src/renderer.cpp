@@ -9,6 +9,8 @@ Renderer::Renderer(fea::MessageBus& bus)
         targetVP(fea::Viewport({1600.0f, 600.0f}, {0, 0}, fea::Camera({800.0f, 300.0f})))
 {
     messageBus.addSubscriber<MouseClickMessage>(*this);
+    messageBus.addSubscriber<MouseClickMessage>(gui);
+    messageBus.addSubscriber<MousePositionMessage>(gui);
     messageBus.addSubscriber<CameraPositionMessage>(*this);
     messageBus.addSubscriber<AntPositionMessage>(*this);
     messageBus.addSubscriber<AntCreationMessage>(*this);
@@ -25,6 +27,8 @@ void Renderer::createTexture(const std::string& name, const std::string& path, i
 Renderer::~Renderer()
 {
     messageBus.removeSubscriber<MouseClickMessage>(*this);
+    messageBus.removeSubscriber<MouseClickMessage>(gui);
+    messageBus.removeSubscriber<MousePositionMessage>(gui);
     messageBus.removeSubscriber<CameraPositionMessage>(*this);
     messageBus.removeSubscriber<AntPositionMessage>(*this);
     messageBus.removeSubscriber<AntCreationMessage>(*this);

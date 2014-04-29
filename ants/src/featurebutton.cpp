@@ -1,8 +1,12 @@
 #include "featurebutton.h"
+#include <iostream>
 
 FeatureButton::FeatureButton(glm::vec2 pos, glm::vec2 size, std::string title)
 {
     padding = 5.0f;
+
+    offColour = fea::Color(240, 240, 240, 123);
+    onColour = fea::Color(100, 100, 100, 123);
 
     position = pos;
     largeQuad = fea::Quad(size);
@@ -13,7 +17,7 @@ FeatureButton::FeatureButton(glm::vec2 pos, glm::vec2 size, std::string title)
     smallQuad = fea::Quad(size - glm::vec2(padding * 2.0f, padding * 2.0f));
     smallQuad.setPosition(position + glm::vec2(padding, padding));
     smallQuad.setParallax({0, 0});
-    smallQuad.setColor(fea::Color(240, 240, 240, 123));
+    smallQuad.setColor(offColour);
 
     titleText = title;
 }
@@ -53,6 +57,7 @@ void FeatureButton::setClicked(bool click)
 void FeatureButton::setHovered(bool hover)
 {
     hovered = hover;
+    smallQuad.setColor(hovered ? onColour : offColour);
 }
 
 bool FeatureButton::isHovered()

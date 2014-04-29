@@ -19,12 +19,17 @@ class FeatureButton
     private:
         glm::vec2 position;
         float padding;
+
+        fea::Color offColour;
+        fea::Color onColour;
+
         fea::Quad largeQuad;
         fea::Quad smallQuad;
         fea::TextSurface titleSurface;
         fea::TextSurface contentSurface;
         std::string titleText;
         std::string contentText;
+
         bool clicked;
         bool hovered;
 };
