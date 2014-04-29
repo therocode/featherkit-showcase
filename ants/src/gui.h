@@ -17,9 +17,8 @@ class GUI
 
     private:
         std::vector<fea::Drawable2D*> drawables;
-        std::vector<FeatureButton> featureButtons;
+        std::vector<std::unique_ptr<FeatureButton>> featureButtons;
         fea::Quad backgroundQuad;
         glm::vec2 origin;
-
-        FeatureButton btn;
+        glm::vec2 buttonSize;
 };

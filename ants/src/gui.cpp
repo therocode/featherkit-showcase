@@ -1,24 +1,32 @@
 #include "gui.h"
 
 GUI::GUI()
-    :
-    origin({-400.0f, -300.0f}),
-    btn(origin, {200, 50}, "hej")
 {
 }
 
 void GUI::setup()
 {
-    backgroundQuad = fea::Quad({200, 600});
+    origin = glm::vec2(-400.0f, -300.0f);
+    buttonSize = glm::vec2(200.0f, 50.0f);
+
+    backgroundQuad = fea::Quad({200.0f, 600.0f});
     backgroundQuad.setPosition(origin);
-    backgroundQuad.setParallax({0, 0});
+    backgroundQuad.setParallax({0.0f, 0.0f});
     backgroundQuad.setColor(fea::Color(123, 123, 123, 123));
 
     drawables.push_back(&backgroundQuad);
 
-    for(auto& drawable : btn.getDrawables())
+    for(int32_t i = 0; i < 3; i++)
     {
-        drawables.push_back(drawable);
+        featureButtons.push_back(std::unique_ptr<FeatureButton>(new FeatureButton(glm::vec2(origin.x, origin.y + buttonSize.y * i), buttonSize, "hej")));
+    }
+
+    for(auto& button : featureButtons)
+    {
+        for(auto& drawable : button->getDrawables())
+        {
+            drawables.push_back(drawable);
+        }
     }
 }
 
