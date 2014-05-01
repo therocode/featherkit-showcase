@@ -2,7 +2,7 @@
 #include <iostream>
 
 InputHandler::InputHandler(fea::MessageBus& bus)
-    :   input(new fea::SDL2InputBackend()),
+    :   input(new fea::SDLInputBackend()),
         messageBus(bus),
         directions{false, false , false, false}
 {
@@ -73,5 +73,6 @@ void InputHandler::inputLoop()
         messageBus.send(CameraPositionMessage(glm::vec2(-12.0f, 0.0f)));
     if(directions[RIGHT])
         messageBus.send(CameraPositionMessage(glm::vec2(12.0f, 0.0f)));
-
+    
+    messageBus.send(MousePositionMessage(glm::vec2(input.getMouseWindowPosition())));
 }

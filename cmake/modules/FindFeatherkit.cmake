@@ -2,7 +2,7 @@ set( FEATHERKIT_FOUND false)
 
 find_path(
     FEATHERKIT_INCLUDE_DIR
-    featherkit/structure.h
+    featherkit/structure.hpp
     PATH_SUFFIXES
     include
     PATHS

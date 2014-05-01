@@ -15,6 +15,7 @@ Physics::Physics(fea::MessageBus& bus)
 
     dirtTexture = nullptr;
     gravity = glm::vec2(0.0f, 1.0f);
+    terrainCollisionThreshold = 100.0f;
 }
 
 Physics::~Physics()
@@ -48,7 +49,7 @@ void Physics::update()
         messageBus.send(AntPositionMessage(antId, ant.getPosition(), ant.getAngle()));
 
         // check if any ants are outside of the screen boundaries
-        if((ant.getPosition().x < 20.0f) || (ant.getPosition().x > 1576.0f))
+        if((ant.getPosition().x < 20.0f) || (ant.getPosition().x > 1580.0f))
         {
             antsOutsideOfBoundary.push_back(antId);
         }
@@ -143,13 +144,13 @@ void Physics::updateGravityState(PhysicsBody& body)
     }
     else if(body.getFGP().falling)
     {// rotate the ant relative to back point
-        body.setFallingVelocity(glm::vec2(0.0f, 0.0f));
+        body.resetFallingVelocity();
         body.setPosition(rotatePoint(body.getPosition(), -degree * 3.0f, body.getBGPInWorldSpace()));
         body.setAngle(body.getAngle() - degree * 3.0f);    
     }
     else if(body.getBGP().falling)
     {// rotate the ant relative to front point
-        body.setFallingVelocity(glm::vec2(0.0f, 0.0f));
+        body.resetFallingVelocity();
         body.setPosition(rotatePoint(body.getPosition(), degree * 3.0f, body.getFGPInWorldSpace()));
         body.setAngle(body.getAngle() + degree * 3.0f);    
     }
@@ -158,9 +159,17 @@ void Physics::updateGravityState(PhysicsBody& body)
 void Physics::terrainCheck(PhysicsBody& body)
 {
     // Front Point check
+    glm::vec2 originalPosition = body.getPosition();
+    glm::vec2 verticalOffset = glm::vec2(0.0f, 0.0f);
     while(terrainCollisionAt(body.getFGPInWorldSpace()))
     {
-        body.setPosition({body.getPosition().x, body.getPosition().y - 1.0f});
+        body.setPosition(body.getPosition() - glm::vec2(0.0f, 1.0f));
+        verticalOffset += glm::vec2(0.0f, 1.0f);
+    }
+    if(verticalOffset.y > terrainCollisionThreshold)
+    {
+        glm::vec2 velocity = body.recalculateVelocity();
+        body.setPosition(originalPosition - velocity);
     }
     bool frontColliding = terrainCollisionAt(body.getFGPInWorldSpace() + glm::vec2(0.0f, 4.0f));
     body.setFGPAsFalling(!frontColliding);   // falls if air below, otherwise not falling
@@ -168,7 +177,7 @@ void Physics::terrainCheck(PhysicsBody& body)
     // Back Point check
     while(terrainCollisionAt(body.getBGPInWorldSpace()))
     {
-        body.setPosition({body.getPosition().x, body.getPosition().y - 1.0f});
+        body.setPosition(body.getPosition() - glm::vec2(0.0f, 1.0f));
     }
     bool backColliding = terrainCollisionAt(body.getBGPInWorldSpace() + glm::vec2(0.0f, 4.0f));
     body.setBGPAsFalling(!backColliding);
@@ -176,7 +185,7 @@ void Physics::terrainCheck(PhysicsBody& body)
 
 bool Physics::terrainCollisionAt(glm::vec2 pos)
 {
-    glm::uvec2 position = (glm::uvec2)(pos/4.0f);
+    glm::uvec2 position = (glm::uvec2)(pos/2.0f);
     return dirtTexture->getPixel(position.x, position.y).a() != 0.0f;
 }
 
