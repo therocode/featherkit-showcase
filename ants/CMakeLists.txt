@@ -25,7 +25,7 @@ endif()
 
 if(SDL_FOUND)
     include_directories(${SDL_INCLUDE_DIR})
-    target_link_libraries(${project_name} ${SDL_LIBRARIES})
+    target_link_libraries(${project_name} ${SDL_LIBRARY})
 endif()
 
 if(GLM_FOUND)

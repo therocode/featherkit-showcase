@@ -10,12 +10,15 @@ enum AntType
     BLUE
 };
 
+namespace std
+{
 template<>
-    struct std::hash<AntType>
+    struct hash<AntType>
     {
         public:
-            std::size_t operator()(const AntType& antType) const 
+            size_t operator()(const AntType& antType) const 
             {
                 return (size_t)antType;
             }
     };
+}

@@ -1,6 +1,6 @@
 #include "antapplication.h"
 
-int main()
+int main(int argc, char *argv[])
 {
     AntApplication app;
     app.run();
