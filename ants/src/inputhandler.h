@@ -3,6 +3,7 @@
 #include "direction.h"
 #include <featherkit/userinterface.hpp>
 #include <featherkit/ui/sdlinputbackend.hpp>
+#include <array>
 
 class InputHandler
 {
@@ -14,5 +15,5 @@ class InputHandler
         fea::InputHandler input;
         fea::MessageBus& messageBus;
 
-        bool directions[4]; 
+        std::array<bool,4> directions; 
 };

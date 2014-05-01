@@ -4,7 +4,7 @@
 InputHandler::InputHandler(fea::MessageBus& bus)
     :   input(new fea::SDLInputBackend()),
         messageBus(bus),
-        directions{false, false , false, false}
+        directions({false, false , false, false}) 
 {
 }
 
