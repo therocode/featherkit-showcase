@@ -19,13 +19,13 @@ FeatureButton::FeatureButton(glm::vec2 pos, glm::vec2 size, std::string title)
     smallQuad.setParallax({0.0f, 0.0f});
     smallQuad.setColor(offColour);
 
-    titleFont = fea::Font("ants/data/fonts/Champagne_Limousines_Bold.ttf");
-    titleText = title;
-    titleSurface.setPenPosition(position + glm::vec2(padding, padding));
+    titleFont = fea::Font("ants/data/fonts/Champagne_Limousines_Bold.ttf", 40);
+    titleText = title;                                                  
     titleSurface.setParallax({0.0f, 0.0f});
     titleSurface.setPenFont(titleFont);
     titleSurface.setColor(fea::Color(255, 255, 255));
     titleSurface.write(titleText);
+    titleSurface.setPosition(position + glm::vec2(padding, padding) + glm::vec2(5.0f, titleSurface.getSize().y));
 }
 
 /*
