@@ -29,6 +29,7 @@ class FeatureButton
         fea::TextSurface contentSurface;
         std::string titleText;
         std::string contentText;
+        fea::Font titleFont;
 
         bool clicked;
         bool hovered;
