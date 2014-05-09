@@ -18,7 +18,8 @@ void GUI::setup()
 
     for(size_t i = 0; i < 3; i++)
     {
-        featureButtons.push_back(std::unique_ptr<FeatureButton>(new FeatureButton(glm::vec2(origin.x, origin.y + buttonSize.y * i), buttonSize, "hej")));
+        featureButtons.push_back(std::unique_ptr<FeatureButton>(new FeatureButton(glm::vec2(origin.x, origin.y + buttonSize.y * i), buttonSize, "hej",
+        "lol bajs this is a description")));
     }
 
     for(auto& button : featureButtons)
@@ -27,6 +28,14 @@ void GUI::setup()
         {
             drawables.push_back(drawable);
         }
+    }
+}
+
+void GUI::update()
+{
+    for(auto& button : featureButtons)
+    {
+        button->update();
     }
 }
 
@@ -61,10 +70,8 @@ void GUI::handleMessage(const MouseClickMessage& mess)
     // check for clicking
     glm::vec2 position;
     std::tie(position) = mess.mData;
-    /*
     for(auto& button : featureButtons)
     {
-        button.setClicked(button.isHovered());
+        button->setClicked(button->isHovered());
     }
-    */
 }

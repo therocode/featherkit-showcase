@@ -11,6 +11,7 @@ class GUI
         GUI();
         std::vector<fea::Drawable2D*> getDrawables();
         void setup();
+        void update();
 
         virtual void handleMessage(const MousePositionMessage& mess) override;
         virtual void handleMessage(const MouseClickMessage& mess) override;

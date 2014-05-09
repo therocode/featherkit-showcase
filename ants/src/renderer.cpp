@@ -53,6 +53,7 @@ void Renderer::render()
 {
     updateCamera();
     cloudHandler.update();
+    gui.update();
     renderRenderTarget();
     renderScene();
     renderGUI();
