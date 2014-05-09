@@ -33,9 +33,11 @@ void GUI::setup()
 
 void GUI::update()
 {
+    float yPos = origin.y;
     for(auto& button : featureButtons)
     {
-        button->update();
+        button->update(yPos);
+        yPos += button->getLength();
     }
 }
 
@@ -51,18 +53,8 @@ void GUI::handleMessage(const MousePositionMessage& mess)
     std::tie(position) = mess.mData;
     for(size_t i = 0; i < featureButtons.size(); i++)
     {
-        featureButtons.at(i)->setHovered(withinArea(position, i));
+        featureButtons.at(i)->setHovered(featureButtons.at(i)->withinArea(position));
     }
-}
-
-bool GUI::withinArea(glm::vec2 position, size_t index)
-{
-    glm::vec2 boundaryPosition = glm::vec2(0.0f, buttonSize.y * index);
-    glm::vec2 boundaryPosition2 = boundaryPosition + buttonSize;
-    return((position.x >= boundaryPosition.x) &&
-           (position.x <= boundaryPosition2.x) &&
-           (position.y >= boundaryPosition.y) &&
-           (position.y <= boundaryPosition2.y));
 }
 
 void GUI::handleMessage(const MouseClickMessage& mess)

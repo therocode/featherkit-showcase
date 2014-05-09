@@ -22,6 +22,4 @@ class GUI
         fea::Quad backgroundQuad;
         glm::vec2 origin;
         glm::vec2 buttonSize;
-
-        bool withinArea(glm::vec2 position, size_t index);
 };

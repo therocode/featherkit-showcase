@@ -36,15 +36,15 @@ FeatureButton::FeatureButton(glm::vec2 pos, glm::vec2 size, std::string title, s
 
     originalLength = size.y;
     //expandedLength = contentSurface.getSize().y;
-    expandedLength = 62.0f;
+    expandedLength = 100.0f;
     slideVelocity = 1.0f;
 
     state = ButtonState::CLOSED;
 }
 
-const glm::vec2& FeatureButton::getPosition()
+float FeatureButton::getLength()
 {
-    return position;
+    return largeQuad.getSize().y;
 }
 
 void FeatureButton::setPosition(glm::vec2 pos)
@@ -52,8 +52,14 @@ void FeatureButton::setPosition(glm::vec2 pos)
     position = pos;
 }
 
-bool FeatureButton::withinPosition(glm::vec2 pos)
+bool FeatureButton::withinArea(glm::vec2 pos)
 {
+    glm::vec2 boundaryPosition = position - glm::vec2(-400.0f, -300.0f);
+    glm::vec2 boundaryPosition2 = boundaryPosition + glm::vec2(largeQuad.getSize().x, originalLength);
+    return((pos.x >= boundaryPosition.x) &&
+           (pos.x <= boundaryPosition2.x) &&
+           (pos.y >= boundaryPosition.y) &&
+           (pos.y <= boundaryPosition2.y));
 }
 
 void FeatureButton::setClicked(bool click)
@@ -94,13 +100,19 @@ std::vector<fea::Drawable2D*> FeatureButton::getDrawables()
     return drawables;
 }
 
-void FeatureButton::update()
+void FeatureButton::update(float lengthUpdate)
 {
+    // update position
+    position = glm::vec2(position.x, lengthUpdate);
+    largeQuad.setPosition(position);
+    smallQuad.setPosition(position + glm::vec2(padding, padding));
+    titleSurface.setPosition(position + glm::vec2(padding, padding) + glm::vec2(5.0f, titleSurface.getSize().y));
+
+    // update size
     switch(state)
     {
         case ButtonState::CLOSED:
             // do nothing, I think
-            //std::cout << "test\n";
             break;
         case ButtonState::CLOSING:
         {
@@ -118,7 +130,6 @@ void FeatureButton::update()
         }
         case ButtonState::OPENING:
         {
-            //std::cout << "\n///////////////I'm trying\n";
             glm::vec2 quadSize = largeQuad.getSize();
             if(quadSize.y < expandedLength)
             {
@@ -133,7 +144,6 @@ void FeatureButton::update()
         }
         case ButtonState::OPENED:
             // show text
-            std::cout << "hi it is open\n";
             break;
     }
 }
