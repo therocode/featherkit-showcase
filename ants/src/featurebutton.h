@@ -41,6 +41,7 @@ class FeatureButton
         std::string contentText;
         fea::Font titleFont;
         fea::Font contentFont;
+        std::vector<fea::Drawable2D*> drawables;
 
         bool clicked;
         bool hovered;

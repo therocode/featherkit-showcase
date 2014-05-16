@@ -40,6 +40,10 @@ FeatureButton::FeatureButton(glm::vec2 pos, glm::vec2 size, std::string title, s
     slideVelocity = 1.0f;
 
     state = ButtonState::CLOSED;
+
+    drawables.push_back(&largeQuad);
+    drawables.push_back(&smallQuad);
+    drawables.push_back(&titleSurface);
 }
 
 float FeatureButton::getLength()
@@ -72,6 +76,10 @@ void FeatureButton::setClicked(bool click)
         else if(state == ButtonState::CLOSING || state == ButtonState::CLOSED)
             state = ButtonState::OPENING;
     }
+    else
+    {
+        state = ButtonState::CLOSING;
+    }
 }
 
 void FeatureButton::setHovered(bool hover)
@@ -92,11 +100,6 @@ ButtonState FeatureButton::getState()
 
 std::vector<fea::Drawable2D*> FeatureButton::getDrawables()
 {
-    std::vector<fea::Drawable2D*> drawables;
-    drawables.push_back(&largeQuad);
-    drawables.push_back(&smallQuad);
-    drawables.push_back(&titleSurface);
-
     return drawables;
 }
 
