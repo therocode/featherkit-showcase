@@ -31,8 +31,9 @@ FeatureButton::FeatureButton(glm::vec2 pos, glm::vec2 size, std::string title, s
     contentText = content;
     contentSurface.setParallax({0.0f, 0.0f});
     contentSurface.setPenFont(contentFont);
-    contentSurface.setColor(fea::Color(255, 255, 255));
+    contentSurface.setColor(fea::Color(255, 255, 255, 0));
     contentSurface.write(contentText);
+    contentSurface.setPosition(position + glm::vec2(padding, padding) + glm::vec2(5.0f, contentSurface.getSize().y + smallQuad.getSize().y));
 
     originalLength = size.y;
     //expandedLength = contentSurface.getSize().y;
@@ -44,6 +45,7 @@ FeatureButton::FeatureButton(glm::vec2 pos, glm::vec2 size, std::string title, s
     drawables.push_back(&largeQuad);
     drawables.push_back(&smallQuad);
     drawables.push_back(&titleSurface);
+    drawables.push_back(&contentSurface);
 }
 
 float FeatureButton::getLength()
@@ -78,6 +80,8 @@ void FeatureButton::setClicked(bool click)
     }
     else
     {
+        // closing on other clicks means
+        // only one button opens at a time
         state = ButtonState::CLOSING;
     }
 }
@@ -119,6 +123,7 @@ void FeatureButton::update(float lengthUpdate)
             break;
         case ButtonState::CLOSING:
         {
+            contentSurface.setColor(fea::Color(255, 255, 255, 0));
             glm::vec2 quadSize = largeQuad.getSize();
             if(quadSize.y > originalLength)
             {
@@ -146,7 +151,7 @@ void FeatureButton::update(float lengthUpdate)
             break;
         }
         case ButtonState::OPENED:
-            // show text
+            contentSurface.setColor(fea::Color(255, 255, 255, 255));
             break;
     }
 }

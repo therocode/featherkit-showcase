@@ -9,7 +9,6 @@
 
 class Renderer
     :   public fea::MessageReceiver<CameraPositionMessage>,
-        public fea::MessageReceiver<MouseClickMessage>,
         public fea::MessageReceiver<AntPositionMessage>,
         public fea::MessageReceiver<AntCreationMessage>,
         public fea::MessageReceiver<AntDeletionMessage>
@@ -21,7 +20,6 @@ class Renderer
         void render();
 
         //messages//
-        virtual void handleMessage(const MouseClickMessage& mess) override;
         virtual void handleMessage(const CameraPositionMessage& mess) override;
         virtual void handleMessage(const AntPositionMessage& mess) override;
         virtual void handleMessage(const AntCreationMessage& mess) override;
