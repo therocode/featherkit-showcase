@@ -1,8 +1,8 @@
 #pragma once
 #include "anttype.h"
 #include <glm/glm.hpp>
-#include <featherkit/messaging.hpp>
-#include <featherkit/rendering/texture.hpp>
+#include <fea/messaging.hpp>
+#include <fea/rendering/texture.hpp>
 
 FEA_DECLARE_MESSAGE(QuitMessage);
 FEA_DECLARE_MESSAGE(CameraPositionMessage, const glm::vec2&);       // vel to add

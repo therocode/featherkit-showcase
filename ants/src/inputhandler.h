@@ -1,8 +1,8 @@
 #pragma once
 #include "messages.h"
 #include "direction.h"
-#include <featherkit/userinterface.hpp>
-#include <featherkit/ui/sdlinputbackend.hpp>
+#include <fea/userinterface.hpp>
+#include <fea/ui/sdlinputbackend.hpp>
 
 class InputHandler
 {

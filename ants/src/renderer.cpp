@@ -6,7 +6,7 @@ Renderer::Renderer(fea::MessageBus& bus)
         cameraPosition(600.0f, 900.0f),
         cameraInterpolator(cameraPosition),
         renderer(fea::Viewport({800.0f, 600.0f}, {0, 0}, fea::Camera(cameraInterpolator.getPosition()))),
-        targetVP(fea::Viewport({1600.0f, 600.0f}, {0, 0}, fea::Camera({800.0f, 300.0f})))
+        renderTargetVP(fea::Viewport({1600.0f, 600.0f}, {0, 0}, fea::Camera({800.0f, 300.0f})))
 {
     messageBus.addSubscriber<MouseClickMessage>(gui);
     messageBus.addSubscriber<MousePositionMessage>(gui);
@@ -14,6 +14,10 @@ Renderer::Renderer(fea::MessageBus& bus)
     messageBus.addSubscriber<AntPositionMessage>(*this);
     messageBus.addSubscriber<AntCreationMessage>(*this);
     messageBus.addSubscriber<AntDeletionMessage>(*this);
+
+    renderStateIndex = 0;
+    renderStates.push_back(RenderState(glm::vec2(400.0f, 300.0f), 1.0f));
+    renderStates.push_back(RenderState(glm::vec2(600.0f, 150.0f), 2.0f));
 }
 
 void Renderer::createTexture(const std::string& name, const std::string& path, int width, int height, bool smooth, bool interactive)
@@ -52,8 +56,17 @@ void Renderer::render()
     updateCamera();
     cloudHandler.update();
     gui.update();
-    renderRenderTarget();
-    renderScene();
+
+    if(renderStateIndex == 0)
+    {
+        renderRenderTarget();
+        renderScene();
+    }
+    else if(renderStateIndex == 1)
+    {
+        renderRenderTarget();
+        renderScene();
+    }
     renderGUI();
 }
 
@@ -187,12 +200,12 @@ void Renderer::updateCamera()
 
     cameraInterpolator.setPosition(cameraPosition);
     cameraInterpolator.update();
-    sceneVP = renderer.getViewport();
+    defaultSceneVP = renderer.getViewport(); // might have to move this or change this or something
 }
 
 void Renderer::renderRenderTarget()
 {
-    renderer.setViewport(targetVP);
+    renderer.setViewport(renderTargetVP);
     renderer.clear(lightingTarget, fea::Color(0, 0, 0, 255));
     renderer.queue(darknessQuad);
     renderer.setBlendMode(fea::BlendMode::ADD);
@@ -236,7 +249,7 @@ void Renderer::renderRenderTarget()
 void Renderer::renderScene()
 {
     renderer.setBlendMode(fea::BlendMode::ALPHA);
-    renderer.setViewport(sceneVP);
+    renderer.setViewport(defaultSceneVP);
     renderer.getViewport().getCamera().setPosition(cameraInterpolator.getPosition());
     renderer.clear(fea::Color(0, 125, 255));
     renderer.queue(skyQuad);

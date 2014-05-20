@@ -1,7 +1,7 @@
 #pragma once
 #include "messages.h"
 #include "featurebutton.h"
-#include <featherkit/render2d.hpp>
+#include <fea/render2d.hpp>
 
 class GUI
     :   public fea::MessageReceiver<MousePositionMessage>,

@@ -1,6 +1,6 @@
 #pragma once
 #include "anttype.h"
-#include <featherkit/rendering/animatedquad.hpp>
+#include <fea/rendering/animatedquad.hpp>
 
 struct AntSprite
 {

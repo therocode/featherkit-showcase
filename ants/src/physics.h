@@ -1,7 +1,7 @@
 #pragma once
 #include "messages.h"
 #include "physicsbody.h"
-#include <featherkit/render2d.hpp>
+#include <fea/render2d.hpp>
 
 class Physics
     :   public fea::MessageReceiver<DirtTextureSetMessage>,

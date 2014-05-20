@@ -27,7 +27,7 @@ FeatureButton::FeatureButton(glm::vec2 pos, glm::vec2 size, std::string title, s
     titleSurface.write(titleText);
     titleSurface.setPosition(position + glm::vec2(padding, padding) + glm::vec2(5.0f, titleSurface.getSize().y));
 
-    contentFont = fea::Font("ants/data/fonts/Champagne_Limousines.ttf", 30);
+    contentFont = fea::Font("ants/data/fonts/Champagne_Limousines.ttf", 20);
     contentText = content;
     contentSurface.setParallax({0.0f, 0.0f});
     contentSurface.setPenFont(contentFont);
@@ -77,6 +77,7 @@ void FeatureButton::setClicked(bool click)
             state = ButtonState::CLOSING;
         else if(state == ButtonState::CLOSING || state == ButtonState::CLOSED)
             state = ButtonState::OPENING;
+            // send open message to renderer heregtgt
     }
     else
     {

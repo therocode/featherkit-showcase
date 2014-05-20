@@ -1,7 +1,7 @@
 #pragma once
 #include <glm/glm.hpp>
-#include <featherkit/render2d.hpp>
-#include <featherkit/rendering/textsurface.hpp>
+#include <fea/render2d.hpp>
+#include <fea/rendering/textsurface.hpp>
 
 enum ButtonState
 {

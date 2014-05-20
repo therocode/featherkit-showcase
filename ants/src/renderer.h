@@ -1,11 +1,12 @@
 #pragma once
+#include "renderstate.h"
 #include "messages.h"
 #include "interpolator.h"
 #include "imageloader.h"
 #include "antsprite.h"
 #include "cloudhandler.h"
 #include "gui.h"
-#include <featherkit/render2d.hpp>
+#include <fea/render2d.hpp>
 
 class Renderer
     :   public fea::MessageReceiver<CameraPositionMessage>,
@@ -31,6 +32,8 @@ class Renderer
         Interpolator cameraInterpolator;
         fea::Renderer2D renderer;
         GUI gui;
+        std::vector<RenderState> renderStates;
+        size_t renderStateIndex;
 
         ImageLoader loader;
         std::unordered_map<std::string, fea::Texture> textures;
@@ -47,8 +50,8 @@ class Renderer
         std::vector<fea::Quad> cloudQuads;
         CloudHandler cloudHandler;
 
-        fea::Viewport sceneVP;
-        const fea::Viewport targetVP;
+        fea::Viewport defaultSceneVP;
+        const fea::Viewport renderTargetVP;
         fea::RenderTarget lightingTarget;
         fea::Quad lightingQuad;
         fea::Quad darknessQuad;
