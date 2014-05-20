@@ -34,6 +34,7 @@ class Renderer
         GUI gui;
         std::vector<RenderState> renderStates;
         size_t renderStateIndex;
+        float cameraZoom;
 
         ImageLoader loader;
         std::unordered_map<std::string, fea::Texture> textures;

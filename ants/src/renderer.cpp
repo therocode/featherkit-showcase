@@ -15,9 +15,11 @@ Renderer::Renderer(fea::MessageBus& bus)
     messageBus.addSubscriber<AntCreationMessage>(*this);
     messageBus.addSubscriber<AntDeletionMessage>(*this);
 
-    renderStateIndex = 0;
-    renderStates.push_back(RenderState(glm::vec2(400.0f, 300.0f), 1.0f));
-    renderStates.push_back(RenderState(glm::vec2(600.0f, 150.0f), 2.0f));
+    renderStateIndex = 1;
+    renderStates.push_back(RenderState(glm::vec2(400.0f, 300.0f), 1.0f, glm::vec2(450.0f, 300.0f), glm::vec2(1150.0, 900.0f)));
+    renderStates.push_back(RenderState(glm::vec2(600.0f, 150.0f), 2.0f, glm::vec2(450.0f, 300.0f), glm::vec2(1150.0, 900.0f)));
+
+    cameraZoom = 1.0f;
 }
 
 void Renderer::createTexture(const std::string& name, const std::string& path, int width, int height, bool smooth, bool interactive)
@@ -189,14 +191,31 @@ void Renderer::setupRenderTarget()
 
 void Renderer::updateCamera()
 {
-    if(cameraPosition.x < 450.0f)
-        cameraPosition.x = 450.0f;
-    else if(cameraPosition.x > 1150.0f)
-        cameraPosition.x = 1150.0f;
-    if(cameraPosition.y < 300.0f)
-        cameraPosition.y = 300.0f;
-    else if(cameraPosition.y > 900.0f)
-        cameraPosition.y = 900.0f;
+    RenderState currentState = renderStates.at(renderStateIndex);
+
+    if(cameraPosition.x < currentState.topLeftCameraBoundary.x)
+        cameraPosition.x = currentState.topLeftCameraBoundary.x;
+    else if(cameraPosition.x > currentState.bottomRightCameraBoundary.x)
+        cameraPosition.x = currentState.bottomRightCameraBoundary.x;
+    if(cameraPosition.y < currentState.topLeftCameraBoundary.y)
+        cameraPosition.y = currentState.topLeftCameraBoundary.y;
+    else if(cameraPosition.y > currentState.bottomRightCameraBoundary.y)
+        cameraPosition.y = currentState.bottomRightCameraBoundary.y;
+
+    cameraZoom = renderer.getViewport().getCamera().getZoom().x;
+    if(fabs(cameraZoom - currentState.cameraZoomTarget) < 0.01f)
+    {
+        cameraZoom = currentState.cameraZoomTarget;
+    }
+    else if(cameraZoom < currentState.cameraZoomTarget)
+    {
+        cameraZoom += 0.01f;
+    }
+    else if(cameraZoom > currentState.cameraZoomTarget)
+    {
+        cameraZoom -= 0.01f;
+    }
+    renderer.getViewport().getCamera().setZoom({cameraZoom, cameraZoom});
 
     cameraInterpolator.setPosition(cameraPosition);
     cameraInterpolator.update();
