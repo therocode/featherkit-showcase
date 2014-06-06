@@ -5,8 +5,9 @@ Renderer::Renderer(fea::MessageBus& bus)
     :   messageBus(bus),
         cameraPosition(600.0f, 900.0f),
         cameraInterpolator(cameraPosition),
-        renderer(fea::Viewport({800.0f, 600.0f}, {0, 0}, fea::Camera(cameraInterpolator.getPosition()))),
-        renderTargetVP(fea::Viewport({1600.0f, 600.0f}, {0, 0}, fea::Camera({800.0f, 300.0f})))
+        renderer(fea::Viewport({800.0f, 600.0f}, {0, 0})),
+        renderTargetVP(fea::Viewport({1600.0f, 600.0f}, {0, 0}, fea::Camera({800.0f, 300.0f}))),
+        guiCam({0.0f, 0.0f})
 {
     messageBus.addSubscriber<MouseClickMessage>(gui);
     messageBus.addSubscriber<MousePositionMessage>(gui);
@@ -15,11 +16,11 @@ Renderer::Renderer(fea::MessageBus& bus)
     messageBus.addSubscriber<AntCreationMessage>(*this);
     messageBus.addSubscriber<AntDeletionMessage>(*this);
 
-    renderStateIndex = 0;
+    renderStateIndex = 1;
     renderStates.push_back(RenderState(glm::vec2(400.0f, 300.0f), 1.0f, glm::vec2(450.0f, 300.0f), glm::vec2(1150.0, 900.0f)));
     renderStates.push_back(RenderState(glm::vec2(600.0f, 150.0f), 2.0f, glm::vec2(450.0f, 300.0f), glm::vec2(1150.0, 900.0f)));
 
-    cameraZoom = 1.0f;
+    cameraZoom = 2.0f;
 }
 
 void Renderer::createTexture(const std::string& name, const std::string& path, int width, int height, bool smooth, bool interactive)
@@ -55,21 +56,21 @@ void Renderer::setup()
 
 void Renderer::render()
 {
-    updateCamera();
+    updateCamera(); // updates defaultSceneCam
     cloudHandler.update();
     gui.update();
 
     if(renderStateIndex == 0)
     {
-        renderRenderTarget();
-        renderScene();
+        renderRenderTarget();   // change to renderTargetVP and render with that
+        renderScene();  // change back to defaultSceneVP with defaultSceneCam
     }
     else if(renderStateIndex == 1)
     {
         renderRenderTarget();
         renderScene();
     }
-    renderGUI();
+    renderGUI();    // change to guiCam, but keep the same defaultSceneVP
 }
 
 void Renderer::handleMessage(const CameraPositionMessage& mess)
@@ -201,8 +202,12 @@ void Renderer::updateCamera()
         cameraPosition.y = currentState.topLeftCameraBoundary.y;
     else if(cameraPosition.y > currentState.bottomRightCameraBoundary.y)
         cameraPosition.y = currentState.bottomRightCameraBoundary.y;
+    
+    cameraInterpolator.setPosition(cameraPosition);
+    cameraInterpolator.update();
+    defaultSceneCam.setPosition(cameraInterpolator.getPosition());
 
-    cameraZoom = renderer.getViewport().getCamera().getZoom().x;
+    cameraZoom = defaultSceneCam.getZoom().x;
     if(fabs(cameraZoom - currentState.cameraZoomTarget) < 0.01f)
     {
         cameraZoom = currentState.cameraZoomTarget;
@@ -215,10 +220,8 @@ void Renderer::updateCamera()
     {
         cameraZoom -= 0.01f;
     }
-    renderer.getViewport().getCamera().setZoom({cameraZoom, cameraZoom});
+    defaultSceneCam.setZoom({cameraZoom, cameraZoom});
 
-    cameraInterpolator.setPosition(cameraPosition);
-    cameraInterpolator.update();
     defaultSceneVP = renderer.getViewport(); // might have to move this or change this or something
 }
 
@@ -269,7 +272,7 @@ void Renderer::renderScene()
 {
     renderer.setBlendMode(fea::BlendMode::ALPHA);
     renderer.setViewport(defaultSceneVP);
-    renderer.getViewport().getCamera().setPosition(cameraInterpolator.getPosition());
+    renderer.getViewport().setCamera(defaultSceneCam);
     renderer.clear(fea::Color(0, 125, 255));
     renderer.queue(skyQuad);
     for(size_t i = 0; i < cloudHandler.getCloudPositions().size(); i++)
@@ -294,6 +297,7 @@ void Renderer::renderScene()
 
 void Renderer::renderGUI()
 {
+    renderer.getViewport().setCamera(guiCam);
     for(auto& drawable : gui.getDrawables())
     {
         //fea::Drawable2D copy = *drawable;

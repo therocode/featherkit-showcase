@@ -53,6 +53,8 @@ class Renderer
 
         fea::Viewport defaultSceneVP;
         const fea::Viewport renderTargetVP;
+        fea::Camera defaultSceneCam; 
+        const fea::Camera guiCam;
         fea::RenderTarget lightingTarget;
         fea::Quad lightingQuad;
         fea::Quad darknessQuad;
