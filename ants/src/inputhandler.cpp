@@ -74,5 +74,5 @@ void InputHandler::inputLoop()
     if(directions[RIGHT])
         messageBus.send(CameraPositionMessage(glm::vec2(12.0f, 0.0f)));
     
-    messageBus.send(MousePositionMessage(glm::vec2(input.getMouseWindowPosition())));
+    messageBus.send(MousePositionMessage(glm::vec2(input.getMouseWindowPosition().x, input.getMouseWindowPosition().y)));
 }

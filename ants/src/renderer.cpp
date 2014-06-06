@@ -15,7 +15,7 @@ Renderer::Renderer(fea::MessageBus& bus)
     messageBus.addSubscriber<AntCreationMessage>(*this);
     messageBus.addSubscriber<AntDeletionMessage>(*this);
 
-    renderStateIndex = 1;
+    renderStateIndex = 0;
     renderStates.push_back(RenderState(glm::vec2(400.0f, 300.0f), 1.0f, glm::vec2(450.0f, 300.0f), glm::vec2(1150.0, 900.0f)));
     renderStates.push_back(RenderState(glm::vec2(600.0f, 150.0f), 2.0f, glm::vec2(450.0f, 300.0f), glm::vec2(1150.0, 900.0f)));
 
