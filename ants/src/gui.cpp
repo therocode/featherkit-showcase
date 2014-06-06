@@ -1,4 +1,5 @@
 #include "gui.h"
+#include "buttontype.h"
 
 GUI::GUI()
 {
@@ -19,7 +20,7 @@ void GUI::setup()
     for(size_t i = 0; i < 3; i++)
     {
         featureButtons.push_back(std::unique_ptr<FeatureButton>(new FeatureButton(glm::vec2(origin.x, origin.y + buttonSize.y * i), buttonSize, "hej",
-        "lol bajs this is a description")));
+        "lol bajs this is a description", (ButtonType)i)));
     }
 
     for(auto& button : featureButtons)

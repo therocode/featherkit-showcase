@@ -15,6 +15,7 @@ Renderer::Renderer(fea::MessageBus& bus)
     messageBus.addSubscriber<AntPositionMessage>(*this);
     messageBus.addSubscriber<AntCreationMessage>(*this);
     messageBus.addSubscriber<AntDeletionMessage>(*this);
+    messageBus.addSubscriber<GuiButtonClickedMessage>(*this);
 
     renderStateIndex = 1;
     renderStates.push_back(RenderState(glm::vec2(400.0f, 300.0f), 1.0f, glm::vec2(450.0f, 300.0f), glm::vec2(1150.0, 900.0f)));
@@ -38,6 +39,7 @@ Renderer::~Renderer()
     messageBus.removeSubscriber<AntPositionMessage>(*this);
     messageBus.removeSubscriber<AntCreationMessage>(*this);
     messageBus.removeSubscriber<AntDeletionMessage>(*this);
+    messageBus.removeSubscriber<GuiButtonClickedMessage>(*this);
 }
 
 void Renderer::setup()
@@ -56,21 +58,21 @@ void Renderer::setup()
 
 void Renderer::render()
 {
-    updateCamera(); // updates defaultSceneCam
+    updateCamera(); 
     cloudHandler.update();
     gui.update();
 
     if(renderStateIndex == 0)
     {
-        renderRenderTarget();   // change to renderTargetVP and render with that
-        renderScene();  // change back to defaultSceneVP with defaultSceneCam
+        renderRenderTarget();   
+        renderScene();  
     }
     else if(renderStateIndex == 1)
     {
         renderRenderTarget();
         renderScene();
     }
-    renderGUI();    // change to guiCam, but keep the same defaultSceneVP
+    renderGUI();    
 }
 
 void Renderer::handleMessage(const CameraPositionMessage& mess)
@@ -114,6 +116,18 @@ void Renderer::handleMessage(const AntPositionMessage& mess)
     std::tie(index, position, angle) = mess.mData;
     antSprites.at(index).quad.setPosition(position);
     antSprites.at(index).quad.setRotation(angle);
+}
+
+void Renderer::handleMessage(const GuiButtonClickedMessage& mess)
+{
+    /*
+    size_t index;
+    glm::vec2 position;
+    float angle;
+    std::tie(index, position, angle) = mess.mData;
+    antSprites.at(index).quad.setPosition(position);
+    antSprites.at(index).quad.setRotation(angle);
+    */
 }
 
 ////

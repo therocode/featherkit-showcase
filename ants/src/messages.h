@@ -1,5 +1,6 @@
 #pragma once
 #include "anttype.h"
+#include "buttontype.h"
 #include <glm/glm.hpp>
 #include <fea/messaging.hpp>
 #include <fea/rendering/texture.hpp>
@@ -19,3 +20,4 @@ FEA_DECLARE_MESSAGE(MouseClickMessage, glm::vec2); // mouse position of the clic
 FEA_DECLARE_MESSAGE(MousePositionMessage, glm::vec2); // mouse position in window coords
 
 FEA_DECLARE_MESSAGE(DirtTextureSetMessage, fea::Texture*);    // dirt texture
+FEA_DECLARE_MESSAGE(GuiButtonClickedMessage, ButtonType);     // 

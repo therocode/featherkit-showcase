@@ -1,7 +1,7 @@
 #include "featurebutton.h"
 #include <iostream>
 
-FeatureButton::FeatureButton(glm::vec2 pos, glm::vec2 size, std::string title, std::string content)
+FeatureButton::FeatureButton(glm::vec2 pos, glm::vec2 size, std::string title, std::string content, ButtonType type)
 {
     padding = 5.0f;
 
@@ -41,6 +41,7 @@ FeatureButton::FeatureButton(glm::vec2 pos, glm::vec2 size, std::string title, s
     slideVelocity = 1.0f;
 
     state = ButtonState::CLOSED;
+    buttonType = type;
 
     drawables.push_back(&largeQuad);
     drawables.push_back(&smallQuad);
@@ -76,8 +77,9 @@ void FeatureButton::setClicked(bool click)
         if(state == ButtonState::OPENING || state == ButtonState::OPENED)
             state = ButtonState::CLOSING;
         else if(state == ButtonState::CLOSING || state == ButtonState::CLOSED)
+        {
             state = ButtonState::OPENING;
-            // send open message to renderer heregtgt
+        }
     }
     else
     {

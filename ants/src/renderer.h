@@ -12,7 +12,8 @@ class Renderer
     :   public fea::MessageReceiver<CameraPositionMessage>,
         public fea::MessageReceiver<AntPositionMessage>,
         public fea::MessageReceiver<AntCreationMessage>,
-        public fea::MessageReceiver<AntDeletionMessage>
+        public fea::MessageReceiver<AntDeletionMessage>,
+        public fea::MessageReceiver<GuiButtonClickedMessage>
 {
     public:
         Renderer(fea::MessageBus& bus);
@@ -25,6 +26,7 @@ class Renderer
         virtual void handleMessage(const AntPositionMessage& mess) override;
         virtual void handleMessage(const AntCreationMessage& mess) override;
         virtual void handleMessage(const AntDeletionMessage& mess) override;
+        virtual void handleMessage(const GuiButtonClickedMessage& mess) override;
 
     private:
         fea::MessageBus& messageBus;

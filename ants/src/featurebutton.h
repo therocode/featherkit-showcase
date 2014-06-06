@@ -2,6 +2,7 @@
 #include <glm/glm.hpp>
 #include <fea/render2d.hpp>
 #include <fea/rendering/textsurface.hpp>
+#include "buttontype.h"
 
 enum ButtonState
 {
@@ -11,7 +12,7 @@ enum ButtonState
 class FeatureButton
 {
     public:
-        FeatureButton(glm::vec2 pos, glm::vec2 size, std::string title, std::string content);
+        FeatureButton(glm::vec2 pos, glm::vec2 size, std::string title, std::string content, ButtonType type);
         float getLength(); 
         void setPosition(glm::vec2 pos);
         bool withinArea(glm::vec2 pos);
@@ -25,6 +26,7 @@ class FeatureButton
 
     private:
         ButtonState state;
+        ButtonType buttonType;
         glm::vec2 position;
         float padding;
 
