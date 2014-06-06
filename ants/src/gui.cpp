@@ -18,11 +18,18 @@ void GUI::setup()
 
     drawables.push_back(&backgroundQuad);
 
-    for(size_t i = 0; i < 3; i++)
-    {
-        featureButtons.push_back(std::unique_ptr<FeatureButton>(new FeatureButton(glm::vec2(origin.x, origin.y + buttonSize.y * i), buttonSize, "hej",
-        "lol bajs this is a description", (ButtonType)i)));
-    }
+    featureButtons.push_back(std::unique_ptr<FeatureButton>(new FeatureButton(glm::vec2(origin.x, origin.y + buttonSize.y * 0), buttonSize, "Interactive textures",
+        "asdfsadfsdaf", ButtonType::B_INTERACTIVE)));
+    featureButtons.push_back(std::unique_ptr<FeatureButton>(new FeatureButton(glm::vec2(origin.x, origin.y + buttonSize.y * 1), buttonSize, "Color blend modes",
+        "lol lorem ipsum", ButtonType::B_COLOUR_BLEND)));
+    featureButtons.push_back(std::unique_ptr<FeatureButton>(new FeatureButton(glm::vec2(origin.x, origin.y + buttonSize.y * 2), buttonSize, "Parallax",
+        "tea is tasty", ButtonType::B_PARALLAX)));
+    featureButtons.push_back(std::unique_ptr<FeatureButton>(new FeatureButton(glm::vec2(origin.x, origin.y + buttonSize.y * 3), buttonSize, "Animations",
+        "coffee is tasty", ButtonType::B_ANIMATION)));
+    featureButtons.push_back(std::unique_ptr<FeatureButton>(new FeatureButton(glm::vec2(origin.x, origin.y + buttonSize.y * 4), buttonSize, "Text",
+        "hot chocolate is tasty", ButtonType::B_TEXT)));
+    featureButtons.push_back(std::unique_ptr<FeatureButton>(new FeatureButton(glm::vec2(origin.x, origin.y + buttonSize.y * 5), buttonSize, "Camera/Viewport",
+        "i like elephants and hens", ButtonType::B_CAMERA)));
 
     for(auto& button : featureButtons)
     {

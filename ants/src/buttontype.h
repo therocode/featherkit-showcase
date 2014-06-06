@@ -1,6 +1,6 @@
 #pragma once
 
-enum ButtonType { B_DEFAULT = 0, B_ZOOM, B_ZOOM2 };
+enum ButtonType { B_DEFAULT = 0, B_INTERACTIVE, B_COLOUR_BLEND, B_PARALLAX, B_ANIMATION, B_TEXT, B_CAMERA };
 
 namespace std {
 
