@@ -19,7 +19,8 @@ class FeatureButton
         void setClicked(bool click);
         void setHovered(bool hover);
         bool isHovered();
-        ButtonState getState();
+        bool isOpening();
+        ButtonType getButtonType();
 
         std::vector<fea::Drawable2D*> getDrawables();
         void update(float lengthUpdate);

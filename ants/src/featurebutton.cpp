@@ -77,9 +77,7 @@ void FeatureButton::setClicked(bool click)
         if(state == ButtonState::OPENING || state == ButtonState::OPENED)
             state = ButtonState::CLOSING;
         else if(state == ButtonState::CLOSING || state == ButtonState::CLOSED)
-        {
             state = ButtonState::OPENING;
-        }
     }
     else
     {
@@ -100,9 +98,14 @@ bool FeatureButton::isHovered()
     return hovered;
 }
 
-ButtonState FeatureButton::getState()
+bool FeatureButton::isOpening()
 {
-    return state;
+    return (state == ButtonState::OPENING);
+}
+
+ButtonType FeatureButton::getButtonType()
+{
+    return buttonType;
 }
 
 std::vector<fea::Drawable2D*> FeatureButton::getDrawables()

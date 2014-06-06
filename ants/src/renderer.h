@@ -34,8 +34,8 @@ class Renderer
         Interpolator cameraInterpolator;
         fea::Renderer2D renderer;
         GUI gui;
-        std::vector<RenderState> renderStates;
-        size_t renderStateIndex;
+        std::unordered_map<ButtonType, RenderState> renderStates;
+        ButtonType renderStateButton;
         float cameraZoom;
 
         ImageLoader loader;

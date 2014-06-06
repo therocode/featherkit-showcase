@@ -1,7 +1,8 @@
 #include "gui.h"
 #include "buttontype.h"
 
-GUI::GUI()
+GUI::GUI(fea::MessageBus& b)
+  : bus(b)
 {
 }
 
@@ -63,8 +64,18 @@ void GUI::handleMessage(const MouseClickMessage& mess)
     // check for clicking
     glm::vec2 position;
     std::tie(position) = mess.mData;
+    bool noneOpen = true; // check to see if any are open
+
     for(auto& button : featureButtons)
     {
         button->setClicked(button->isHovered());
+        if(button->isOpening())
+        {   
+            bus.send(GuiButtonClickedMessage(button->getButtonType()));
+            noneOpen = false;
+        }
     }
+
+    if(noneOpen)
+        bus.send(GuiButtonClickedMessage(ButtonType::B_DEFAULT));
 }

@@ -7,6 +7,7 @@ Renderer::Renderer(fea::MessageBus& bus)
         cameraInterpolator(cameraPosition),
         renderer(fea::Viewport({800.0f, 600.0f}, {0, 0})),
         renderTargetVP(fea::Viewport({1600.0f, 600.0f}, {0, 0}, fea::Camera({800.0f, 300.0f}))),
+        gui(bus),
         guiCam({0.0f, 0.0f})
 {
     messageBus.addSubscriber<MouseClickMessage>(gui);
@@ -17,9 +18,10 @@ Renderer::Renderer(fea::MessageBus& bus)
     messageBus.addSubscriber<AntDeletionMessage>(*this);
     messageBus.addSubscriber<GuiButtonClickedMessage>(*this);
 
-    renderStateIndex = 1;
-    renderStates.push_back(RenderState(glm::vec2(400.0f, 300.0f), 1.0f, glm::vec2(450.0f, 300.0f), glm::vec2(1150.0, 900.0f)));
-    renderStates.push_back(RenderState(glm::vec2(600.0f, 150.0f), 2.0f, glm::vec2(450.0f, 300.0f), glm::vec2(1150.0, 900.0f)));
+    renderStateButton = ButtonType::B_DEFAULT;
+    renderStates.emplace(ButtonType::B_DEFAULT, RenderState(glm::vec2(400.0f, 300.0f), 1.0f, glm::vec2(450.0f, 300.0f), glm::vec2(1150.0, 900.0f)));
+    renderStates.emplace(ButtonType::B_ZOOM, RenderState(glm::vec2(600.0f, 150.0f), 2.0f, glm::vec2(450.0f, 300.0f), glm::vec2(1150.0, 900.0f)));
+    renderStates.emplace(ButtonType::B_ZOOM2, RenderState(glm::vec2(600.0f, 150.0f), 2.0f, glm::vec2(450.0f, 300.0f), glm::vec2(1150.0, 900.0f)));
 
     cameraZoom = 2.0f;
 }
@@ -62,16 +64,9 @@ void Renderer::render()
     cloudHandler.update();
     gui.update();
 
-    if(renderStateIndex == 0)
-    {
-        renderRenderTarget();   
-        renderScene();  
-    }
-    else if(renderStateIndex == 1)
-    {
-        renderRenderTarget();
-        renderScene();
-    }
+    renderRenderTarget();
+    renderScene();
+
     renderGUI();    
 }
 
@@ -120,6 +115,7 @@ void Renderer::handleMessage(const AntPositionMessage& mess)
 
 void Renderer::handleMessage(const GuiButtonClickedMessage& mess)
 {
+    std::tie(renderStateButton) = mess.mData;
     /*
     size_t index;
     glm::vec2 position;
@@ -206,7 +202,7 @@ void Renderer::setupRenderTarget()
 
 void Renderer::updateCamera()
 {
-    RenderState currentState = renderStates.at(renderStateIndex);
+    RenderState currentState = renderStates.at(renderStateButton);
 
     if(cameraPosition.x < currentState.topLeftCameraBoundary.x)
         cameraPosition.x = currentState.topLeftCameraBoundary.x;

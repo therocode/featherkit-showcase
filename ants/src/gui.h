@@ -8,7 +8,7 @@ class GUI
         public fea::MessageReceiver<MouseClickMessage>
 {
     public:
-        GUI();
+        GUI(fea::MessageBus& b);
         std::vector<fea::Drawable2D*> getDrawables();
         void setup();
         void update();
@@ -17,6 +17,7 @@ class GUI
         virtual void handleMessage(const MouseClickMessage& mess) override;
 
     private:
+        fea::MessageBus& bus;
         std::vector<fea::Drawable2D*> drawables;
         std::vector<std::unique_ptr<FeatureButton>> featureButtons;
         fea::Quad backgroundQuad;
