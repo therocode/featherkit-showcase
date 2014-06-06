@@ -16,6 +16,7 @@ add_executable(${project_name} ${header_files} ${source_files})
 find_package(Featherkit REQUIRED COMPONENTS ui sdl rendering structure messaging)
 find_package(SDL REQUIRED)
 find_package(GLM REQUIRED)
+find_package(GLEW REQUIRED)
 
 if(FEATHERKIT_FOUND)
     include_directories(${FEATHERKIT_INCLUDE_DIRS})
@@ -31,4 +32,4 @@ if(GLM_FOUND)
     include_directories(${GLM_INCLUDE_DIR})
 endif()
 
-target_link_libraries(${project_name} GL GLU GLEW)
+target_link_libraries(${project_name} ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY} ${GLEW_LIBRARY})
