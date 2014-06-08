@@ -31,4 +31,4 @@ if(GLM_FOUND)
     include_directories(${GLM_INCLUDE_DIR})
 endif()
 
-target_link_libraries(${project_name} ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY})
+target_link_libraries(${project_name} ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY} ${SDL_LIBRARY} SDLmain)
