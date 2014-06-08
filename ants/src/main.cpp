@@ -1,6 +1,7 @@
+#include <SDL/SDL.h>
 #include "antapplication.h"
 
-int main()
+int SDL_main()
 {
     AntApplication app;
     app.run();
