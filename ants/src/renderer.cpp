@@ -20,8 +20,8 @@ Renderer::Renderer(fea::MessageBus& bus)
 
     renderStateButton = ButtonType::B_DEFAULT;
     renderStates.emplace(ButtonType::B_DEFAULT, RenderState(glm::vec2(400.0f, 300.0f), 1.0f, glm::vec2(450.0f, 300.0f), glm::vec2(1150.0, 900.0f)));
-    renderStates.emplace(ButtonType::B_INTERACTIVE, RenderState(glm::vec2(600.0f, 150.0f), 2.0f, glm::vec2(450.0f, 300.0f), glm::vec2(1150.0, 900.0f)));
-    renderStates.emplace(ButtonType::B_COLOUR_BLEND, RenderState(glm::vec2(600.0f, 150.0f), 2.0f, glm::vec2(450.0f, 300.0f), glm::vec2(1150.0, 900.0f)));
+    renderStates.emplace(ButtonType::B_INTERACTIVE, RenderState(glm::vec2(600.0f, 150.0f), 1.8f, glm::vec2(450.0f, 300.0f), glm::vec2(1150.0, 900.0f)));
+    renderStates.emplace(ButtonType::B_COLOUR_BLEND, RenderState(glm::vec2(600.0f, 150.0f), 1.0f, glm::vec2(450.0f, 300.0f), glm::vec2(1150.0, 900.0f)));
     renderStates.emplace(ButtonType::B_PARALLAX, RenderState(glm::vec2(600.0f, 150.0f), 2.0f, glm::vec2(450.0f, 300.0f), glm::vec2(1150.0, 900.0f)));
     renderStates.emplace(ButtonType::B_ANIMATION, RenderState(glm::vec2(600.0f, 150.0f), 2.0f, glm::vec2(450.0f, 300.0f), glm::vec2(1150.0, 900.0f)));
     renderStates.emplace(ButtonType::B_TEXT, RenderState(glm::vec2(600.0f, 150.0f), 2.0f, glm::vec2(450.0f, 300.0f), glm::vec2(1150.0, 900.0f)));
@@ -208,19 +208,6 @@ void Renderer::updateCamera()
 {
     RenderState currentState = renderStates.at(renderStateButton);
 
-    if(cameraPosition.x < currentState.topLeftCameraBoundary.x)
-        cameraPosition.x = currentState.topLeftCameraBoundary.x;
-    else if(cameraPosition.x > currentState.bottomRightCameraBoundary.x)
-        cameraPosition.x = currentState.bottomRightCameraBoundary.x;
-    if(cameraPosition.y < currentState.topLeftCameraBoundary.y)
-        cameraPosition.y = currentState.topLeftCameraBoundary.y;
-    else if(cameraPosition.y > currentState.bottomRightCameraBoundary.y)
-        cameraPosition.y = currentState.bottomRightCameraBoundary.y;
-    
-    cameraInterpolator.setPosition(cameraPosition);
-    cameraInterpolator.update();
-    defaultSceneCam.setPosition(cameraInterpolator.getPosition());
-
     cameraZoom = defaultSceneCam.getZoom().x;
     if(fabs(cameraZoom - currentState.cameraZoomTarget) < 0.01f)
     {
@@ -235,6 +222,34 @@ void Renderer::updateCamera()
         cameraZoom -= 0.01f;
     }
     defaultSceneCam.setZoom({cameraZoom, cameraZoom});
+
+    float leftBound = currentState.topLeftCameraBoundary.x;
+    float rightBound = currentState.bottomRightCameraBoundary.x;
+    float topBound = currentState.topLeftCameraBoundary.y;
+    float bottomBound = currentState.bottomRightCameraBoundary.y;
+
+    float LRHalfWidth = (rightBound - leftBound) / 2.0f;
+    float TBHalfWidth = (bottomBound - topBound) / 2.0f;
+    float LRMidpoint = leftBound + LRHalfWidth;
+    float TBMidpoint = topBound + TBHalfWidth;
+
+    leftBound = LRMidpoint - (LRHalfWidth * cameraZoom);
+    rightBound = LRMidpoint + (LRHalfWidth * cameraZoom);
+    topBound = TBMidpoint - (TBHalfWidth * cameraZoom);
+    bottomBound = TBMidpoint + (TBHalfWidth * cameraZoom);
+
+    if(cameraPosition.x < leftBound)
+        cameraPosition.x = leftBound;
+    else if(cameraPosition.x > rightBound)
+        cameraPosition.x = rightBound;
+    if(cameraPosition.y < topBound)
+        cameraPosition.y = topBound;
+    else if(cameraPosition.y > bottomBound)
+        cameraPosition.y = bottomBound;
+    
+    cameraInterpolator.setPosition(cameraPosition);
+    cameraInterpolator.update();
+    defaultSceneCam.setPosition(cameraInterpolator.getPosition());
 
     defaultSceneVP = renderer.getViewport(); // might have to move this or change this or something
 }
