@@ -21,7 +21,7 @@ Renderer::Renderer(fea::MessageBus& bus)
     renderStateButton = ButtonType::B_DEFAULT;
     renderStates.emplace(ButtonType::B_DEFAULT, RenderState(glm::vec2(400.0f, 300.0f), 1.0f, glm::vec2(450.0f, 300.0f), glm::vec2(1150.0, 900.0f)));
     renderStates.emplace(ButtonType::B_INTERACTIVE, RenderState(glm::vec2(600.0f, 150.0f), 1.8f, glm::vec2(450.0f, 300.0f), glm::vec2(1150.0, 900.0f)));
-    renderStates.emplace(ButtonType::B_COLOUR_BLEND, RenderState(glm::vec2(600.0f, 150.0f), 1.0f, glm::vec2(450.0f, 300.0f), glm::vec2(1150.0, 900.0f)));
+    renderStates.emplace(ButtonType::B_COLOUR_BLEND, RenderState(glm::vec2(600.0f, 150.0f), 0.5f, glm::vec2(450.0f, 300.0f), glm::vec2(1150.0, 900.0f)));
     renderStates.emplace(ButtonType::B_PARALLAX, RenderState(glm::vec2(600.0f, 150.0f), 2.0f, glm::vec2(450.0f, 300.0f), glm::vec2(1150.0, 900.0f)));
     renderStates.emplace(ButtonType::B_ANIMATION, RenderState(glm::vec2(600.0f, 150.0f), 2.0f, glm::vec2(450.0f, 300.0f), glm::vec2(1150.0, 900.0f)));
     renderStates.emplace(ButtonType::B_TEXT, RenderState(glm::vec2(600.0f, 150.0f), 2.0f, glm::vec2(450.0f, 300.0f), glm::vec2(1150.0, 900.0f)));
@@ -120,14 +120,6 @@ void Renderer::handleMessage(const AntPositionMessage& mess)
 void Renderer::handleMessage(const GuiButtonClickedMessage& mess)
 {
     std::tie(renderStateButton) = mess.mData;
-    /*
-    size_t index;
-    glm::vec2 position;
-    float angle;
-    std::tie(index, position, angle) = mess.mData;
-    antSprites.at(index).quad.setPosition(position);
-    antSprites.at(index).quad.setRotation(angle);
-    */
 }
 
 ////
@@ -228,15 +220,18 @@ void Renderer::updateCamera()
     float topBound = currentState.topLeftCameraBoundary.y;
     float bottomBound = currentState.bottomRightCameraBoundary.y;
 
-    float LRHalfWidth = (rightBound - leftBound) / 2.0f;
-    float TBHalfWidth = (bottomBound - topBound) / 2.0f;
-    float LRMidpoint = leftBound + LRHalfWidth;
-    float TBMidpoint = topBound + TBHalfWidth;
+    float originalWidth = renderer.getViewport().getSize().x / 2.0f;
+    float newWidth = originalWidth / cameraZoom;
+    float differenceWidth = originalWidth - newWidth;
 
-    leftBound = LRMidpoint - (LRHalfWidth * cameraZoom);
-    rightBound = LRMidpoint + (LRHalfWidth * cameraZoom);
-    topBound = TBMidpoint - (TBHalfWidth * cameraZoom);
-    bottomBound = TBMidpoint + (TBHalfWidth * cameraZoom);
+    float originalHeight = renderer.getViewport().getSize().y / 2.0f;
+    float newHeight = originalHeight / cameraZoom;
+    float differenceHeight = originalHeight - newHeight;
+
+    leftBound -= differenceWidth;
+    rightBound += differenceWidth;
+    topBound -= differenceHeight;
+    bottomBound += differenceHeight;
 
     if(cameraPosition.x < leftBound)
         cameraPosition.x = leftBound;
