@@ -19,13 +19,13 @@ Renderer::Renderer(fea::MessageBus& bus)
     messageBus.addSubscriber<GuiButtonClickedMessage>(*this);
 
     renderStateButton = ButtonType::B_DEFAULT;
-    renderStates.emplace(ButtonType::B_DEFAULT, RenderState(glm::vec2(400.0f, 300.0f), 1.0f, glm::vec2(450.0f, 300.0f), glm::vec2(1150.0, 900.0f)));
-    renderStates.emplace(ButtonType::B_INTERACTIVE, RenderState(glm::vec2(600.0f, 150.0f), 1.8f, glm::vec2(450.0f, 300.0f), glm::vec2(1150.0, 900.0f)));
-    renderStates.emplace(ButtonType::B_COLOUR_BLEND, RenderState(glm::vec2(600.0f, 150.0f), 0.5f, glm::vec2(450.0f, 300.0f), glm::vec2(1150.0, 900.0f)));
-    renderStates.emplace(ButtonType::B_PARALLAX, RenderState(glm::vec2(600.0f, 150.0f), 2.0f, glm::vec2(450.0f, 300.0f), glm::vec2(1150.0, 900.0f)));
-    renderStates.emplace(ButtonType::B_ANIMATION, RenderState(glm::vec2(600.0f, 150.0f), 2.0f, glm::vec2(450.0f, 300.0f), glm::vec2(1150.0, 900.0f)));
-    renderStates.emplace(ButtonType::B_TEXT, RenderState(glm::vec2(600.0f, 150.0f), 2.0f, glm::vec2(450.0f, 300.0f), glm::vec2(1150.0, 900.0f)));
-    renderStates.emplace(ButtonType::B_CAMERA, RenderState(glm::vec2(600.0f, 150.0f), 2.0f, glm::vec2(450.0f, 300.0f), glm::vec2(1150.0, 900.0f)));
+    renderStates.emplace(ButtonType::B_DEFAULT,      RenderState(1.00f, glm::vec2( 450.0f,  300.0f), glm::vec2(1150.0,  900.0f)));
+    renderStates.emplace(ButtonType::B_INTERACTIVE,  RenderState(1.50f, glm::vec2(1000.0f, 1000.0f), glm::vec2(1000.0, 1000.0f)));
+    renderStates.emplace(ButtonType::B_COLOUR_BLEND, RenderState(1.20f, glm::vec2( 500.0f,  950.0f), glm::vec2( 500.0,  950.0f)));
+    renderStates.emplace(ButtonType::B_PARALLAX,     RenderState(0.40f, glm::vec2( 450.0f,  600.0f), glm::vec2(1150.0,  600.0f)));
+    renderStates.emplace(ButtonType::B_ANIMATION,    RenderState(8.00f, glm::vec2( 450.0f,  300.0f), glm::vec2(1150.0,  900.0f)));
+    renderStates.emplace(ButtonType::B_TEXT,         RenderState(1.00f, glm::vec2( 450.0f,  300.0f), glm::vec2(1150.0,  900.0f)));
+    renderStates.emplace(ButtonType::B_CAMERA,       RenderState(0.52f, glm::vec2( 800.0f,  600.0f), glm::vec2( 800.0,  600.0f)));
 
     cameraZoom = 2.0f;
 }
@@ -220,6 +220,8 @@ void Renderer::updateCamera()
     float topBound = currentState.topLeftCameraBoundary.y;
     float bottomBound = currentState.bottomRightCameraBoundary.y;
 
+    /*
+    // v wtf is this v //
     float originalWidth = renderer.getViewport().getSize().x / 2.0f;
     float newWidth = originalWidth / cameraZoom;
     float differenceWidth = originalWidth - newWidth;
@@ -227,11 +229,20 @@ void Renderer::updateCamera()
     float originalHeight = renderer.getViewport().getSize().y / 2.0f;
     float newHeight = originalHeight / cameraZoom;
     float differenceHeight = originalHeight - newHeight;
+    // ^ wtf is this ^ //
 
     leftBound -= differenceWidth;
     rightBound += differenceWidth;
     topBound -= differenceHeight;
     bottomBound += differenceHeight;
+    */
+
+    /*
+    std::cout << "left and right: ";
+    std::cout << leftBound << " och " << rightBound << "\n";
+    std::cout << "top and bottom: ";
+    std::cout << topBound << " och " << bottomBound << "\n\n";
+    */
 
     if(cameraPosition.x < leftBound)
         cameraPosition.x = leftBound;
@@ -297,7 +308,7 @@ void Renderer::renderScene()
     renderer.setBlendMode(fea::BlendMode::ALPHA);
     renderer.setViewport(defaultSceneVP);
     renderer.getViewport().setCamera(defaultSceneCam);
-    renderer.clear(fea::Color(0, 125, 255));
+    renderer.clear(fea::Color(0, 0, 0));
     renderer.queue(skyQuad);
     for(size_t i = 0; i < cloudHandler.getCloudPositions().size(); i++)
     {

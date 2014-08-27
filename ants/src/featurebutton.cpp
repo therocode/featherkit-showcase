@@ -153,11 +153,12 @@ void FeatureButton::update(float lengthUpdate)
             {
                 largeQuad.setSize({quadSize.x, expandedLength});
                 state = ButtonState::OPENED;
+                contentSurface.setColor(fea::Color(255, 255, 255, 255));
             }
             break;
         }
         case ButtonState::OPENED:
-            contentSurface.setColor(fea::Color(255, 255, 255, 255));
+            // also do nothing
             break;
     }
 }

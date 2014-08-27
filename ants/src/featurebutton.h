@@ -49,6 +49,5 @@ class FeatureButton
         bool clicked;
         bool hovered;
 
-        float targetLength;
         float slideVelocity;
 };
