@@ -39,7 +39,7 @@ void GUI::setup()
         "Featherkit has built-in text rendering stuff.",
         ButtonType::B_TEXT)));
     featureButtons.push_back(std::unique_ptr<FeatureButton>(new FeatureButton(glm::vec2(origin.x, origin.y + buttonSize.y * 5), buttonSize,
-        "Camera/Viewport",
+        "Camera/viewport",
         "Featherkit's camera and viewport system make rendering different things easy and stuff",
         ButtonType::B_CAMERA)));
 

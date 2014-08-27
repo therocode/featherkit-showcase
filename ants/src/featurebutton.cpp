@@ -19,7 +19,7 @@ FeatureButton::FeatureButton(glm::vec2 pos, glm::vec2 size, std::string title, s
     smallQuad.setParallax({0.0f, 0.0f});
     smallQuad.setColor(offColour);
 
-    titleFont = fea::Font("ants/data/fonts/Champagne_Limousines_Bold.ttf", 40);
+    titleFont = fea::Font("ants/data/fonts/Champagne_Limousines_Bold.ttf", 23);
     titleText = title;                                                  
     titleSurface.setParallax({0.0f, 0.0f});
     titleSurface.setPenFont(titleFont);
@@ -32,8 +32,11 @@ FeatureButton::FeatureButton(glm::vec2 pos, glm::vec2 size, std::string title, s
     contentSurface.setParallax({0.0f, 0.0f});
     contentSurface.setPenFont(contentFont);
     contentSurface.setColor(fea::Color(255, 255, 255, 0));
+    contentSurface.enableWordWrap(true);
+    contentSurface.setLineWidth(smallQuad.getSize().x - padding);
+    contentSurface.setLineHeight(20.0f);
     contentSurface.write(contentText);
-    contentSurface.setPosition(position + glm::vec2(padding, padding) + glm::vec2(5.0f, contentSurface.getSize().y + smallQuad.getSize().y));
+    contentSurface.setPosition(position + glm::vec2(padding, padding) + glm::vec2(5.0f, titleSurface.getSize().y + smallQuad.getSize().y));
 
     originalLength = size.y;
     //expandedLength = contentSurface.getSize().y;
@@ -119,7 +122,7 @@ void FeatureButton::update(float lengthUpdate)
     position = glm::vec2(position.x, lengthUpdate);
     largeQuad.setPosition(position);
     smallQuad.setPosition(position + glm::vec2(padding, padding));
-    titleSurface.setPosition(position + glm::vec2(padding, padding) + glm::vec2(5.0f, titleSurface.getSize().y));
+    titleSurface.setPosition(position + glm::vec2(padding, padding) + glm::vec2(5.0f, titleSurface.getSize().y + 10.0f));
 
     // update size
     switch(state)

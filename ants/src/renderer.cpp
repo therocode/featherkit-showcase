@@ -220,30 +220,6 @@ void Renderer::updateCamera()
     float topBound = currentState.topLeftCameraBoundary.y;
     float bottomBound = currentState.bottomRightCameraBoundary.y;
 
-    /*
-    // v wtf is this v //
-    float originalWidth = renderer.getViewport().getSize().x / 2.0f;
-    float newWidth = originalWidth / cameraZoom;
-    float differenceWidth = originalWidth - newWidth;
-
-    float originalHeight = renderer.getViewport().getSize().y / 2.0f;
-    float newHeight = originalHeight / cameraZoom;
-    float differenceHeight = originalHeight - newHeight;
-    // ^ wtf is this ^ //
-
-    leftBound -= differenceWidth;
-    rightBound += differenceWidth;
-    topBound -= differenceHeight;
-    bottomBound += differenceHeight;
-    */
-
-    /*
-    std::cout << "left and right: ";
-    std::cout << leftBound << " och " << rightBound << "\n";
-    std::cout << "top and bottom: ";
-    std::cout << topBound << " och " << bottomBound << "\n\n";
-    */
-
     if(cameraPosition.x < leftBound)
         cameraPosition.x = leftBound;
     else if(cameraPosition.x > rightBound)
