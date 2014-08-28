@@ -19,6 +19,13 @@ FeatureButton::FeatureButton(glm::vec2 pos, glm::vec2 size, std::string title, s
     smallQuad.setParallax({0.0f, 0.0f});
     smallQuad.setColor(offColour);
 
+    contentQuad = fea::Quad(size - glm::vec2(padding * 2.0f, padding * 2.0f));
+    contentQuad.setPosition(position + glm::vec2(padding, padding) + glm::vec2(0.0f, padding + smallQuad.getSize().y));
+    contentQuad.setParallax({0.0f, 0.0f});
+    contentQuad.setColor(offColour);
+
+    std::cout << contentQuad.getSize().x << " and " << contentQuad.getSize().y << "\n";
+
     titleFont = fea::Font("ants/data/fonts/Champagne_Limousines_Bold.ttf", 23);
     titleText = title;                                                  
     titleSurface.setParallax({0.0f, 0.0f});
@@ -27,16 +34,18 @@ FeatureButton::FeatureButton(glm::vec2 pos, glm::vec2 size, std::string title, s
     titleSurface.write(titleText);
     titleSurface.setPosition(position + glm::vec2(padding, padding) + glm::vec2(5.0f, titleSurface.getSize().y));
 
-    contentFont = fea::Font("ants/data/fonts/Champagne_Limousines.ttf", 20);
+    contentFont = fea::Font("ants/data/fonts/Champagne_Limousines.ttf", 18);
     contentText = content;
     contentSurface.setParallax({0.0f, 0.0f});
     contentSurface.setPenFont(contentFont);
     contentSurface.setColor(fea::Color(255, 255, 255, 0));
     contentSurface.enableWordWrap(true);
-    contentSurface.setLineWidth(smallQuad.getSize().x - padding);
-    contentSurface.setLineHeight(20.0f);
+    contentSurface.setLineWidth(smallQuad.getSize().x - (2.0f * padding));
+    contentSurface.setLineHeight(18.0f);
     contentSurface.write(contentText);
-    contentSurface.setPosition(position + glm::vec2(padding, padding) + glm::vec2(5.0f, titleSurface.getSize().y + smallQuad.getSize().y));
+    contentSurface.setPosition(position + glm::vec2(padding, padding) + glm::vec2(5.0f, padding + titleSurface.getSize().y + smallQuad.getSize().y));
+
+    contentQuad.setSize(contentQuad.getSize() + glm::vec2(0.0f, contentSurface.getSize().y));
 
     originalLength = size.y;
     //expandedLength = contentSurface.getSize().y;
@@ -48,6 +57,7 @@ FeatureButton::FeatureButton(glm::vec2 pos, glm::vec2 size, std::string title, s
 
     drawables.push_back(&largeQuad);
     drawables.push_back(&smallQuad);
+    drawables.push_back(&contentQuad);
     drawables.push_back(&titleSurface);
     drawables.push_back(&contentSurface);
 }
@@ -133,6 +143,7 @@ void FeatureButton::update(float lengthUpdate)
         case ButtonState::CLOSING:
         {
             contentSurface.setColor(fea::Color(255, 255, 255, 0));
+            contentQuad.setColor(fea::Color(255, 255, 255, 0));
             glm::vec2 quadSize = largeQuad.getSize();
             if(quadSize.y > originalLength)
             {
@@ -148,6 +159,8 @@ void FeatureButton::update(float lengthUpdate)
         case ButtonState::OPENING:
         {
             glm::vec2 quadSize = largeQuad.getSize();
+            std::cout << "quad length is: " << quadSize.y << "\n";
+            std::cout << "expanded length is: " << expandedLength << "\n";
             if(quadSize.y < expandedLength)
             {
                 largeQuad.setSize({quadSize.x, quadSize.y + slideVelocity});
@@ -157,6 +170,7 @@ void FeatureButton::update(float lengthUpdate)
                 largeQuad.setSize({quadSize.x, expandedLength});
                 state = ButtonState::OPENED;
                 contentSurface.setColor(fea::Color(255, 255, 255, 255));
+                contentQuad.setColor(fea::Color(255, 255, 255, 255));
             }
             break;
         }

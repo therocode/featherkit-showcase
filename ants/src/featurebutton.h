@@ -36,6 +36,7 @@ class FeatureButton
 
         fea::Quad largeQuad;
         fea::Quad smallQuad;
+        fea::Quad contentQuad;
         float originalLength;
         float expandedLength;
         fea::TextSurface titleSurface;
