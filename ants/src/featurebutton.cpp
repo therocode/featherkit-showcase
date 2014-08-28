@@ -24,8 +24,6 @@ FeatureButton::FeatureButton(glm::vec2 pos, glm::vec2 size, std::string title, s
     contentQuad.setParallax({0.0f, 0.0f});
     contentQuad.setColor(offColour);
 
-    std::cout << contentQuad.getSize().x << " and " << contentQuad.getSize().y << "\n";
-
     titleFont = fea::Font("ants/data/fonts/Champagne_Limousines_Bold.ttf", 23);
     titleText = title;                                                  
     titleSurface.setParallax({0.0f, 0.0f});
@@ -45,11 +43,11 @@ FeatureButton::FeatureButton(glm::vec2 pos, glm::vec2 size, std::string title, s
     contentSurface.write(contentText);
     contentSurface.setPosition(position + glm::vec2(padding, padding) + glm::vec2(5.0f, padding + titleSurface.getSize().y + smallQuad.getSize().y));
 
-    contentQuad.setSize(contentQuad.getSize() + glm::vec2(0.0f, contentSurface.getSize().y));
+    contentQuad.setSize(glm::vec2(contentQuad.getSize().x, contentSurface.getSize().y + (2.0f * padding)));
 
     originalLength = size.y;
-    //expandedLength = contentSurface.getSize().y;
-    expandedLength = 100.0f;
+    //std::cout << "content surface length is: " << contentSurface.getSize().y << "\n";
+    expandedLength = smallQuad.getSize().y + contentSurface.getSize().y + (4.0f * padding);
     slideVelocity = 1.0f;
 
     state = ButtonState::CLOSED;
@@ -145,6 +143,7 @@ void FeatureButton::update(float lengthUpdate)
             contentSurface.setColor(fea::Color(255, 255, 255, 0));
             contentQuad.setColor(fea::Color(255, 255, 255, 0));
             glm::vec2 quadSize = largeQuad.getSize();
+
             if(quadSize.y > originalLength)
             {
                 largeQuad.setSize({quadSize.x, quadSize.y - slideVelocity});
@@ -159,8 +158,7 @@ void FeatureButton::update(float lengthUpdate)
         case ButtonState::OPENING:
         {
             glm::vec2 quadSize = largeQuad.getSize();
-            std::cout << "quad length is: " << quadSize.y << "\n";
-            std::cout << "expanded length is: " << expandedLength << "\n";
+
             if(quadSize.y < expandedLength)
             {
                 largeQuad.setSize({quadSize.x, quadSize.y + slideVelocity});
