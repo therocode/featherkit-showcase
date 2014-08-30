@@ -22,7 +22,7 @@ FeatureButton::FeatureButton(glm::vec2 pos, glm::vec2 size, std::string title, s
     contentQuad = fea::Quad(size - glm::vec2(padding * 2.0f, padding * 2.0f));
     contentQuad.setPosition(position + glm::vec2(padding, padding) + glm::vec2(0.0f, padding + smallQuad.getSize().y));
     contentQuad.setParallax({0.0f, 0.0f});
-    contentQuad.setColor(offColour);
+    contentQuad.setColor(fea::Color(255, 255, 255, 0));
 
     titleFont = fea::Font("ants/data/fonts/Champagne_Limousines_Bold.ttf", 23);
     titleText = title;                                                  
@@ -46,7 +46,6 @@ FeatureButton::FeatureButton(glm::vec2 pos, glm::vec2 size, std::string title, s
     contentQuad.setSize(glm::vec2(contentQuad.getSize().x, contentSurface.getSize().y + (2.0f * padding)));
 
     originalLength = size.y;
-    //std::cout << "content surface length is: " << contentSurface.getSize().y << "\n";
     expandedLength = smallQuad.getSize().y + contentSurface.getSize().y + (4.0f * padding);
     slideVelocity = 1.0f;
 
@@ -168,7 +167,7 @@ void FeatureButton::update(float lengthUpdate)
                 largeQuad.setSize({quadSize.x, expandedLength});
                 state = ButtonState::OPENED;
                 contentSurface.setColor(fea::Color(255, 255, 255, 255));
-                contentQuad.setColor(fea::Color(255, 255, 255, 255));
+                contentQuad.setColor(offColour);
             }
             break;
         }

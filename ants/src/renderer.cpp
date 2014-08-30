@@ -23,7 +23,7 @@ Renderer::Renderer(fea::MessageBus& bus)
     renderStates.emplace(ButtonType::B_INTERACTIVE,  RenderState(1.50f, glm::vec2(1000.0f, 1000.0f), glm::vec2(1000.0, 1000.0f)));
     renderStates.emplace(ButtonType::B_COLOUR_BLEND, RenderState(1.20f, glm::vec2( 500.0f,  950.0f), glm::vec2( 500.0,  950.0f)));
     renderStates.emplace(ButtonType::B_PARALLAX,     RenderState(0.40f, glm::vec2( 450.0f,  600.0f), glm::vec2(1150.0,  600.0f)));
-    renderStates.emplace(ButtonType::B_ANIMATION,    RenderState(8.00f, glm::vec2( 450.0f,  300.0f), glm::vec2(1150.0,  900.0f)));
+    renderStates.emplace(ButtonType::B_ANIMATION,    RenderState(6.00f, glm::vec2( 450.0f,  300.0f), glm::vec2(1150.0,  900.0f)));
     renderStates.emplace(ButtonType::B_TEXT,         RenderState(1.00f, glm::vec2( 450.0f,  300.0f), glm::vec2(1150.0,  900.0f)));
     renderStates.emplace(ButtonType::B_CAMERA,       RenderState(0.52f, glm::vec2( 800.0f,  600.0f), glm::vec2( 800.0,  600.0f)));
 
