@@ -16,7 +16,6 @@ class AntApplication
 {
     public:
         AntApplication();
-        ~AntApplication();
         void loop() override;
         void setup(const std::vector<std::string>& args) override;
         void destroy() override;

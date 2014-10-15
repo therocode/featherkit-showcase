@@ -10,13 +10,7 @@ Renderer::Renderer(fea::MessageBus& bus)
         renderTargetVP(fea::Viewport({1600.0f, 600.0f}, {0, 0}, fea::Camera({800.0f, 300.0f}))),
         guiCam({0.0f, 0.0f})
 {
-    messageBus.addSubscriber<MouseClickMessage>(gui);
-    messageBus.addSubscriber<MousePositionMessage>(gui);
-    messageBus.addSubscriber<CameraPositionMessage>(*this);
-    messageBus.addSubscriber<AntPositionMessage>(*this);
-    messageBus.addSubscriber<AntCreationMessage>(*this);
-    messageBus.addSubscriber<AntDeletionMessage>(*this);
-    messageBus.addSubscriber<GuiButtonClickedMessage>(*this);
+    fea::subscribe(messageBus, *this);
 
     renderStateButton = ButtonType::B_DEFAULT;
     renderStates.emplace(ButtonType::B_DEFAULT,      RenderState(1.00f, glm::vec2( 450.0f,  300.0f), glm::vec2(1150.0,  900.0f)));
@@ -35,17 +29,6 @@ void Renderer::createTexture(const std::string& name, const std::string& path, i
     fea::Texture texture;
     texture.create(width, height, loader.loadImage(path, width, height).data(), smooth, interactive);
     textures.emplace(name, std::move(texture));
-}
-
-Renderer::~Renderer()
-{
-    messageBus.removeSubscriber<MouseClickMessage>(gui);
-    messageBus.removeSubscriber<MousePositionMessage>(gui);
-    messageBus.removeSubscriber<CameraPositionMessage>(*this);
-    messageBus.removeSubscriber<AntPositionMessage>(*this);
-    messageBus.removeSubscriber<AntCreationMessage>(*this);
-    messageBus.removeSubscriber<AntDeletionMessage>(*this);
-    messageBus.removeSubscriber<GuiButtonClickedMessage>(*this);
 }
 
 void Renderer::setup()

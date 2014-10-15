@@ -9,15 +9,10 @@ AntApplication::AntApplication()
         renderer(messageBus),
         digging(messageBus)
 {
-    messageBus.addSubscriber<QuitMessage>(*this);
+    fea::subscribe(messageBus, *this, false);
     window.create(fea::VideoMode(800, 600, 32), "ants");
     renderer.setup();
     createInitialAnts();
-}
-
-AntApplication::~AntApplication()
-{
-    messageBus.removeSubscriber<QuitMessage>(*this);
 }
 
 void AntApplication::loop()

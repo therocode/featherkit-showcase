@@ -4,8 +4,7 @@
 #include <fea/render2d.hpp>
 
 class GUI
-    :   public fea::MessageReceiver<MousePositionMessage>,
-        public fea::MessageReceiver<MouseClickMessage>
+    :   public fea::MessageReceiver<MousePositionMessage, MouseClickMessage>
 {
     public:
         GUI(fea::MessageBus& b);

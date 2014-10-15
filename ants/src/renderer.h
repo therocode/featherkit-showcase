@@ -9,15 +9,10 @@
 #include <fea/render2d.hpp>
 
 class Renderer
-    :   public fea::MessageReceiver<CameraPositionMessage>,
-        public fea::MessageReceiver<AntPositionMessage>,
-        public fea::MessageReceiver<AntCreationMessage>,
-        public fea::MessageReceiver<AntDeletionMessage>,
-        public fea::MessageReceiver<GuiButtonClickedMessage>
+    :   public fea::MessageReceiver<CameraPositionMessage, AntPositionMessage, AntCreationMessage, AntDeletionMessage, GuiButtonClickedMessage>
 {
     public:
         Renderer(fea::MessageBus& bus);
-        ~Renderer();
         void setup();
         void render();
 

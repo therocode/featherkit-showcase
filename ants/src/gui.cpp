@@ -4,6 +4,7 @@
 GUI::GUI(fea::MessageBus& b)
   : bus(b)
 {
+    fea::subscribe(bus, *this);
 }
 
 void GUI::setup()
