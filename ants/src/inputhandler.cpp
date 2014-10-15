@@ -60,19 +60,19 @@ void InputHandler::inputLoop()
         {
             if(event.mouseButton.button == fea::Mouse::LEFT)
             {
-                messageBus.send(MouseClickMessage(glm::vec2(event.mouseButton.x, event.mouseButton.y)));
+                messageBus.send(MouseClickMessage());
             }
         }
     }
 
     if(directions[UP])
-        messageBus.send(CameraPositionMessage(glm::vec2(0.0f, -12.0f)));
+        messageBus.send(CameraPositionMessage({glm::vec2(0.0f, -12.0f)}));
     if(directions[DOWN])
-        messageBus.send(CameraPositionMessage(glm::vec2(0.0f, 12.0f)));
+        messageBus.send(CameraPositionMessage({glm::vec2(0.0f, 12.0f)}));
     if(directions[LEFT])
-        messageBus.send(CameraPositionMessage(glm::vec2(-12.0f, 0.0f)));
+        messageBus.send(CameraPositionMessage({glm::vec2(-12.0f, 0.0f)}));
     if(directions[RIGHT])
-        messageBus.send(CameraPositionMessage(glm::vec2(12.0f, 0.0f)));
+        messageBus.send(CameraPositionMessage({glm::vec2(12.0f, 0.0f)}));
     
-    messageBus.send(MousePositionMessage(glm::vec2(input.getMouseWindowPosition().x, input.getMouseWindowPosition().y)));
+    messageBus.send(MousePositionMessage({glm::vec2(input.getMouseWindowPosition().x, input.getMouseWindowPosition().y)}));
 }

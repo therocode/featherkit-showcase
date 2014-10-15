@@ -35,19 +35,19 @@ void Digging::update()
     {
         if(glm::length(antPosition - diggingPositionStartA) < radius)
         {
-            messageBus.send(AntStartedDiggingMessage(diggerAntId, diggingPositionEndA));     // send to renderer to change animation? 
+            messageBus.send(AntStartedDiggingMessage({diggerAntId, diggingPositionEndA}));     // send to renderer to change animation? 
             digging = true;
             diggingPosition = DIG_A;
         }
         else if(glm::length(antPosition - diggingPositionStartB) < radius)
         {
-            messageBus.send(AntStartedDiggingMessage(diggerAntId, diggingPositionEndB));
+            messageBus.send(AntStartedDiggingMessage({diggerAntId, diggingPositionEndB}));
             digging = true;
             diggingPosition = DIG_B;
         }
         else if(glm::length(antPosition - diggingPositionStartC) < radius)
         {
-            messageBus.send(AntStartedDiggingMessage(diggerAntId, diggingPositionEndC));
+            messageBus.send(AntStartedDiggingMessage({diggerAntId, diggingPositionEndC}));
             digging = true;
             diggingPosition = DIG_C;
         }
@@ -59,7 +59,7 @@ void Digging::update()
         {
             digging = false;
             diggingPosition = DIG_OFF;
-            messageBus.send(AntStoppedDiggingMessage(diggerAntId));
+            messageBus.send(AntStoppedDiggingMessage({diggerAntId}));
         }
         // dig!
         else
@@ -79,25 +79,18 @@ void Digging::update()
 
 void Digging::handleMessage(const AntPositionMessage& mess)
 {
-    size_t index;
-    glm::vec2 position;
-    std::tie(index, position, std::ignore) = mess.mData;
-    
-    if(index == diggerAntId)
+    if(mess.mAntId == diggerAntId)
     {
-        antPosition = position;
+        antPosition = mess.mOriginPosition;
     }
 }
 
 void Digging::handleMessage(const DiggerAntCreatedMessage& mess)
 {
-    size_t id;
-    std::tie(id) = mess.mData;
-
-    diggerAntId = id;
+    diggerAntId = mess.mDiggerAntId;
 }
 
 void Digging::handleMessage(const DirtTextureSetMessage& mess)
 {
-    std::tie(dirtTexture) = mess.mData;
+    dirtTexture = mess.mDirtTexture;
 }

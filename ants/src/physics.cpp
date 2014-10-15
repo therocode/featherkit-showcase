@@ -46,7 +46,7 @@ void Physics::update()
             terrainCheck(ant);
         }
 
-        messageBus.send(AntPositionMessage(antId, ant.getPosition(), ant.getAngle()));
+        messageBus.send(AntPositionMessage({antId, ant.getPosition(), ant.getAngle()}));
 
         // check if any ants are outside of the screen boundaries
         if((ant.getPosition().x < 20.0f) || (ant.getPosition().x > 1580.0f))
@@ -57,51 +57,34 @@ void Physics::update()
 
     for(size_t& id : antsOutsideOfBoundary)
     {
-        messageBus.send(AntOutsideBoundariesMessage(id));
+        messageBus.send(AntOutsideBoundariesMessage({id}));
     }
 }
 
 void Physics::handleMessage(const DirtTextureSetMessage& mess)
 {
-    std::tie(dirtTexture) = mess.mData;
+    dirtTexture = mess.mDirtTexture;
 }
 
 void Physics::handleMessage(const AntCreationMessage& mess)
 {
-    size_t id;
-    bool digging;
-    bool goingRight;
-    glm::vec2 position;
-    float velocity;
-    std::tie(id, digging, goingRight, position, velocity) = mess.mData;
-
-    PhysicsBody ant(position, goingRight, velocity);
-    ants.emplace(id, ant);
+    PhysicsBody ant(mess.mPosition, mess.mGoingRight, mess.mVelocity);
+    ants.emplace(mess.mAntId, ant);
 }
 
 void Physics::handleMessage(const AntDeletionMessage& mess)
 {
-    int index;
-    std::tie(index) = mess.mData;
-
-    ants.erase(index);
+    ants.erase(mess.mAntId);
 }
 
 void Physics::handleMessage(const AntStartedDiggingMessage& mess)
 {
-    size_t index;
-    glm::vec2 targetPosition;
-    std::tie(index, targetPosition) = mess.mData;
-
-    targetPositions.emplace(index, targetPosition);
+    targetPositions.emplace(mess.mDiggerAntId, mess.mDiggingTargetPosition);
 }
 
 void Physics::handleMessage(const AntStoppedDiggingMessage& mess)
 {
-    size_t index;
-    std::tie(index) = mess.mData;
-
-    targetPositions.erase(index);
+    targetPositions.erase(mess.mDiggerAntId);
 }
 
 void Physics::updateVelocity(PhysicsBody& body, size_t id)

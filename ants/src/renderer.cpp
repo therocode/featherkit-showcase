@@ -6,8 +6,8 @@ Renderer::Renderer(fea::MessageBus& bus)
         cameraPosition(600.0f, 900.0f),
         cameraInterpolator(cameraPosition),
         renderer(fea::Viewport({800.0f, 600.0f}, {0, 0})),
-        renderTargetVP(fea::Viewport({1600.0f, 600.0f}, {0, 0}, fea::Camera({800.0f, 300.0f}))),
         gui(bus),
+        renderTargetVP(fea::Viewport({1600.0f, 600.0f}, {0, 0}, fea::Camera({800.0f, 300.0f}))),
         guiCam({0.0f, 0.0f})
 {
     messageBus.addSubscriber<MouseClickMessage>(gui);
@@ -59,7 +59,7 @@ void Renderer::setup()
     createAnimations();
     setupRenderTarget();
 
-    messageBus.send(DirtTextureSetMessage(&textures.at("dirt")));
+    messageBus.send(DirtTextureSetMessage({&textures.at("dirt")}));
 }
 
 void Renderer::render()
@@ -76,50 +76,35 @@ void Renderer::render()
 
 void Renderer::handleMessage(const CameraPositionMessage& mess)
 {
-    glm::vec2 vel;
-    std::tie(vel) = mess.mData;
-    cameraPosition += vel;
+    cameraPosition += mess.mVelocityToAdd;
 }
 
 void Renderer::handleMessage(const AntCreationMessage& mess)
 {
-    size_t id;
-    AntType type;
-    bool goingRight;
-    glm::vec2 position;
-    std::tie(id, type, goingRight, position, std::ignore) = mess.mData;
-
     fea::AnimatedQuad antQuad = fea::AnimatedQuad({50, 25});
     antQuad.setTexture(textures.at("ant")); 
-    antQuad.setAnimation(animations.at(type));
+    antQuad.setAnimation(animations.at(mess.mAntType));
     antQuad.setOrigin({25.0f, 12.5f});
-    antQuad.setPosition(position);
-    antQuad.setHFlip(goingRight);
+    antQuad.setPosition(mess.mPosition);
+    antQuad.setHFlip(mess.mGoingRight);
 
-    antSprites.emplace(id, AntSprite(antQuad, type));  
+    antSprites.emplace(mess.mAntId, AntSprite(antQuad, mess.mAntType));  
 }
 
 void Renderer::handleMessage(const AntDeletionMessage& mess)
 {
-    int index;
-    std::tie(index) = mess.mData;
-
-    antSprites.erase(index);
+    antSprites.erase(mess.mAntId);
 }
 
 void Renderer::handleMessage(const AntPositionMessage& mess)
 {
-    size_t index;
-    glm::vec2 position;
-    float angle;
-    std::tie(index, position, angle) = mess.mData;
-    antSprites.at(index).quad.setPosition(position);
-    antSprites.at(index).quad.setRotation(angle);
+    antSprites.at(mess.mAntId).quad.setPosition(mess.mOriginPosition);
+    antSprites.at(mess.mAntId).quad.setRotation(mess.mAngle);
 }
 
 void Renderer::handleMessage(const GuiButtonClickedMessage& mess)
 {
-    std::tie(renderStateButton) = mess.mData;
+    renderStateButton = mess.mButtonType;
 }
 
 ////
@@ -167,8 +152,10 @@ void Renderer::setupQuads()
     cloudQuads.push_back(cloud3Quad);
     cloudQuads.push_back(cloud4Quad);
 
-    frontHillsQuad.setParallax({1.1f, 1.0f});
-    backHillsQuad.setParallax({1.4f, 1.0f});
+    frontHillsQuad.setParallax({0.7f, 1.0f});
+    backHillsQuad.setParallax({0.5f, 1.0f});
+    frontHillsQuad.setPosition({-300.0f, 0.0f});
+    backHillsQuad.setPosition({-800.0f, 0.0f});
 }
 
 void Renderer::createAnimations()

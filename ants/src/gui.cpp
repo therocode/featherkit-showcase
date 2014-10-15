@@ -70,19 +70,15 @@ std::vector<fea::Drawable2D*> GUI::getDrawables()
 void GUI::handleMessage(const MousePositionMessage& mess)
 {
     // check for hovering
-    glm::vec2 position;
-    std::tie(position) = mess.mData;
     for(size_t i = 0; i < featureButtons.size(); i++)
     {
-        featureButtons.at(i)->setHovered(featureButtons.at(i)->withinArea(position));
+        featureButtons.at(i)->setHovered(featureButtons.at(i)->withinArea(mess.mMousePosition));
     }
 }
 
 void GUI::handleMessage(const MouseClickMessage& mess)
 {
     // check for clicking
-    glm::vec2 position;
-    std::tie(position) = mess.mData;
     bool noneOpen = true; // check to see if any are open
 
     for(auto& button : featureButtons)
@@ -90,11 +86,11 @@ void GUI::handleMessage(const MouseClickMessage& mess)
         button->setClicked(button->isHovered());
         if(button->isOpening())
         {   
-            bus.send(GuiButtonClickedMessage(button->getButtonType()));
+            bus.send(GuiButtonClickedMessage({button->getButtonType()}));
             noneOpen = false;
         }
     }
 
     if(noneOpen)
-        bus.send(GuiButtonClickedMessage(ButtonType::B_DEFAULT));
+        bus.send(GuiButtonClickedMessage({ButtonType::B_DEFAULT}));
 }
