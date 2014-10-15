@@ -58,13 +58,19 @@ class Renderer
         fea::Quad largeHalo;
         fea::Quad smallHalo;
 
+        fea::TextSurface textSurface;
+        std::string textString;
+        fea::Font textFont;
+
         void createTextures();
         void setupQuads();
         void createAnimations();
         void setupRenderTarget();
+        void setupText();
 
         void updateCamera();
         void renderRenderTarget();
         void renderScene();
         void renderGUI();
+        void renderTextState();
 };

@@ -41,6 +41,7 @@ void Renderer::setup()
     setupQuads();
     createAnimations();
     setupRenderTarget();
+    setupText();
 
     messageBus.send(DirtTextureSetMessage({&textures.at("dirt")}));
 }
@@ -55,6 +56,12 @@ void Renderer::render()
     renderScene();
 
     renderGUI();    
+
+    if(renderStateButton == ButtonType::B_TEXT)
+    {
+        // draw text on screen //
+        renderTextState();
+    }
 }
 
 void Renderer::handleMessage(const CameraPositionMessage& mess)
@@ -164,6 +171,19 @@ void Renderer::setupRenderTarget()
     darknessQuad.setTexture(textures.at("darkness"));
     largeHalo.setTexture(textures.at("halo"));
     smallHalo.setTexture(textures.at("halo"));
+}
+
+void Renderer::setupText()
+{
+    textFont = fea::Font("ants/data/fonts/Champagne_Limousines_Bold.ttf", 50);
+    textString = "'Ants'\nWritten in Feather Kit\nBy @kimspindel";
+    textSurface.setParallax({0.0f, 0.0f});
+    textSurface.setPenFont(textFont);
+    textSurface.setColor(fea::Color(255, 255, 255));
+    textSurface.setLineHeight(50.0f);
+    textSurface.write(textString);
+    textSurface.setOrigin(textSurface.getSize()/2.0f);
+    //textSurface.setPosition({-120.0f, -100.0f});
 }
 
 void Renderer::updateCamera()
@@ -285,5 +305,12 @@ void Renderer::renderGUI()
         //copy.setPosition(asdf);
         renderer.queue(*drawable);
     }
+    renderer.render();
+}
+
+void Renderer::renderTextState()
+{
+    textSurface.rotate(0.05f);  // make this "animated" :D
+    renderer.queue(textSurface);
     renderer.render();
 }
