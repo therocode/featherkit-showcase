@@ -46,8 +46,8 @@ FeatureButton::FeatureButton(glm::vec2 pos, glm::vec2 size, std::string title, s
     contentQuad.setSize(glm::vec2(contentQuad.getSize().x, contentSurface.getSize().y + (2.0f * padding)));
 
     originalLength = size.y;
-    expandedLength = smallQuad.getSize().y + contentSurface.getSize().y + (4.0f * padding);
-    slideVelocity = 1.0f;
+    expandedLength = smallQuad.getSize().y + contentSurface.getSize().y + (5.0f * padding);
+    slideVelocity = 3.0f;
 
     state = ButtonState::CLOSED;
     buttonType = type;
