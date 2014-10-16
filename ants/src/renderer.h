@@ -1,3 +1,4 @@
+// holy shit refactor this //
 #pragma once
 #include "renderstate.h"
 #include "messages.h"
@@ -61,6 +62,8 @@ class Renderer
         fea::TextSurface textSurface;
         std::string textString;
         fea::Font textFont;
+        float angularVelocity;
+        float scalingVelocity;
 
         void createTextures();
         void setupQuads();

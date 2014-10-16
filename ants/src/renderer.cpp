@@ -1,3 +1,4 @@
+// holy shit refactor this //
 #include "renderer.h"
 #include <iostream>
 
@@ -175,6 +176,8 @@ void Renderer::setupRenderTarget()
 
 void Renderer::setupText()
 {
+    angularVelocity = 0.002f;
+    scalingVelocity = 0.999f;
     textFont = fea::Font("ants/data/fonts/Champagne_Limousines_Bold.ttf", 50);
     textString = "'Ants'\nWritten in Feather Kit\nBy @kimspindel";
     textSurface.setParallax({0.0f, 0.0f});
@@ -183,7 +186,7 @@ void Renderer::setupText()
     textSurface.setLineHeight(50.0f);
     textSurface.write(textString);
     textSurface.setOrigin(textSurface.getSize()/2.0f);
-    //textSurface.setPosition({-120.0f, -100.0f});
+    textSurface.setPosition({50.0f, 0.0f});
 }
 
 void Renderer::updateCamera()
@@ -310,7 +313,21 @@ void Renderer::renderGUI()
 
 void Renderer::renderTextState()
 {
-    textSurface.rotate(0.05f);  // make this "animated" :D
+    textSurface.rotate(angularVelocity);  // make this "animated" :D
+    if((textSurface.getRotation() < -0.10f) ||
+       (textSurface.getRotation() > 0.10f))
+    {
+        angularVelocity = -angularVelocity;
+    }
+    textSurface.scale({scalingVelocity, scalingVelocity});  // make this "animated" :D
+    if(textSurface.getScale().x < 0.98f)
+    {
+        scalingVelocity = 1.001f;
+    }
+    else if(textSurface.getScale().x > 1.02f)
+    {
+        scalingVelocity = 0.999f;
+    }
     renderer.queue(textSurface);
     renderer.render();
 }
