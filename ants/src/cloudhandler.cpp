@@ -2,25 +2,34 @@
 
 CloudHandler::CloudHandler()
 {
-    cloudPositions.push_back({0.0f, 100.0f});
-    cloudPositions.push_back({500.0f, 230.0f});
-    cloudPositions.push_back({1000.0f, 60.0f});
-    cloudPositions.push_back({1500.0f, 250.0f});
-
     cloudVelocity = glm::vec2(1.0f, 0.0f);
 }
 
 void CloudHandler::update()
 {
-    for(auto& position : cloudPositions)
+    for(auto& cloud : mClouds)
     {
-        position += cloudVelocity;
-        if(position.x > 1650.0f)
-            position.x = -270.0f;
+        cloud.setPosition(cloud.getPosition() + cloudVelocity);
+        if(cloud.getPosition().x > 1650.0f)
+        {
+            cloud.setPosition({-270.0f, cloud.getPosition().y});
+        }
     }
 }
 
-std::vector<glm::vec2> CloudHandler::getCloudPositions()
+void CloudHandler::addCloud(fea::Quad cloud)
 {
-    return cloudPositions;
+    std::vector<glm::vec2> cloudPositions = {{   0.0f, 100.0f},
+                                             { 500.0f, 230.0f},
+                                             {1000.0f,  60.0f},
+                                             {1500.0f, 250.0f}};
+
+    size_t numberOfCloudsAdded = mClouds.size();
+    cloud.setPosition(cloudPositions.at(numberOfCloudsAdded));
+    mClouds.push_back(cloud);
+}
+
+const std::vector<fea::Quad>& CloudHandler::getCloudQuads()
+{
+    return mClouds;
 }

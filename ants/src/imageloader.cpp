@@ -2,9 +2,11 @@
 #include "lodepng.h"
 #include <iostream>
 
-std::vector<unsigned char> ImageLoader::loadImage(std::string path, uint32_t width, uint32_t height)
+std::vector<unsigned char> ImageLoader::loadImage(std::string path)
 {
     std::vector<unsigned char> image; //the raw pixels
+
+    uint32_t width, height;
 
     //decode
     unsigned error = lodepng::decode(image, width, height, path);

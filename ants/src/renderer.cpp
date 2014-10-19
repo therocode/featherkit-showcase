@@ -7,9 +7,10 @@ Renderer::Renderer(fea::MessageBus& bus)
         cameraPosition(600.0f, 900.0f),
         cameraInterpolator(cameraPosition),
         renderer(fea::Viewport({800.0f, 600.0f}, {0, 0})),
-        gui(bus),
+        mScene(bus),
+        mGui(bus),
         renderTargetVP(fea::Viewport({1600.0f, 600.0f}, {0, 0}, fea::Camera({800.0f, 300.0f}))),
-        guiCam({0.0f, 0.0f})
+        mGuiCam({0.0f, 0.0f})
 {
     fea::subscribe(messageBus, *this);
 
@@ -25,42 +26,27 @@ Renderer::Renderer(fea::MessageBus& bus)
     cameraZoom = 2.0f;
 }
 
-void Renderer::createTexture(const std::string& name, const std::string& path, int width, int height, bool smooth, bool interactive)
-{
-    fea::Texture texture;
-    texture.create(width, height, loader.loadImage(path, width, height).data(), smooth, interactive);
-    textures.emplace(name, std::move(texture));
-}
-
 void Renderer::setup()
 {
     renderer.setup();
 
-    gui.setup();
-
-    createTextures();
-    setupQuads();
-    createAnimations();
-    setupRenderTarget();
-    setupText();
-
-    messageBus.send(DirtTextureSetMessage({&textures.at("dirt")}));
+    mGui.setup();
+    mWiggleText.setup();
+    mScene.setup();
 }
 
 void Renderer::render()
 {
     updateCamera(); 
-    cloudHandler.update();
-    gui.update();
+    mScene.update();
+    mGui.update();
 
-    renderRenderTarget();
+    renderLighting();
     renderScene();
-
     renderGUI();    
 
     if(renderStateButton == ButtonType::B_TEXT)
     {
-        // draw text on screen //
         renderTextState();
     }
 }
@@ -70,124 +56,12 @@ void Renderer::handleMessage(const CameraPositionMessage& mess)
     cameraPosition += mess.mVelocityToAdd;
 }
 
-void Renderer::handleMessage(const AntCreationMessage& mess)
-{
-    fea::AnimatedQuad antQuad = fea::AnimatedQuad({50, 25});
-    antQuad.setTexture(textures.at("ant")); 
-    antQuad.setAnimation(animations.at(mess.mAntType));
-    antQuad.setOrigin({25.0f, 12.5f});
-    antQuad.setPosition(mess.mPosition);
-    antQuad.setHFlip(mess.mGoingRight);
-
-    antSprites.emplace(mess.mAntId, AntSprite(antQuad, mess.mAntType));  
-}
-
-void Renderer::handleMessage(const AntDeletionMessage& mess)
-{
-    antSprites.erase(mess.mAntId);
-}
-
-void Renderer::handleMessage(const AntPositionMessage& mess)
-{
-    antSprites.at(mess.mAntId).quad.setPosition(mess.mOriginPosition);
-    antSprites.at(mess.mAntId).quad.setRotation(mess.mAngle);
-}
-
 void Renderer::handleMessage(const GuiButtonClickedMessage& mess)
 {
     renderStateButton = mess.mButtonType;
 }
 
 ////
-
-void Renderer::createTextures()
-{
-    createTexture("dirt", "ants/data/textures/dirt2.png", 800, 600, true, true);
-    createTexture("dirtbg", "ants/data/textures/dirtbg2.png", 800, 600, false);
-    createTexture("backhills", "ants/data/textures/backhills.png", 800, 600, false);
-    createTexture("fronthills", "ants/data/textures/fronthills.png", 800, 600, false);
-    createTexture("sky", "ants/data/textures/sky.png", 1, 300);
-    createTexture("cloud1", "ants/data/textures/cloud1.png", 320, 200);
-    createTexture("cloud2", "ants/data/textures/cloud2.png", 320, 200);
-    createTexture("cloud3", "ants/data/textures/cloud3.png", 320, 200);
-    createTexture("cloud4", "ants/data/textures/cloud4.png", 160, 200);
-    createTexture("ant", "ants/data/textures/ant.png", 800, 800);
-    createTexture("darkness", "ants/data/textures/darkness.png", 800, 300);
-    createTexture("halo", "ants/data/textures/halo.png", 145, 145);
-}
-
-void Renderer::setupQuads()
-{
-    dirtQuad = fea::Quad({1600, 1200});
-    dirtBgQuad = fea::Quad({1600, 1200});
-    frontHillsQuad = fea::Quad({1700, 1200});
-    backHillsQuad = fea::Quad({2240, 1200});
-    skyQuad = fea::Quad({1600, 1200});
-    fea::Quad cloud1Quad = fea::Quad({320, 200});
-    fea::Quad cloud2Quad = fea::Quad({320, 200});
-    fea::Quad cloud3Quad = fea::Quad({320, 200});
-    fea::Quad cloud4Quad = fea::Quad({160, 200});
-
-    dirtQuad.setTexture(textures.at("dirt"));
-    dirtBgQuad.setTexture(textures.at("dirtbg"));
-    frontHillsQuad.setTexture(textures.at("fronthills"));
-    backHillsQuad.setTexture(textures.at("backhills"));
-    skyQuad.setTexture(textures.at("sky"));
-    cloud1Quad.setTexture(textures.at("cloud1"));
-    cloud2Quad.setTexture(textures.at("cloud2"));
-    cloud3Quad.setTexture(textures.at("cloud3"));
-    cloud4Quad.setTexture(textures.at("cloud4"));
-
-    cloudQuads.push_back(cloud1Quad);
-    cloudQuads.push_back(cloud2Quad);
-    cloudQuads.push_back(cloud3Quad);
-    cloudQuads.push_back(cloud4Quad);
-
-    frontHillsQuad.setParallax({0.7f, 1.0f});
-    backHillsQuad.setParallax({0.5f, 1.0f});
-    frontHillsQuad.setPosition({-300.0f, 0.0f});
-    backHillsQuad.setPosition({-800.0f, 0.0f});
-}
-
-void Renderer::createAnimations()
-{
-    animations.emplace((int)AntType::NORMAL, fea::Animation(glm::vec2(0.0f, 0.0f), glm::vec2(200.0f/800.0f, 100.0f/800.0f), 4, 16));
-    animations.emplace((int)AntType::DIGGING, fea::Animation(glm::vec2(0.0f, 100.0f/800.0f), glm::vec2(200.0f/800.0f, 100.0f/800.0f), 4, 8));
-    animations.emplace((int)AntType::BLUE, fea::Animation(glm::vec2(0.0f, 200.0f/800.0f), glm::vec2(200.0f/800.0f, 100.0f/800.0f), 4, 16));
-    animations.emplace((int)AntType::GREEN, fea::Animation(glm::vec2(0.0f, 300.0f/800.0f), glm::vec2(200.0f/800.0f, 100.0f/800.0f), 4, 16));
-    animations.emplace((int)AntType::RED, fea::Animation(glm::vec2(0.0f, 400.0f/800.0f), glm::vec2(200.0f/800.0f, 100.0f/800.0f), 4, 16));
-}
-
-void Renderer::setupRenderTarget()
-{
-    lightingTarget.create(1600, 600);
-    lightingQuad = fea::Quad({1600, 600});
-    darknessQuad = fea::Quad({1600, 600});
-    largeHalo = fea::Quad({290, 290});
-    smallHalo = fea::Quad({200, 200});
-
-    lightingQuad.setPosition({0, 600});
-    lightingQuad.setVFlip(true);
-    lightingQuad.setTexture(lightingTarget.getTexture());
-    darknessQuad.setTexture(textures.at("darkness"));
-    largeHalo.setTexture(textures.at("halo"));
-    smallHalo.setTexture(textures.at("halo"));
-}
-
-void Renderer::setupText()
-{
-    angularVelocity = 0.002f;
-    scalingVelocity = 0.999f;
-    textFont = fea::Font("ants/data/fonts/Champagne_Limousines_Bold.ttf", 50);
-    textString = "'Ants'\nWritten in Feather Kit\nBy @kimspindel";
-    textSurface.setParallax({0.0f, 0.0f});
-    textSurface.setPenFont(textFont);
-    textSurface.setColor(fea::Color(255, 255, 255));
-    textSurface.setLineHeight(50.0f);
-    textSurface.write(textString);
-    textSurface.setOrigin(textSurface.getSize()/2.0f);
-    textSurface.setPosition({50.0f, 0.0f});
-}
 
 void Renderer::updateCamera()
 {
@@ -229,12 +103,19 @@ void Renderer::updateCamera()
     defaultSceneVP = renderer.getViewport(); // might have to move this or change this or something
 }
 
-void Renderer::renderRenderTarget()
+void Renderer::renderLighting()
 {
+    fea::RenderTarget& lightingTarget = mScene.getLightingRenderTarget();
+    std::unordered_map<LightingQuadType, fea::Quad>& lightingQuads = mScene.getLightingQuads();
+    std::unordered_map<size_t, AntSprite>& antSprites = mScene.getAntSprites();
+
     renderer.setViewport(renderTargetVP);
     renderer.clear(lightingTarget, fea::Color(0, 0, 0, 255));
-    renderer.queue(darknessQuad);
+    renderer.queue(lightingQuads.at(LightingQuadType::DARK));
     renderer.setBlendMode(fea::BlendMode::ADD);
+
+    // large halos //
+    fea::Quad& largeHalo = lightingQuads.at(LightingQuadType::LARGE_HALO);
     //R
     largeHalo.setColor(fea::Color(255, 0, 0, 70));
     largeHalo.setPosition({1155, 325});
@@ -247,7 +128,9 @@ void Renderer::renderRenderTarget()
     largeHalo.setColor(fea::Color(0, 0, 255, 70));
     largeHalo.setPosition({185, 312});
     renderer.queue(largeHalo);
-    //small halos
+
+    // small halos //
+    fea::Quad& smallHalo = lightingQuads.at(LightingQuadType::SMALL_HALO);
     for(auto& antSprite : antSprites)
     {
         if(antSprite.second.type == AntType::RED)
@@ -277,35 +160,41 @@ void Renderer::renderScene()
     renderer.setBlendMode(fea::BlendMode::ALPHA);
     renderer.setViewport(defaultSceneVP);
     renderer.getViewport().setCamera(defaultSceneCam);
-    renderer.clear(fea::Color(0, 0, 0));
-    renderer.queue(skyQuad);
-    for(size_t i = 0; i < cloudHandler.getCloudPositions().size(); i++)
+    renderer.clear(fea::Color::White);
+
+    for(auto& drawable : mScene.getLandscapeQuads())
     {
-        cloudQuads.at(i).setPosition(cloudHandler.getCloudPositions().at(i));
-        renderer.queue(cloudQuads.at(i));
+        renderer.queue(drawable);
     }
-    renderer.queue(backHillsQuad);
-    renderer.queue(frontHillsQuad);
-    renderer.queue(dirtBgQuad);
-    renderer.queue(dirtQuad);
-    for(auto& antSprite : antSprites)
+
+    for(auto& antSprite : mScene.getAntSprites())
     {
         renderer.queue(antSprite.second.quad);
         antSprite.second.quad.tick();
     }
+
+    for(auto& cloud : mScene.getCloudQuads())
+    {
+        renderer.queue(cloud);
+    }
+
+    // lighting //
+    fea::Quad lightingQuad = fea::Quad({1600, 600});
+    lightingQuad.setTexture(mScene.getLightingRenderTarget().getTexture());
+    lightingQuad.setVFlip(true);
+    lightingQuad.setPosition({0.0f, 600.0f});
     renderer.setBlendMode(fea::BlendMode::MULTIPLY);
     renderer.queue(lightingQuad);
     renderer.setBlendMode(fea::BlendMode::ALPHA);
+
     renderer.render();
 }
 
 void Renderer::renderGUI()
 {
-    renderer.getViewport().setCamera(guiCam);
-    for(auto& drawable : gui.getDrawables())
+    renderer.getViewport().setCamera(mGuiCam);
+    for(auto& drawable : mGui.getDrawables())
     {
-        //fea::Drawable2D copy = *drawable;
-        //copy.setPosition(asdf);
         renderer.queue(*drawable);
     }
     renderer.render();
@@ -313,21 +202,10 @@ void Renderer::renderGUI()
 
 void Renderer::renderTextState()
 {
-    textSurface.rotate(angularVelocity);  // make this "animated" :D
-    if((textSurface.getRotation() < -0.10f) ||
-       (textSurface.getRotation() > 0.10f))
+    mWiggleText.wiggle();
+    for(auto& drawable : mWiggleText.getDrawables())
     {
-        angularVelocity = -angularVelocity;
+        renderer.queue(*drawable);
     }
-    textSurface.scale({scalingVelocity, scalingVelocity});  // make this "animated" :D
-    if(textSurface.getScale().x < 0.98f)
-    {
-        scalingVelocity = 1.001f;
-    }
-    else if(textSurface.getScale().x > 1.02f)
-    {
-        scalingVelocity = 0.999f;
-    }
-    renderer.queue(textSurface);
     renderer.render();
 }
