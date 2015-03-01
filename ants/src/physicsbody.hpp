@@ -1,5 +1,5 @@
 #pragma once
-#include "collisionpoint.h"
+#include "collisionpoint.hpp"
 #include <glm/glm.hpp>
 
 class PhysicsBody

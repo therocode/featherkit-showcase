@@ -1,6 +1,6 @@
 #pragma once
-#include "messages.h"
-#include "anttype.h"
+#include "messages.hpp"
+#include "anttype.hpp"
 
 class AntManager
     :   public fea::MessageReceiver<AntOutsideBoundariesMessage>

@@ -2,7 +2,7 @@
 #include <glm/glm.hpp>
 #include <fea/render2d.hpp>
 #include <fea/rendering/textsurface.hpp>
-#include "buttontype.h"
+#include "buttontype.hpp"
 
 enum ButtonState
 {

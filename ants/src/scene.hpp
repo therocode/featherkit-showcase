@@ -1,9 +1,9 @@
 #pragma once
-#include "cloudhandler.h"
-#include "imageloader.h"
-#include "antsprite.h"
-#include "messages.h"
-#include "lightingquadtype.h"
+#include "cloudhandler.hpp"
+#include "imageloader.hpp"
+#include "antsprite.hpp"
+#include "messages.hpp"
+#include "lightingquadtype.hpp"
 #include <fea/rendering/rendertarget.hpp>
 
 class Scene
@@ -19,9 +19,9 @@ class Scene
         std::unordered_map<LightingQuadType, fea::Quad>& getLightingQuads();;
         fea::RenderTarget& getLightingRenderTarget();
 
-        virtual void handleMessage(const AntPositionMessage& mess) override;
-        virtual void handleMessage(const AntCreationMessage& mess) override;
-        virtual void handleMessage(const AntDeletionMessage& mess) override;
+        void handleMessage(const AntPositionMessage& mess) override;
+        void handleMessage(const AntCreationMessage& mess) override;
+        void handleMessage(const AntDeletionMessage& mess) override;
 
     private:
         fea::MessageBus& mBus;

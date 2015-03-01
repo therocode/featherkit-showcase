@@ -1,4 +1,4 @@
-#include "wiggletext.h"
+#include "wiggletext.hpp"
 #include <iostream>
 
 WiggleText::WiggleText()

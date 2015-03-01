@@ -1,4 +1,4 @@
-#include "physicsbody.h"
+#include "physicsbody.hpp"
 #include <iostream>
 
 PhysicsBody::PhysicsBody(glm::vec2 pos, bool goingR, float velocity)

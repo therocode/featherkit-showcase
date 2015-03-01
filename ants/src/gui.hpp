@@ -1,6 +1,6 @@
 #pragma once
-#include "messages.h"
-#include "featurebutton.h"
+#include "messages.hpp"
+#include "featurebutton.hpp"
 #include <fea/render2d.hpp>
 
 class GUI

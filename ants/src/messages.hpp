@@ -1,6 +1,6 @@
 #pragma once
-#include "anttype.h"
-#include "buttontype.h"
+#include "anttype.hpp"
+#include "buttontype.hpp"
 #include <glm/glm.hpp>
 #include <fea/util.hpp>
 #include <fea/rendering/texture.hpp>

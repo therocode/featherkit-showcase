@@ -1,5 +1,5 @@
-#include "imageloader.h"
-#include "lodepng.h"
+#include "imageloader.hpp"
+#include "lodepng.hpp"
 #include <iostream>
 
 std::vector<unsigned char> ImageLoader::loadImage(std::string path)

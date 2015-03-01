@@ -1,6 +1,6 @@
 #pragma once
-#include "messages.h"
-#include "direction.h"
+#include "messages.hpp"
+#include "direction.hpp"
 #include <fea/userinterface.hpp>
 #include <fea/ui/sdlinputbackend.hpp>
 

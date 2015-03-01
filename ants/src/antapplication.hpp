@@ -1,12 +1,12 @@
 #pragma once
-#include "inputhandler.h"
-#include "antmanager.h"
-#include "renderer.h"
-#include "imageloader.h"
-#include "interpolator.h"
-#include "messages.h"
-#include "physics.h"
-#include "digging.h"
+#include "inputhandler.hpp"
+#include "antmanager.hpp"
+#include "renderer.hpp"
+#include "imageloader.hpp"
+#include "interpolator.hpp"
+#include "messages.hpp"
+#include "physics.hpp"
+#include "digging.hpp"
 #include <fea/structure.hpp>
 #include <fea/ui/sdlwindowbackend.hpp>
 

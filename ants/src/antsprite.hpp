@@ -1,5 +1,5 @@
 #pragma once
-#include "anttype.h"
+#include "anttype.hpp"
 #include <fea/rendering/animatedquad.hpp>
 
 struct AntSprite

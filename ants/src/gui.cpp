@@ -1,5 +1,5 @@
-#include "gui.h"
-#include "buttontype.h"
+#include "gui.hpp"
+#include "buttontype.hpp"
 
 GUI::GUI(fea::MessageBus& b)
   : bus(b)
@@ -79,6 +79,7 @@ void GUI::handleMessage(const MousePositionMessage& mess)
 
 void GUI::handleMessage(const MouseClickMessage& mess)
 {
+    (void)mess;
     // check for clicking
     bool noneOpen = true; // check to see if any are open
 

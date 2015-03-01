@@ -1,4 +1,4 @@
-#include "interpolator.h"
+#include "interpolator.hpp"
 
 Interpolator::Interpolator(const glm::vec2& initialPosition) : mCurrentPos(initialPosition), mTargetPos(initialPosition)
 {

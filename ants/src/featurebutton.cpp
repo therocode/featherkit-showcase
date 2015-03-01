@@ -1,4 +1,4 @@
-#include "featurebutton.h"
+#include "featurebutton.hpp"
 #include <iostream>
 
 FeatureButton::FeatureButton(glm::vec2 pos, glm::vec2 size, std::string title, std::string content, ButtonType type)

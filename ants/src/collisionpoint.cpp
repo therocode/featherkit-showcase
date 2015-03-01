@@ -1,4 +1,4 @@
-#include "collisionpoint.h"
+#include "collisionpoint.hpp"
 
 CollisionPoint::CollisionPoint()
 {

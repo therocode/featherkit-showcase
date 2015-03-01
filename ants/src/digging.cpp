@@ -1,4 +1,4 @@
-#include "digging.h"
+#include "digging.hpp"
 
 Digging::Digging(fea::MessageBus& bus)
     :   messageBus(bus)

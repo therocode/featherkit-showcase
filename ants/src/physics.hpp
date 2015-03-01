@@ -1,6 +1,6 @@
 #pragma once
-#include "messages.h"
-#include "physicsbody.h"
+#include "messages.hpp"
+#include "physicsbody.hpp"
 #include <fea/render2d.hpp>
 
 class Physics

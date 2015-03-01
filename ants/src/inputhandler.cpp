@@ -1,4 +1,4 @@
-#include "inputhandler.h"
+#include "inputhandler.hpp"
 #include <iostream>
 
 InputHandler::InputHandler(fea::MessageBus& bus)

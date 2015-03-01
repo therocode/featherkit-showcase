@@ -1,5 +1,5 @@
-#include "antapplication.h"
-#include "anttype.h"
+#include "antapplication.hpp"
+#include "anttype.hpp"
 
 AntApplication::AntApplication()
     :   input(messageBus),

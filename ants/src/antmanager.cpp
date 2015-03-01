@@ -1,4 +1,4 @@
-#include "antmanager.h"
+#include "antmanager.hpp"
 #include <stdlib.h>
 
 AntManager::AntManager(fea::MessageBus& bus)

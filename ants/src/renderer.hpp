@@ -1,11 +1,11 @@
 // holy shit refactor this //
 #pragma once
-#include "renderstate.h"
-#include "messages.h"
-#include "interpolator.h"
-#include "wiggletext.h"
-#include "scene.h"
-#include "gui.h"
+#include "renderstate.hpp"
+#include "messages.hpp"
+#include "interpolator.hpp"
+#include "wiggletext.hpp"
+#include "scene.hpp"
+#include "gui.hpp"
 #include <fea/render2d.hpp>
 
 class Renderer

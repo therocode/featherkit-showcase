@@ -1,5 +1,5 @@
 #pragma once
-#include "messages.h"
+#include "messages.hpp"
 
 enum DiggingSpot { DIG_OFF = 0, DIG_A, DIG_B, DIG_C };
 

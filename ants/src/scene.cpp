@@ -1,4 +1,4 @@
-#include "scene.h"
+#include "scene.hpp"
 
 Scene::Scene(fea::MessageBus& bus)
     :   mBus(bus)
