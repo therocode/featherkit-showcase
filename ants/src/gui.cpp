@@ -21,27 +21,27 @@ void GUI::setup()
 
     featureButtons.push_back(std::unique_ptr<FeatureButton>(new FeatureButton(glm::vec2(origin.x, origin.y + buttonSize.y * 0), buttonSize,
         "Interactive textures",
-        "Texture pixels can be read and modified easily. Here we see the ant physics and collision detection based on the texture.",
+        "Texture pixels can be read and modified easily. Physics and collision detection can be texture dependent.",
         ButtonType::B_INTERACTIVE)));
     featureButtons.push_back(std::unique_ptr<FeatureButton>(new FeatureButton(glm::vec2(origin.x, origin.y + buttonSize.y * 1), buttonSize,
         "Color blend modes",
-        "Featherkit provides a means to render drawables to textures as well as changing blend modes, which can be used to create lighting effects, as shown here.",
+        "Feather Kit provides a means to render drawables to textures as well as changing blend modes. This functionality can be used to create lighting effects.",
         ButtonType::B_COLOUR_BLEND)));
     featureButtons.push_back(std::unique_ptr<FeatureButton>(new FeatureButton(glm::vec2(origin.x, origin.y + buttonSize.y * 2), buttonSize, 
         "Parallax",
-        "Featherkit provides built-in parallax functions to give perspective effects. Move the camera left and right to try.",
+        "Feather Kit provides built-in parallax functions to give perspective effects. Try moving the camera left and right.",
         ButtonType::B_PARALLAX)));
     featureButtons.push_back(std::unique_ptr<FeatureButton>(new FeatureButton(glm::vec2(origin.x, origin.y + buttonSize.y * 3), buttonSize,
         "Animations",
-        "Animated Quads make it easy to animate poope blaehlakjfd alsdkf.",
+        "Feather Kit has animated quads which make it easy to create animated sprites.",
         ButtonType::B_ANIMATION)));
     featureButtons.push_back(std::unique_ptr<FeatureButton>(new FeatureButton(glm::vec2(origin.x, origin.y + buttonSize.y * 4), buttonSize,
         "Text",
-        "Featherkit has built-in text rendering stuff.",
+        "Featherkit has built-in functionality for rendering text.",
         ButtonType::B_TEXT)));
     featureButtons.push_back(std::unique_ptr<FeatureButton>(new FeatureButton(glm::vec2(origin.x, origin.y + buttonSize.y * 5), buttonSize,
         "Camera/viewport",
-        "Featherkit's camera and viewport system make rendering different things easy and stuff",
+        "Featherkit's camera and viewport system make it easy to choose how the scene is rendered and provides support for multiple cameras and viewports.",
         ButtonType::B_CAMERA)));
 
     for(auto& button : featureButtons)

@@ -1,4 +1,3 @@
-// holy shit refactor this //
 #include "renderer.hpp"
 #include <iostream>
 
@@ -19,11 +18,12 @@ Renderer::Renderer(fea::MessageBus& bus)
     renderStates.emplace(ButtonType::B_INTERACTIVE,  RenderState(1.50f, glm::vec2(1000.0f, 1000.0f), glm::vec2(1000.0, 1000.0f)));
     renderStates.emplace(ButtonType::B_COLOUR_BLEND, RenderState(1.20f, glm::vec2( 500.0f,  950.0f), glm::vec2( 500.0,  950.0f)));
     renderStates.emplace(ButtonType::B_PARALLAX,     RenderState(0.40f, glm::vec2( 450.0f,  600.0f), glm::vec2(1150.0,  600.0f)));
-    renderStates.emplace(ButtonType::B_ANIMATION,    RenderState(6.00f, glm::vec2( 450.0f,  300.0f), glm::vec2(1150.0,  900.0f)));
+    renderStates.emplace(ButtonType::B_ANIMATION,    RenderState(4.00f, glm::vec2( 450.0f,  300.0f), glm::vec2(1150.0,  900.0f)));
     renderStates.emplace(ButtonType::B_TEXT,         RenderState(1.00f, glm::vec2( 450.0f,  300.0f), glm::vec2(1150.0,  900.0f)));
     renderStates.emplace(ButtonType::B_CAMERA,       RenderState(0.52f, glm::vec2( 800.0f,  600.0f), glm::vec2( 800.0,  600.0f)));
 
     cameraZoom = 2.0f;
+
 }
 
 void Renderer::setup()
@@ -74,27 +74,81 @@ void Renderer::updateCamera()
     }
     else if(cameraZoom < currentState.cameraZoomTarget)
     {
-        cameraZoom += 0.01f;
+        if(cameraZoom > 1.50f)
+        {
+            cameraZoom += 0.04f;
+        }
+        else
+        {
+            cameraZoom += 0.01f;
+        }
     }
     else if(cameraZoom > currentState.cameraZoomTarget)
     {
-        cameraZoom -= 0.01f;
+        if(cameraZoom > 1.50f)
+        {
+            cameraZoom -= 0.04f;
+        }
+        else
+        {
+            cameraZoom -= 0.01f;
+        }
     }
     defaultSceneCam.setZoom({cameraZoom, cameraZoom});
 
-    float leftBound = currentState.topLeftCameraBoundary.x;
-    float rightBound = currentState.bottomRightCameraBoundary.x;
-    float topBound = currentState.topLeftCameraBoundary.y;
-    float bottomBound = currentState.bottomRightCameraBoundary.y;
+    if(renderStateButton != B_ANIMATION)
+    {
+        float leftBound = currentState.topLeftCameraBoundary.x;
+        float rightBound = currentState.bottomRightCameraBoundary.x;
+        float topBound = currentState.topLeftCameraBoundary.y;
+        float bottomBound = currentState.bottomRightCameraBoundary.y;
 
-    if(cameraPosition.x < leftBound)
-        cameraPosition.x = leftBound;
-    else if(cameraPosition.x > rightBound)
-        cameraPosition.x = rightBound;
-    if(cameraPosition.y < topBound)
-        cameraPosition.y = topBound;
-    else if(cameraPosition.y > bottomBound)
-        cameraPosition.y = bottomBound;
+        if(cameraPosition.x < leftBound)
+        {
+            cameraPosition.x = leftBound;
+        }
+        else if(cameraPosition.x > rightBound)
+        {
+            cameraPosition.x = rightBound;
+        }
+        if(cameraPosition.y < topBound)
+        {
+            cameraPosition.y = topBound;
+        }
+        else if(cameraPosition.y > bottomBound)
+        {
+            cameraPosition.y = bottomBound;
+        }
+    }
+    else
+    {   // follow an ant
+        
+        // if animationId has expired, then get a new one! //
+        if(mScene.getAntSprites().count(animationFollowAntId) == 0)
+        {
+            animationFollowAntId = mScene.getAntSprites().begin()->first;
+        }
+        AntSprite antSprite = mScene.getAntSprites().at(animationFollowAntId);
+        float xalle = antSprite.mQuad.getPosition().x;
+        float yalle = antSprite.mQuad.getPosition().y;
+        
+        if(cameraPosition.x < xalle)
+        {
+            cameraPosition.x = xalle;
+        }
+        else if(cameraPosition.x > xalle)
+        {
+            cameraPosition.x = xalle;
+        }
+        if(cameraPosition.y < yalle)
+        {
+            cameraPosition.y = yalle;
+        }
+        else if(cameraPosition.y > yalle)
+        {
+            cameraPosition.y = yalle;
+        }
+    }
     
     cameraInterpolator.setPosition(cameraPosition);
     cameraInterpolator.update();
@@ -133,22 +187,22 @@ void Renderer::renderLighting()
     fea::Quad& smallHalo = lightingQuads.at(LightingQuadType::SMALL_HALO);
     for(auto& antSprite : antSprites)
     {
-        if(antSprite.second.type == AntType::RED)
+        if(antSprite.second.mType == AntType::RED)
         {
             smallHalo.setColor(fea::Color(255, 0, 0, 70));
-            smallHalo.setPosition(antSprite.second.quad.getPosition() - glm::vec2(100.0f, 700.0f));
+            smallHalo.setPosition(antSprite.second.mQuad.getPosition() - glm::vec2(100.0f, 700.0f));
             renderer.queue(smallHalo);
         }
-        else if(antSprite.second.type == AntType::GREEN)
+        else if(antSprite.second.mType == AntType::GREEN)
         {
             smallHalo.setColor(fea::Color(0, 255, 0, 70));
-            smallHalo.setPosition(antSprite.second.quad.getPosition() - glm::vec2(100.0f, 700.0f));
+            smallHalo.setPosition(antSprite.second.mQuad.getPosition() - glm::vec2(100.0f, 700.0f));
             renderer.queue(smallHalo);
         }
-        else if(antSprite.second.type == AntType::BLUE)
+        else if(antSprite.second.mType == AntType::BLUE)
         {
             smallHalo.setColor(fea::Color(0, 0, 255, 70));
-            smallHalo.setPosition(antSprite.second.quad.getPosition() - glm::vec2(100.0f, 700.0f));
+            smallHalo.setPosition(antSprite.second.mQuad.getPosition() - glm::vec2(100.0f, 700.0f));
             renderer.queue(smallHalo);
         }
     }
@@ -160,7 +214,7 @@ void Renderer::renderScene()
     renderer.setBlendMode(fea::BlendMode::ALPHA);
     renderer.setViewport(defaultSceneVP);
     renderer.getViewport().setCamera(defaultSceneCam);
-    renderer.clear(fea::Color::White);
+    renderer.clear(fea::Color::Black);
 
     for(auto& drawable : mScene.getLandscapeQuads())
     {
@@ -169,8 +223,8 @@ void Renderer::renderScene()
 
     for(auto& antSprite : mScene.getAntSprites())
     {
-        renderer.queue(antSprite.second.quad);
-        antSprite.second.quad.tick();
+        renderer.queue(antSprite.second.mQuad);
+        antSprite.second.mQuad.tick();
     }
 
     for(auto& cloud : mScene.getCloudQuads())

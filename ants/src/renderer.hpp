@@ -1,4 +1,3 @@
-// holy shit refactor this //
 #pragma once
 #include "renderstate.hpp"
 #include "messages.hpp"
@@ -31,6 +30,8 @@ class Renderer
         WiggleText mWiggleText;
         std::unordered_map<ButtonType, RenderState> renderStates;
         ButtonType renderStateButton;
+
+        size_t animationFollowAntId;
 
         float cameraZoom;
 

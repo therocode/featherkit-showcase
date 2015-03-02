@@ -4,11 +4,11 @@
 
 struct AntSprite
 {
-    AntSprite(fea::AnimatedQuad q, AntType t)
+    AntSprite(fea::AnimatedQuad quad, AntType type)
     {
-        quad = q;
-        type = t;
+        mQuad = quad;
+        mType = type;
     }
-    fea::AnimatedQuad quad;
-    AntType type;
+    fea::AnimatedQuad mQuad;
+    AntType mType;
 };

@@ -154,6 +154,6 @@ void Scene::handleMessage(const AntDeletionMessage& mess)
 
 void Scene::handleMessage(const AntPositionMessage& mess)
 {
-    mAntSprites.at(mess.mAntId).quad.setPosition(mess.mOriginPosition);
-    mAntSprites.at(mess.mAntId).quad.setRotation(mess.mAngle);
+    mAntSprites.at(mess.mAntId).mQuad.setPosition(mess.mOriginPosition);
+    mAntSprites.at(mess.mAntId).mQuad.setRotation(mess.mAngle);
 }
