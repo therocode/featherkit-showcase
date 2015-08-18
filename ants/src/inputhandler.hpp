@@ -2,7 +2,7 @@
 #include "messages.hpp"
 #include "direction.hpp"
 #include <fea/userinterface.hpp>
-#include <fea/ui/sdlinputbackend.hpp>
+#include <fea/ui/sdl2inputbackend.hpp>
 
 class InputHandler
 {

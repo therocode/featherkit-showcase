@@ -13,8 +13,8 @@ file(GLOB_RECURSE header_files "src/*.h")
 
 add_executable(${project_name} ${header_files} ${source_files})
 
-find_package(Featherkit REQUIRED COMPONENTS ui sdl rendering structure util)
-find_package(SDL REQUIRED)
+find_package(Featherkit REQUIRED COMPONENTS ui sdl2 rendering structure util)
+find_package(SDL2 REQUIRED)
 find_package(GLM REQUIRED)
 
 if(FEATHERKIT_FOUND)
@@ -22,9 +22,9 @@ if(FEATHERKIT_FOUND)
     target_link_libraries(${project_name} ${FEATHERKIT_LIBRARIES})
 endif()
 
-if(SDL_FOUND)
-    include_directories(${SDL_INCLUDE_DIR})
-    target_link_libraries(${project_name} ${SDL_LIBRARIES})
+if(SDL2_FOUND)
+    include_directories(${SDL2_INCLUDE_DIR})
+    target_link_libraries(${project_name} ${SDL2_LIBRARIES})
 endif()
 
 if(GLM_FOUND)

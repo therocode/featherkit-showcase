@@ -8,7 +8,7 @@
 #include "physics.hpp"
 #include "digging.hpp"
 #include <fea/structure.hpp>
-#include <fea/ui/sdlwindowbackend.hpp>
+#include <fea/ui/sdl2windowbackend.hpp>
 
 class AntApplication
     : public fea::Application,
