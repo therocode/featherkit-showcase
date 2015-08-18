@@ -51,15 +51,15 @@ void AntManager::spawnAnts()
 
 AntType AntManager::randomCrystalAntType()
 {
-    int kalle = rand() % 3;
-    AntType hej;
+    int chance = rand() % 3;
+    AntType ant;
 
-    if(kalle == 0)
-        hej = AntType::RED;
-    else if(kalle == 1)
-        hej = AntType::GREEN;
+    if(chance == 0)
+        ant = AntType::RED;
+    else if(chance == 1)
+        ant = AntType::GREEN;
     else
-        hej = AntType::BLUE;
+        ant = AntType::BLUE;
 
-    return hej;
+    return ant;
 }
