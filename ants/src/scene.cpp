@@ -54,16 +54,15 @@ void Scene::createTexture(const std::string& name, const std::string& path, int 
 
 void Scene::createTextures()
 {
-    createTexture("dirt", "ants/data/textures/dirt2.png", 800, 600, true, true);
-    createTexture("dirtbg", "ants/data/textures/dirtbg2.png", 800, 600, false);
+    createTexture("dirt", "ants/data/textures/dirt.png", 800, 600, true, true);
+    createTexture("dirtbg", "ants/data/textures/dirtbg.png", 800, 600, false);
     createTexture("backhills", "ants/data/textures/backhills.png", 800, 600, false);
     createTexture("fronthills", "ants/data/textures/fronthills.png", 800, 600, false);
-    createTexture("sky", "ants/data/textures/sky.png", 1, 300);
-    createTexture("cloud1", "ants/data/textures/cloud1.png", 320, 200);
-    createTexture("cloud2", "ants/data/textures/cloud2.png", 320, 200);
-    createTexture("cloud3", "ants/data/textures/cloud3.png", 320, 200);
-    createTexture("cloud4", "ants/data/textures/cloud4.png", 160, 200);
-    createTexture("ant", "ants/data/textures/ant.png", 800, 800);
+    createTexture("cloud1", "ants/data/textures/cloud1.png", 243, 205);
+    createTexture("cloud2", "ants/data/textures/cloud2.png", 265, 230);
+    createTexture("cloud3", "ants/data/textures/cloud3.png", 302, 232);
+    createTexture("cloud4", "ants/data/textures/cloud4.png", 312, 238);
+    createTexture("ant", "ants/data/textures/ant.png", 184, 185);
     createTexture("darkness", "ants/data/textures/darkness.png", 800, 300);
     createTexture("halo", "ants/data/textures/halo.png", 145, 145);
 }
@@ -74,30 +73,26 @@ void Scene::setupQuads()
     fea::Quad dirtBgQuad = fea::Quad({1600, 1200});
     fea::Quad frontHillsQuad = fea::Quad({1700, 1200});
     fea::Quad backHillsQuad = fea::Quad({2240, 1200});
-    fea::Quad skyQuad = fea::Quad({1600, 1200});
 
     dirtQuad.setTexture(mTextures.at("dirt"));
     dirtBgQuad.setTexture(mTextures.at("dirtbg"));
     frontHillsQuad.setTexture(mTextures.at("fronthills"));
     backHillsQuad.setTexture(mTextures.at("backhills"));
-    skyQuad.setTexture(mTextures.at("sky"));
 
     frontHillsQuad.setParallax({0.7f, 1.0f});
     backHillsQuad.setParallax({0.5f, 1.0f});
     frontHillsQuad.setPosition({-300.0f, 0.0f});
     backHillsQuad.setPosition({-800.0f, 0.0f});
 
-    mLandscapeQuads.push_back(skyQuad);
-    mLandscapeQuads.back().setTexture(mTextures.at("sky"));
     mLandscapeQuads.push_back(backHillsQuad);
     mLandscapeQuads.push_back(frontHillsQuad);
     mLandscapeQuads.push_back(dirtBgQuad);
     mLandscapeQuads.push_back(dirtQuad);
 
-    fea::Quad cloud1Quad = fea::Quad({320, 200});
-    fea::Quad cloud2Quad = fea::Quad({320, 200});
-    fea::Quad cloud3Quad = fea::Quad({320, 200});
-    fea::Quad cloud4Quad = fea::Quad({160, 200});
+    fea::Quad cloud1Quad = fea::Quad({243, 205});
+    fea::Quad cloud2Quad = fea::Quad({265, 230});
+    fea::Quad cloud3Quad = fea::Quad({302, 232});
+    fea::Quad cloud4Quad = fea::Quad({312, 238});
     cloud1Quad.setTexture(mTextures.at("cloud1"));
     cloud2Quad.setTexture(mTextures.at("cloud2"));
     cloud3Quad.setTexture(mTextures.at("cloud3"));
@@ -116,7 +111,6 @@ void Scene::setupQuads()
     mLightingQuad.setPosition({0, 600});
     mLightingQuad.setVFlip(true);
     mLightingQuad.setTexture(mLightingTarget.getTexture());
-    mDarknessQuad.setTexture(mTextures.at("darkness"));
     mLargeHalo.setTexture(mTextures.at("halo"));
     mSmallHalo.setTexture(mTextures.at("halo"));
 

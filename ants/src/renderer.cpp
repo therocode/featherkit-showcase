@@ -214,7 +214,7 @@ void Renderer::renderScene()
     renderer.setBlendMode(fea::BlendMode::ALPHA);
     renderer.setViewport(defaultSceneVP);
     renderer.getViewport().setCamera(defaultSceneCam);
-    renderer.clear(fea::Color::Black);
+    renderer.clear(fea::Color(0x7ccbd1));
 
     for(auto& drawable : mScene.getLandscapeQuads())
     {
