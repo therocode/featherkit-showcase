@@ -12,12 +12,14 @@ AntApplication::AntApplication()
     fea::subscribe(messageBus, *this, false);
     window.create(fea::VideoMode(800, 600, 32), "ants");
     renderer.setup();
+    // HEJ - have this in that other class
     createInitialAnts();
 }
 
 void AntApplication::loop()
 {
     input.inputLoop();
+    // HEJ - have another class, not antManager, that deals with placing the ants on the map
     antManager.update();
     physics.update();
     digging.update();
@@ -44,6 +46,7 @@ void AntApplication::handleMessage(const QuitMessage& mess)
 void AntApplication::createInitialAnts()
 {
     // digger ant! :) //
+    // HEJ - put these hardcoded values into some header file where they're all defined
     size_t diggerAntId = antManager.createAnt(AntType::DIGGING, true, glm::vec2(320.0f, 1124.0f), 5.0f);
     messageBus.send(DiggerAntCreatedMessage({diggerAntId}));
     antManager.createAnt(AntType::NORMAL, false, glm::vec2(967.0f, 787.0f), (float)(rand() % 25 + 10)/10.0f);
