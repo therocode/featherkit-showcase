@@ -5,13 +5,11 @@ AntApplication::AntApplication()
     :   input(messageBus),
         antManager(messageBus),
         physics(messageBus),
-        window(new fea::SDL2WindowBackend()),
+        window(new fea::SDL2WindowBackend(), fea::VideoMode(800, 600, 32), "ants"),
         renderer(messageBus),
         digging(messageBus)
 {
     fea::subscribe(messageBus, *this, false);
-    window.create(fea::VideoMode(800, 600, 32), "ants");
-    renderer.setup();
     // HEJ - have this in that other class
     createInitialAnts();
 }
@@ -23,18 +21,12 @@ void AntApplication::loop()
     antManager.update();
     physics.update();
     digging.update();
-    renderer.render();
     window.swapBuffers();
 }
 
 void AntApplication::setup(const std::vector<std::string>& args)
 {
     (void)args;
-}
-
-void AntApplication::destroy()
-{
-    window.close();              
 }
 
 void AntApplication::handleMessage(const QuitMessage& mess)

@@ -69,7 +69,7 @@ void Digging::update()
             {
                 for(int j = 0; j < 11; j++)
                 {
-                    dirtTexture->setPixel(antPosition.x/2 + i, antPosition.y/2 + j - 4, fea::Color(255, 255, 255, 0));
+                    dirtTexture->setPixel({antPosition.x/2 + i, antPosition.y/2 + j - 4}, fea::Color(255, 255, 255, 0));
                 }
             }
             dirtTexture->update();

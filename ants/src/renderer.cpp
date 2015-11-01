@@ -24,12 +24,6 @@ Renderer::Renderer(fea::MessageBus& bus)
 
     cameraZoom = 2.0f;
 
-}
-
-void Renderer::setup()
-{
-    renderer.setup();
-
     mGui.setup();
     mWiggleText.setup();
     mScene.setup();

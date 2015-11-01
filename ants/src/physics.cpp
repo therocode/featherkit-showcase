@@ -169,7 +169,7 @@ void Physics::terrainCheck(PhysicsBody& body)
 bool Physics::terrainCollisionAt(glm::vec2 pos)
 {
     glm::uvec2 position = (glm::uvec2)(pos/2.0f);
-    return dirtTexture->getPixel(position.x, position.y).a() != 0.0f;
+    return dirtTexture->getPixel({position.x, position.y}).a() != 0.0f;
 }
 
 glm::vec2 Physics::rotatePoint(glm::vec2 pointToRotate, float degreesToRotate, glm::vec2 pointOfOrigin)

@@ -48,7 +48,7 @@ fea::RenderTarget& Scene::getLightingRenderTarget()
 void Scene::createTexture(const std::string& name, const std::string& path, int width, int height, bool smooth, bool interactive)
 {
     fea::Texture texture;
-    texture.create(width, height, mLoader.loadImage(path).data(), smooth, interactive);
+    texture.create({width, height}, mLoader.loadImage(path).data(), smooth, interactive);
     mTextures.emplace(name, std::move(texture));
 }
 
@@ -102,7 +102,7 @@ void Scene::setupQuads()
     mCloudHandler.addCloud(cloud3Quad);
     mCloudHandler.addCloud(cloud4Quad);
 
-    mLightingTarget.create(1600, 600);
+    mLightingTarget.create({1600, 600});
     fea::Quad mLightingQuad = fea::Quad({1600, 600});
     fea::Quad mDarknessQuad = fea::Quad({1600, 600});
     fea::Quad mLargeHalo = fea::Quad({290, 290});

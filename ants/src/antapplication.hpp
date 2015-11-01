@@ -18,7 +18,6 @@ class AntApplication
         AntApplication();
         void loop() override;
         void setup(const std::vector<std::string>& args) override;
-        void destroy() override;
 
         //messages//
         virtual void handleMessage(const QuitMessage& mess) override;

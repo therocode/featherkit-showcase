@@ -12,7 +12,6 @@ class Renderer
 {
     public:
         Renderer(fea::MessageBus& bus);
-        void setup();
         void render();
 
         //messages//
