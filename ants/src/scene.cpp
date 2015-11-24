@@ -122,21 +122,21 @@ void Scene::setupQuads()
 
 void Scene::createAnimations()
 {
-    mAnimations.emplace((int)AntType::NORMAL,  fea::Animation(glm::vec2(0.0f, 0.0f         ), glm::vec2(200.0f/800.0f, 100.0f/800.0f), 4, 16));
-    mAnimations.emplace((int)AntType::DIGGING, fea::Animation(glm::vec2(0.0f, 100.0f/800.0f), glm::vec2(200.0f/800.0f, 100.0f/800.0f), 4,  8));
-    mAnimations.emplace((int)AntType::BLUE,    fea::Animation(glm::vec2(0.0f, 200.0f/800.0f), glm::vec2(200.0f/800.0f, 100.0f/800.0f), 4, 16));
-    mAnimations.emplace((int)AntType::GREEN,   fea::Animation(glm::vec2(0.0f, 300.0f/800.0f), glm::vec2(200.0f/800.0f, 100.0f/800.0f), 4, 16));
-    mAnimations.emplace((int)AntType::RED,     fea::Animation(glm::vec2(0.0f, 400.0f/800.0f), glm::vec2(200.0f/800.0f, 100.0f/800.0f), 4, 16));
+    mAnimations.emplace((int)AntType::NORMAL,  fea::Animation(glm::vec2(0.0f, 37.0f * 0.0f), glm::vec2(46.0f, 37.0f), 4, 16));
+    mAnimations.emplace((int)AntType::DIGGING, fea::Animation(glm::vec2(0.0f, 37.0f * 1.0f), glm::vec2(46.0f, 37.0f), 4,  8));
+    mAnimations.emplace((int)AntType::BLUE,    fea::Animation(glm::vec2(0.0f, 37.0f * 2.0f), glm::vec2(46.0f, 37.0f), 4, 16));
+    mAnimations.emplace((int)AntType::GREEN,   fea::Animation(glm::vec2(0.0f, 37.0f * 3.0f), glm::vec2(46.0f, 37.0f), 4, 16));
+    mAnimations.emplace((int)AntType::RED,     fea::Animation(glm::vec2(0.0f, 37.0f * 4.0f), glm::vec2(46.0f, 37.0f), 4, 16));
 }
 
 void Scene::handleMessage(const AntCreationMessage& mess)
 {
-    fea::AnimatedQuad antQuad = fea::AnimatedQuad({50, 25});
+    fea::AnimatedQuad antQuad = fea::AnimatedQuad({46.0f, 37.0f});
     antQuad.setTexture(mTextures.at("ant")); 
     antQuad.setAnimation(mAnimations.at(mess.mAntType));
-    antQuad.setOrigin({25.0f, 12.5f});
+    antQuad.setOrigin(antQuad.getSize() / 2.0f);
     antQuad.setPosition(mess.mPosition);
-    antQuad.setHFlip(mess.mGoingRight);
+    antQuad.setHFlip(!mess.mGoingRight);
 
     mAntSprites.emplace(mess.mAntId, AntSprite(antQuad, mess.mAntType));  
 }
